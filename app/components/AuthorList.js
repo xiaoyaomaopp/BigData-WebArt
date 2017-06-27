@@ -44,33 +44,31 @@ class AuthorList extends React.Component {
                         <div>
                             <div className="authorList_cart-right_item">
                                 <span className="authorList_cart-title">名字：</span>
-                                <span className="authorList_cart-name">{author.name}</span>
+                                <span className="authorList_cart-name" title={author.name}>{author.name}</span>
                             </div>
                             <div className="authorList_cart-right_item">
                                 <span className="authorList_cart-title">国籍：</span>
-                                <span className="authorList_cart-nationality">{author.nationality}</span>
+                                <span className="authorList_cart-nationality" title={author.nationality}>{author.nationality}</span>
                             </div>
+                        </div>
+                        <div>
                             <div className="authorList_cart-right_item authorList_cart-right_item-born">
                                 <span className="authorList_cart-title">出生日期/地点：</span>
-                                <span className="authorList_cart-born">{author.born}</span>
+                                <span className="authorList_cart-born" title={author.born}>{author.born}</span>
                             </div>
-                            <div className="authorList_cart-right_item">
+                            <div className="authorList_cart-right_item authorList_cart-right_item-field">
                                 <span className="authorList_cart-title">领域：</span>
-                                <span className="authorList_cart-field">{author.field}</span>
+                                <span className="authorList_cart-field" title={author.field}>{author.field}</span>
                             </div>
                         </div>
                         <div>
                             <div className="authorList_cart-right_item">
                                 <span className="authorList_cart-title">风格：</span>
-                                <span className="authorList_cart-genre">{author.genre}</span>
+                                <span className="authorList_cart-genre" title={author.genre}>{author.genre}</span>
                             </div>
                             <div className="authorList_cart-right_item">
                                 <span className="authorList_cart-title">导师：</span>
-                                <span className="authorList_cart-teachers">{author.teachers}</span>
-                            </div>
-                            <div className="authorList_cart-right_item">
-                                <span className="authorList_cart-title">领域：</span>
-                                <span className="authorList_cart-field">{author.field}</span>
+                                <span className="authorList_cart-teachers" title={author.teachers}>{author.teachers}</span>
                             </div>
                         </div>
 
