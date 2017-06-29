@@ -15,14 +15,14 @@ class AuthorList extends React.Component {
         this.onChange = this.onChange.bind(this);
         this.page = 1;
         this.limit = 5;
-        this.stop = true;
-        this.autoLoadCount = 3;
+        this.autoLoadCount = 5;
     }
 
     componentDidMount() {
         AuthorStore.listen(this.onChange);
         AuthorListActions.getAuthor(this.page, this.limit);
         var that = this;
+        AutoLoad.setDivMode(true);
         AutoLoad.init(".pc-center-box", this.page, this.limit, this.autoLoadCount, function(page,limit){
             AuthorListActions.getMoreAuthor(page, limit).then(
                     data => that.addNewArticle(data.data)

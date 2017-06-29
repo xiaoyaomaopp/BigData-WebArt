@@ -418,8 +418,7 @@ var AuthorList = function (_React$Component) {
         _this.onChange = _this.onChange.bind(_this);
         _this.page = 1;
         _this.limit = 5;
-        _this.stop = true;
-        _this.autoLoadCount = 3;
+        _this.autoLoadCount = 5;
         return _this;
     }
 
@@ -429,6 +428,7 @@ var AuthorList = function (_React$Component) {
             _AuthorStore2.default.listen(this.onChange);
             _AuthorListActions2.default.getAuthor(this.page, this.limit);
             var that = this;
+            _AutoLoad2.default.setDivMode(true);
             _AutoLoad2.default.init(".pc-center-box", this.page, this.limit, this.autoLoadCount, function (page, limit) {
                 _AuthorListActions2.default.getMoreAuthor(page, limit).then(function (data) {
                     return that.addNewArticle(data.data);
@@ -463,7 +463,6 @@ var AuthorList = function (_React$Component) {
             var author_data = this.state.data;
             var author_list = "";
             if (author_data && author_data.data) {
-                var keyIndex = 0;
                 author_list = author_data.data.map(function (author) {
                     return _react2.default.createElement(
                         'div',
@@ -643,27 +642,50 @@ var AutoLoad = function (_React$Component) {
         _this.stop = true;
         _this.autoLoadCount = 5;
         _this.loadOver = false; //最后一页时加载
+        _this.scrollType = false;
+        _this.node = "body";
         return _this;
     }
 
     _createClass(AutoLoad, [{
+        key: 'setDivMode',
+        value: function setDivMode(flag) {
+            this.scrollType = flag;
+        }
+    }, {
         key: 'init',
         value: function init(node, page, limit, autoCount, callbackfunc) {
             if (!!page) this.page = page;
             if (!!limit) this.limit = limit;
             if (!!autoCount) this.autoLoadCount = autoCount;
+            this.node = node;
             var that = this;
-            $(window).scroll(function () {
-                //当内容滚动到底部时加载新的内容 100当距离最底部100个像素时开始加载.
-                if ($(this).scrollTop() + $(window).height() + 50 >= $(document).height() && $(this).scrollTop() > 100) {
-                    if (that.stop == true) {
-                        that.stop = false;
-                        //加载提示信息
-                        $(node).append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
-                        callbackfunc(++that.page, that.limit);
+            if (this.scrollType) {
+                $(node).scroll(function () {
+                    //当内容滚动到底部时加载新的内容 100当距离最底部100个像素时开始加载.
+                    if ($(this).scrollTop() + $(node).height() + 50 >= $(node)[0].scrollHeight && $(node).scrollTop() > 100) {
+                        if (that.stop == true) {
+                            that.stop = false;
+                            //加载提示信息
+                            $(node).append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                            callbackfunc(++that.page, that.limit);
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                $(window).scroll(function () {
+                    //当内容滚动到底部时加载新的内容 100当距离最底部100个像素时开始加载.
+                    if ($(this).scrollTop() + $(window).height() + 50 >= $(document).height() && $(this).scrollTop() > 100) {
+                        if (that.stop == true) {
+                            that.stop = false;
+                            //加载提示信息
+                            $(node).append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                            callbackfunc(++that.page, that.limit);
+                        }
+                    }
+                });
+            }
+
             $(node).on('click', '.pc-click-get-more', function () {
                 if (that.stop == true) {
                     that.stop = false;
@@ -681,10 +703,18 @@ var AutoLoad = function (_React$Component) {
             if (this.autoLoadCount > 0) {
                 this.autoLoadCount--;
             } else if (this.loadOver) {
-                $(window).unbind('scroll');
+                if (this.scrollType) {
+                    $(this.node).unbind('scroll');
+                } else {
+                    $(window).unbind('scroll');
+                }
             } else {
-                $(window).unbind('scroll');
-                $(".pc-center-box").append("<div class='pc-click-get-more'><p>点击加载更多</p></div>");
+                if (this.scrollType) {
+                    $(this.node).unbind('scroll');
+                } else {
+                    $(window).unbind('scroll');
+                }
+                $(this.node).append("<div class='pc-click-get-more'><p>点击加载更多</p></div>");
             }
             this.stop = true;
         }
