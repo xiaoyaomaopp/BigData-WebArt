@@ -1,11 +1,13 @@
 var AuthorSource = {
-    getAuthor:function(page=1,limit=10){
+    getAuthor:function(page=1,limit=10,params={}){
         return new Promise(function(resolve,reject){
             var url = "/api/author";
-            $.get(url, {
+            var param = {
                 "page": page,
-                "limit": limit
-            }).done(resolve).fail(reject);
+                "limit": limit,
+                "query": params
+            };
+            $.get(url, param).done(resolve).fail(reject);
         })
     }
 }

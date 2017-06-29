@@ -11,8 +11,8 @@ class AuthorListActions {
 		AuthorSource.getAuthor(page, limit).then((data) => this.onSuccess(data));
 	}
 
-	getMoreAuthor(page, limit) {
-		return AuthorSource.getAuthor(page, limit).then(function(data){
+	getMoreAuthor(page, limit, params) {
+		return AuthorSource.getAuthor(page, limit, params).then(function(data){
 			return data
 		});
 	}

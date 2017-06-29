@@ -924,6 +924,7 @@ function filterSnapshots(instance, state, stores) {
   }, {});
 }
 },{"../functions":2}],8:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -941,7 +942,7 @@ var _assign = require('object-assign');
 var emptyObject = require('fbjs/lib/emptyObject');
 var _invariant = require('fbjs/lib/invariant');
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   var warning = require('fbjs/lib/warning');
 }
 
@@ -954,7 +955,7 @@ function identity(fn) {
 }
 
 var ReactPropTypeLocationNames;
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   ReactPropTypeLocationNames = {
     prop: 'prop',
     context: 'context',
@@ -1234,7 +1235,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
       }
     },
     childContextTypes: function(Constructor, childContextTypes) {
-      if ("development" !== 'production') {
+      if (process.env.NODE_ENV !== 'production') {
         validateTypeDef(Constructor, childContextTypes, 'childContext');
       }
       Constructor.childContextTypes = _assign(
@@ -1244,7 +1245,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
       );
     },
     contextTypes: function(Constructor, contextTypes) {
-      if ("development" !== 'production') {
+      if (process.env.NODE_ENV !== 'production') {
         validateTypeDef(Constructor, contextTypes, 'context');
       }
       Constructor.contextTypes = _assign(
@@ -1268,7 +1269,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
       }
     },
     propTypes: function(Constructor, propTypes) {
-      if ("development" !== 'production') {
+      if (process.env.NODE_ENV !== 'production') {
         validateTypeDef(Constructor, propTypes, 'prop');
       }
       Constructor.propTypes = _assign({}, Constructor.propTypes, propTypes);
@@ -1284,7 +1285,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
       if (typeDef.hasOwnProperty(propName)) {
         // use a warning instead of an _invariant so components
         // don't show up in prod but only in __DEV__
-        if ("development" !== 'production') {
+        if (process.env.NODE_ENV !== 'production') {
           warning(
             typeof typeDef[propName] === 'function',
             '%s: %s type `%s` is invalid; it must be a function, usually from ' +
@@ -1332,11 +1333,11 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
    */
   function mixSpecIntoComponent(Constructor, spec) {
     if (!spec) {
-      if ("development" !== 'production') {
+      if (process.env.NODE_ENV !== 'production') {
         var typeofSpec = typeof spec;
         var isMixinValid = typeofSpec === 'object' && spec !== null;
 
-        if ("development" !== 'production') {
+        if (process.env.NODE_ENV !== 'production') {
           warning(
             isMixinValid,
             "%s: You're attempting to include a mixin that is either null " +
@@ -1430,7 +1431,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
             }
           } else {
             proto[name] = property;
-            if ("development" !== 'production') {
+            if (process.env.NODE_ENV !== 'production') {
               // Add verbose displayName to the function, which helps when looking
               // at profiling tools.
               if (typeof property === 'function' && spec.displayName) {
@@ -1553,7 +1554,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
    */
   function bindAutoBindMethod(component, method) {
     var boundMethod = method.bind(component);
-    if ("development" !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       boundMethod.__reactBoundContext = component;
       boundMethod.__reactBoundMethod = method;
       boundMethod.__reactBoundArguments = null;
@@ -1574,7 +1575,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
         // ignore the value of "this" that the user is trying to use, so
         // let's warn.
         if (newThis !== component && newThis !== null) {
-          if ("development" !== 'production') {
+          if (process.env.NODE_ENV !== 'production') {
             warning(
               false,
               'bind(): React component methods may only be bound to the ' +
@@ -1583,7 +1584,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
             );
           }
         } else if (!args.length) {
-          if ("development" !== 'production') {
+          if (process.env.NODE_ENV !== 'production') {
             warning(
               false,
               'bind(): You are binding a component method to the component. ' +
@@ -1650,7 +1651,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
      * @final
      */
     isMounted: function() {
-      if ("development" !== 'production') {
+      if (process.env.NODE_ENV !== 'production') {
         warning(
           this.__didWarnIsMounted,
           '%s: isMounted is deprecated. Instead, make sure to clean up ' +
@@ -1689,7 +1690,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
       // This constructor gets overridden by mocks. The argument is used
       // by mocks to assert on what gets mounted.
 
-      if ("development" !== 'production') {
+      if (process.env.NODE_ENV !== 'production') {
         warning(
           this instanceof Constructor,
           'Something is calling a React component directly. Use a factory or ' +
@@ -1713,7 +1714,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
       // getInitialState and componentWillMount methods for initialization.
 
       var initialState = this.getInitialState ? this.getInitialState() : null;
-      if ("development" !== 'production') {
+      if (process.env.NODE_ENV !== 'production') {
         // We allow auto-mocks to proceed as if they're returning null.
         if (
           initialState === undefined &&
@@ -1747,7 +1748,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
       Constructor.defaultProps = Constructor.getDefaultProps();
     }
 
-    if ("development" !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       // This is a tag to indicate that the use of these method names is ok,
       // since it's used with createClass. If it's not, then it's likely a
       // mistake so we'll warn you to use the static property, property
@@ -1765,7 +1766,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
       'createClass(...): Class specification must implement a `render` method.'
     );
 
-    if ("development" !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       warning(
         !Constructor.prototype.componentShouldUpdate,
         '%s has a method called ' +
@@ -1797,7 +1798,8 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
 
 module.exports = factory;
 
-},{"fbjs/lib/emptyObject":10,"fbjs/lib/invariant":11,"fbjs/lib/warning":12,"object-assign":13}],9:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40,"fbjs/lib/emptyObject":10,"fbjs/lib/invariant":11,"fbjs/lib/warning":12,"object-assign":13}],9:[function(require,module,exports){
 "use strict";
 
 /**
@@ -1837,6 +1839,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 
 module.exports = emptyFunction;
 },{}],10:[function(require,module,exports){
+(function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1851,12 +1854,14 @@ module.exports = emptyFunction;
 
 var emptyObject = {};
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   Object.freeze(emptyObject);
 }
 
 module.exports = emptyObject;
-},{}],11:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40}],11:[function(require,module,exports){
+(function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1882,7 +1887,7 @@ module.exports = emptyObject;
 
 var validateFormat = function validateFormat(format) {};
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   validateFormat = function validateFormat(format) {
     if (format === undefined) {
       throw new Error('invariant requires an error message argument');
@@ -1912,7 +1917,9 @@ function invariant(condition, format, a, b, c, d, e, f) {
 }
 
 module.exports = invariant;
-},{}],12:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40}],12:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -1936,7 +1943,7 @@ var emptyFunction = require('./emptyFunction');
 
 var warning = emptyFunction;
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   (function () {
     var printWarning = function printWarning(format) {
       for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -1979,7 +1986,8 @@ if ("development" !== 'production') {
 }
 
 module.exports = warning;
-},{"./emptyFunction":9}],13:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./emptyFunction":9,"_process":40}],13:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -4164,6 +4172,7 @@ exports['default'] = useQueries;
 module.exports = exports['default'];
 }).call(this,require('_process'))
 },{"./PathUtils":25,"./deprecate":32,"./runTransitionHook":33,"_process":40,"query-string":48,"warning":36}],36:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -4184,7 +4193,7 @@ module.exports = exports['default'];
 
 var warning = function() {};
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   warning = function(condition, format, args) {
     var len = arguments.length;
     args = new Array(len > 2 ? len - 2 : 0);
@@ -4225,7 +4234,8 @@ if ("development" !== 'production') {
 
 module.exports = warning;
 
-},{}],37:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40}],37:[function(require,module,exports){
 /**
  * Copyright 2015, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
@@ -4278,6 +4288,7 @@ module.exports = function hoistNonReactStatics(targetComponent, sourceComponent,
 };
 
 },{}],38:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -4301,7 +4312,7 @@ module.exports = function hoistNonReactStatics(targetComponent, sourceComponent,
  */
 
 var invariant = function(condition, format, a, b, c, d, e, f) {
-  if ("development" !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     if (format === undefined) {
       throw new Error('invariant requires an error message argument');
     }
@@ -4330,7 +4341,8 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],39:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40}],39:[function(require,module,exports){
 module.exports = isPromise;
 
 function isPromise(obj) {
@@ -4524,6 +4536,7 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],41:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4535,7 +4548,7 @@ process.umask = function() { return 0; };
 
 'use strict';
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   var invariant = require('fbjs/lib/invariant');
   var warning = require('fbjs/lib/warning');
   var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
@@ -4554,7 +4567,7 @@ if ("development" !== 'production') {
  * @private
  */
 function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-  if ("development" !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     for (var typeSpecName in typeSpecs) {
       if (typeSpecs.hasOwnProperty(typeSpecName)) {
         var error;
@@ -4586,7 +4599,8 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
 module.exports = checkPropTypes;
 
-},{"./lib/ReactPropTypesSecret":44,"fbjs/lib/invariant":46,"fbjs/lib/warning":47}],42:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./lib/ReactPropTypesSecret":44,"_process":40,"fbjs/lib/invariant":46,"fbjs/lib/warning":47}],42:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4610,6 +4624,7 @@ module.exports = function(isValidElement) {
 };
 
 },{"./factoryWithTypeCheckers":43}],43:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4758,7 +4773,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   PropTypeError.prototype = Error.prototype;
 
   function createChainableTypeChecker(validate) {
-    if ("development" !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       var manualPropTypeCallCache = {};
       var manualPropTypeWarningCount = 0;
     }
@@ -4775,7 +4790,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
             'Use `PropTypes.checkPropTypes()` to call them. ' +
             'Read more at http://fb.me/use-check-prop-types'
           );
-        } else if ("development" !== 'production' && typeof console !== 'undefined') {
+        } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
           // Old behavior for people using React.PropTypes
           var cacheKey = componentName + ':' + propName;
           if (
@@ -4885,7 +4900,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createEnumTypeChecker(expectedValues) {
     if (!Array.isArray(expectedValues)) {
-      "development" !== 'production' ? warning(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
       return emptyFunction.thatReturnsNull;
     }
 
@@ -4928,7 +4943,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createUnionTypeChecker(arrayOfTypeCheckers) {
     if (!Array.isArray(arrayOfTypeCheckers)) {
-      "development" !== 'production' ? warning(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
       return emptyFunction.thatReturnsNull;
     }
 
@@ -5123,7 +5138,8 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   return ReactPropTypes;
 };
 
-},{"./checkPropTypes":41,"./lib/ReactPropTypesSecret":44,"fbjs/lib/emptyFunction":45,"fbjs/lib/invariant":46,"fbjs/lib/warning":47}],44:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./checkPropTypes":41,"./lib/ReactPropTypesSecret":44,"_process":40,"fbjs/lib/emptyFunction":45,"fbjs/lib/invariant":46,"fbjs/lib/warning":47}],44:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -5143,9 +5159,9 @@ module.exports = ReactPropTypesSecret;
 arguments[4][9][0].apply(exports,arguments)
 },{"dup":9}],46:[function(require,module,exports){
 arguments[4][11][0].apply(exports,arguments)
-},{"dup":11}],47:[function(require,module,exports){
+},{"_process":40,"dup":11}],47:[function(require,module,exports){
 arguments[4][12][0].apply(exports,arguments)
-},{"./emptyFunction":45,"dup":12}],48:[function(require,module,exports){
+},{"./emptyFunction":45,"_process":40,"dup":12}],48:[function(require,module,exports){
 'use strict';
 var strictUriEncode = require('strict-uri-encode');
 
@@ -5303,6 +5319,7 @@ function mapAsync(array, work, callback) {
   });
 }
 },{}],50:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -5325,14 +5342,15 @@ var History = {
   },
 
   componentWillMount: function componentWillMount() {
-    "development" !== 'production' ? (0, _routerWarning2.default)(false, 'the `History` mixin is deprecated, please access `context.router` with your own `contextTypes`. http://tiny.cc/router-historymixin') : void 0;
+    process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, 'the `History` mixin is deprecated, please access `context.router` with your own `contextTypes`. http://tiny.cc/router-historymixin') : void 0;
     this.history = this.context.history;
   }
 };
 
 exports.default = History;
 module.exports = exports['default'];
-},{"./InternalPropTypes":54,"./routerWarning":82}],51:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./InternalPropTypes":54,"./routerWarning":82,"_process":40}],51:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5362,6 +5380,7 @@ var IndexLink = _react2.default.createClass({
 exports.default = IndexLink;
 module.exports = exports['default'];
 },{"./Link":56,"react":"react"}],52:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -5404,7 +5423,7 @@ var IndexRedirect = _react2.default.createClass({
       if (parentRoute) {
         parentRoute.indexRoute = _Redirect2.default.createRouteFromReactElement(element);
       } else {
-        "development" !== 'production' ? (0, _routerWarning2.default)(false, 'An <IndexRedirect> does not make sense at the root of your route config') : void 0;
+        process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, 'An <IndexRedirect> does not make sense at the root of your route config') : void 0;
       }
     }
   },
@@ -5419,13 +5438,15 @@ var IndexRedirect = _react2.default.createClass({
 
   /* istanbul ignore next: sanity check */
   render: function render() {
-    !false ? "development" !== 'production' ? (0, _invariant2.default)(false, '<IndexRedirect> elements are for router configuration only and should not be rendered') : (0, _invariant2.default)(false) : void 0;
+    !false ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, '<IndexRedirect> elements are for router configuration only and should not be rendered') : (0, _invariant2.default)(false) : void 0;
   }
 });
 
 exports.default = IndexRedirect;
 module.exports = exports['default'];
-},{"./InternalPropTypes":54,"./Redirect":59,"./routerWarning":82,"invariant":38,"react":"react"}],53:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./InternalPropTypes":54,"./Redirect":59,"./routerWarning":82,"_process":40,"invariant":38,"react":"react"}],53:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -5465,7 +5486,7 @@ var IndexRoute = _react2.default.createClass({
       if (parentRoute) {
         parentRoute.indexRoute = (0, _RouteUtils.createRouteFromReactElement)(element);
       } else {
-        "development" !== 'production' ? (0, _routerWarning2.default)(false, 'An <IndexRoute> does not make sense at the root of your route config') : void 0;
+        process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, 'An <IndexRoute> does not make sense at the root of your route config') : void 0;
       }
     }
   },
@@ -5480,13 +5501,14 @@ var IndexRoute = _react2.default.createClass({
 
   /* istanbul ignore next: sanity check */
   render: function render() {
-    !false ? "development" !== 'production' ? (0, _invariant2.default)(false, '<IndexRoute> elements are for router configuration only and should not be rendered') : (0, _invariant2.default)(false) : void 0;
+    !false ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, '<IndexRoute> elements are for router configuration only and should not be rendered') : (0, _invariant2.default)(false) : void 0;
   }
 });
 
 exports.default = IndexRoute;
 module.exports = exports['default'];
-},{"./InternalPropTypes":54,"./RouteUtils":62,"./routerWarning":82,"invariant":38,"react":"react"}],54:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./InternalPropTypes":54,"./RouteUtils":62,"./routerWarning":82,"_process":40,"invariant":38,"react":"react"}],54:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5520,6 +5542,7 @@ var components = exports.components = oneOfType([component, object]);
 var route = exports.route = oneOfType([object, element]);
 var routes = exports.routes = oneOfType([route, arrayOf(route)]);
 },{"react":"react"}],55:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -5572,12 +5595,12 @@ var Lifecycle = {
   },
 
   componentDidMount: function componentDidMount() {
-    "development" !== 'production' ? (0, _routerWarning2.default)(false, 'the `Lifecycle` mixin is deprecated, please use `context.router.setRouteLeaveHook(route, hook)`. http://tiny.cc/router-lifecyclemixin') : void 0;
-    !this.routerWillLeave ? "development" !== 'production' ? (0, _invariant2.default)(false, 'The Lifecycle mixin requires you to define a routerWillLeave method') : (0, _invariant2.default)(false) : void 0;
+    process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, 'the `Lifecycle` mixin is deprecated, please use `context.router.setRouteLeaveHook(route, hook)`. http://tiny.cc/router-lifecyclemixin') : void 0;
+    !this.routerWillLeave ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'The Lifecycle mixin requires you to define a routerWillLeave method') : (0, _invariant2.default)(false) : void 0;
 
     var route = this.props.route || this.context.route;
 
-    !route ? "development" !== 'production' ? (0, _invariant2.default)(false, 'The Lifecycle mixin must be used on either a) a <Route component> or ' + 'b) a descendant of a <Route component> that uses the RouteContext mixin') : (0, _invariant2.default)(false) : void 0;
+    !route ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'The Lifecycle mixin must be used on either a) a <Route component> or ' + 'b) a descendant of a <Route component> that uses the RouteContext mixin') : (0, _invariant2.default)(false) : void 0;
 
     this._unlistenBeforeLeavingRoute = this.context.history.listenBeforeLeavingRoute(route, this.routerWillLeave);
   },
@@ -5588,7 +5611,9 @@ var Lifecycle = {
 
 exports.default = Lifecycle;
 module.exports = exports['default'];
-},{"./routerWarning":82,"invariant":38,"react":"react"}],56:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./routerWarning":82,"_process":40,"invariant":38,"react":"react"}],56:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -5697,7 +5722,7 @@ var Link = _react2.default.createClass({
 
     if (event.defaultPrevented) return;
 
-    !this.context.router ? "development" !== 'production' ? (0, _invariant2.default)(false, '<Link>s rendered outside of a router context cannot navigate.') : (0, _invariant2.default)(false) : void 0;
+    !this.context.router ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, '<Link>s rendered outside of a router context cannot navigate.') : (0, _invariant2.default)(false) : void 0;
 
     if (isModifiedEvent(event) || !isLeftClickEvent(event)) return;
 
@@ -5729,7 +5754,7 @@ var Link = _react2.default.createClass({
 
     var props = _objectWithoutProperties(_props2, ['to', 'query', 'hash', 'state', 'activeClassName', 'activeStyle', 'onlyActiveOnIndex']);
 
-    "development" !== 'production' ? (0, _routerWarning2.default)(!(query || hash || state), 'the `query`, `hash`, and `state` props on `<Link>` are deprecated, use `<Link to={{ pathname, query, hash, state }}/>. http://tiny.cc/router-isActivedeprecated') : void 0;
+    process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(!(query || hash || state), 'the `query`, `hash`, and `state` props on `<Link>` are deprecated, use `<Link to={{ pathname, query, hash, state }}/>. http://tiny.cc/router-isActivedeprecated') : void 0;
 
     // Ignore if rendered outside the context of router, simplifies unit testing.
     var router = this.context.router;
@@ -5765,7 +5790,9 @@ var Link = _react2.default.createClass({
 
 exports.default = Link;
 module.exports = exports['default'];
-},{"./PropTypes":58,"./routerWarning":82,"invariant":38,"react":"react"}],57:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./PropTypes":58,"./routerWarning":82,"_process":40,"invariant":38,"react":"react"}],57:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -5957,7 +5984,7 @@ function formatPattern(pattern, params) {
     if (token === '*' || token === '**') {
       paramValue = Array.isArray(params.splat) ? params.splat[splatIndex++] : params.splat;
 
-      !(paramValue != null || parenCount > 0) ? "development" !== 'production' ? (0, _invariant2.default)(false, 'Missing splat #%s for path "%s"', splatIndex, pattern) : (0, _invariant2.default)(false) : void 0;
+      !(paramValue != null || parenCount > 0) ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'Missing splat #%s for path "%s"', splatIndex, pattern) : (0, _invariant2.default)(false) : void 0;
 
       if (paramValue != null) pathname += encodeURI(paramValue);
     } else if (token === '(') {
@@ -5968,7 +5995,7 @@ function formatPattern(pattern, params) {
       paramName = token.substring(1);
       paramValue = params[paramName];
 
-      !(paramValue != null || parenCount > 0) ? "development" !== 'production' ? (0, _invariant2.default)(false, 'Missing "%s" parameter for path "%s"', paramName, pattern) : (0, _invariant2.default)(false) : void 0;
+      !(paramValue != null || parenCount > 0) ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'Missing "%s" parameter for path "%s"', paramName, pattern) : (0, _invariant2.default)(false) : void 0;
 
       if (paramValue != null) pathname += encodeURIComponent(paramValue);
     } else {
@@ -5978,7 +6005,9 @@ function formatPattern(pattern, params) {
 
   return pathname.replace(/\/+/g, '/');
 }
-},{"invariant":38}],58:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40,"invariant":38}],58:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6035,11 +6064,11 @@ var route = exports.route = InternalPropTypes.route;
 var routes = exports.routes = InternalPropTypes.routes;
 var router = exports.router = routerShape;
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   (function () {
     var deprecatePropType = function deprecatePropType(propType, message) {
       return function () {
-        "development" !== 'production' ? (0, _routerWarning2.default)(false, message) : void 0;
+        process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, message) : void 0;
         return propType.apply(undefined, arguments);
       };
     };
@@ -6075,12 +6104,14 @@ var defaultExport = {
   router: router
 };
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   defaultExport = (0, _deprecateObjectProperties2.default)(defaultExport, 'The default export from `react-router/lib/PropTypes` is deprecated. Please use the named exports instead.');
 }
 
 exports.default = defaultExport;
-},{"./InternalPropTypes":54,"./deprecateObjectProperties":74,"./routerWarning":82,"react":"react"}],59:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./InternalPropTypes":54,"./deprecateObjectProperties":74,"./routerWarning":82,"_process":40,"react":"react"}],59:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6177,13 +6208,15 @@ var Redirect = _react2.default.createClass({
 
   /* istanbul ignore next: sanity check */
   render: function render() {
-    !false ? "development" !== 'production' ? (0, _invariant2.default)(false, '<Redirect> elements are for router configuration only and should not be rendered') : (0, _invariant2.default)(false) : void 0;
+    !false ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, '<Redirect> elements are for router configuration only and should not be rendered') : (0, _invariant2.default)(false) : void 0;
   }
 });
 
 exports.default = Redirect;
 module.exports = exports['default'];
-},{"./InternalPropTypes":54,"./PatternUtils":57,"./RouteUtils":62,"invariant":38,"react":"react"}],60:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./InternalPropTypes":54,"./PatternUtils":57,"./RouteUtils":62,"_process":40,"invariant":38,"react":"react"}],60:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6235,13 +6268,15 @@ var Route = _react2.default.createClass({
 
   /* istanbul ignore next: sanity check */
   render: function render() {
-    !false ? "development" !== 'production' ? (0, _invariant2.default)(false, '<Route> elements are for router configuration only and should not be rendered') : (0, _invariant2.default)(false) : void 0;
+    !false ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, '<Route> elements are for router configuration only and should not be rendered') : (0, _invariant2.default)(false) : void 0;
   }
 });
 
 exports.default = Route;
 module.exports = exports['default'];
-},{"./InternalPropTypes":54,"./RouteUtils":62,"invariant":38,"react":"react"}],61:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./InternalPropTypes":54,"./RouteUtils":62,"_process":40,"invariant":38,"react":"react"}],61:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6281,13 +6316,14 @@ var RouteContext = {
     };
   },
   componentWillMount: function componentWillMount() {
-    "development" !== 'production' ? (0, _routerWarning2.default)(false, 'The `RouteContext` mixin is deprecated. You can provide `this.props.route` on context with your own `contextTypes`. http://tiny.cc/router-routecontextmixin') : void 0;
+    process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, 'The `RouteContext` mixin is deprecated. You can provide `this.props.route` on context with your own `contextTypes`. http://tiny.cc/router-routecontextmixin') : void 0;
   }
 };
 
 exports.default = RouteContext;
 module.exports = exports['default'];
-},{"./routerWarning":82,"react":"react"}],62:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./routerWarning":82,"_process":40,"react":"react"}],62:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6382,6 +6418,7 @@ function createRoutes(routes) {
   return routes;
 }
 },{"react":"react"}],63:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6497,7 +6534,7 @@ var Router = _react2.default.createClass({
     var parseQueryString = _props.parseQueryString;
     var stringifyQuery = _props.stringifyQuery;
 
-    "development" !== 'production' ? (0, _routerWarning2.default)(!(parseQueryString || stringifyQuery), '`parseQueryString` and `stringifyQuery` are deprecated. Please create a custom history. http://tiny.cc/router-customquerystring') : void 0;
+    process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(!(parseQueryString || stringifyQuery), '`parseQueryString` and `stringifyQuery` are deprecated. Please create a custom history. http://tiny.cc/router-customquerystring') : void 0;
 
     var _createRouterObjects = this.createRouterObjects();
 
@@ -6530,7 +6567,7 @@ var Router = _react2.default.createClass({
     var children = _props2.children;
 
 
-    !!isUnsupportedHistory(history) ? "development" !== 'production' ? (0, _invariant2.default)(false, 'You have provided a history object created with history v3.x. ' + 'This version of React Router is not compatible with v3 history ' + 'objects. Please use history v2.x instead.') : (0, _invariant2.default)(false) : void 0;
+    !!isUnsupportedHistory(history) ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'You have provided a history object created with history v3.x. ' + 'This version of React Router is not compatible with v3 history ' + 'objects. Please use history v2.x instead.') : (0, _invariant2.default)(false) : void 0;
 
     if (isDeprecatedHistory(history)) {
       history = this.wrapDeprecatedHistory(history);
@@ -6550,12 +6587,12 @@ var Router = _react2.default.createClass({
 
     var createHistory = void 0;
     if (history) {
-      "development" !== 'production' ? (0, _routerWarning2.default)(false, 'It appears you have provided a deprecated history object to `<Router/>`, please use a history provided by ' + 'React Router with `import { browserHistory } from \'react-router\'` or `import { hashHistory } from \'react-router\'`. ' + 'If you are using a custom history please create it with `useRouterHistory`, see http://tiny.cc/router-usinghistory for details.') : void 0;
+      process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, 'It appears you have provided a deprecated history object to `<Router/>`, please use a history provided by ' + 'React Router with `import { browserHistory } from \'react-router\'` or `import { hashHistory } from \'react-router\'`. ' + 'If you are using a custom history please create it with `useRouterHistory`, see http://tiny.cc/router-usinghistory for details.') : void 0;
       createHistory = function createHistory() {
         return history;
       };
     } else {
-      "development" !== 'production' ? (0, _routerWarning2.default)(false, '`Router` no longer defaults the history prop to hash history. Please use the `hashHistory` singleton instead. http://tiny.cc/router-defaulthistory') : void 0;
+      process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, '`Router` no longer defaults the history prop to hash history. Please use the `hashHistory` singleton instead. http://tiny.cc/router-defaulthistory') : void 0;
       createHistory = _createHashHistory2.default;
     }
 
@@ -6565,9 +6602,9 @@ var Router = _react2.default.createClass({
 
   /* istanbul ignore next: sanity check */
   componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-    "development" !== 'production' ? (0, _routerWarning2.default)(nextProps.history === this.props.history, 'You cannot change <Router history>; it will be ignored') : void 0;
+    process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(nextProps.history === this.props.history, 'You cannot change <Router history>; it will be ignored') : void 0;
 
-    "development" !== 'production' ? (0, _routerWarning2.default)((nextProps.routes || nextProps.children) === (this.props.routes || this.props.children), 'You cannot change <Router routes>; it will be ignored') : void 0;
+    process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)((nextProps.routes || nextProps.children) === (this.props.routes || this.props.children), 'You cannot change <Router routes>; it will be ignored') : void 0;
   },
   componentWillUnmount: function componentWillUnmount() {
     if (this._unlisten) this._unlisten();
@@ -6606,7 +6643,9 @@ var Router = _react2.default.createClass({
 
 exports.default = Router;
 module.exports = exports['default'];
-},{"./InternalPropTypes":54,"./RouteUtils":62,"./RouterContext":64,"./RouterUtils":65,"./createTransitionManager":73,"./routerWarning":82,"history/lib/createHashHistory":28,"history/lib/useQueries":35,"invariant":38,"react":"react"}],64:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./InternalPropTypes":54,"./RouteUtils":62,"./RouterContext":64,"./RouterUtils":65,"./createTransitionManager":73,"./routerWarning":82,"_process":40,"history/lib/createHashHistory":28,"history/lib/useQueries":35,"invariant":38,"react":"react"}],64:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6683,7 +6722,7 @@ var RouterContext = _react2.default.createClass({
     var location = _props.location;
 
     if (!router) {
-      "development" !== 'production' ? (0, _routerWarning2.default)(false, '`<RouterContext>` expects a `router` rather than a `history`') : void 0;
+      process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, '`<RouterContext>` expects a `router` rather than a `history`') : void 0;
 
       router = _extends({}, history, {
         setRouteLeaveHook: history.listenBeforeLeavingRoute
@@ -6691,7 +6730,7 @@ var RouterContext = _react2.default.createClass({
       delete router.listenBeforeLeavingRoute;
     }
 
-    if ("development" !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       location = (0, _deprecateObjectProperties2.default)(location, '`context.location` is deprecated, please use a route component\'s `props.location` instead. http://tiny.cc/router-accessinglocation');
     }
 
@@ -6755,7 +6794,7 @@ var RouterContext = _react2.default.createClass({
       }, element);
     }
 
-    !(element === null || element === false || _react2.default.isValidElement(element)) ? "development" !== 'production' ? (0, _invariant2.default)(false, 'The root route must render a single element') : (0, _invariant2.default)(false) : void 0;
+    !(element === null || element === false || _react2.default.isValidElement(element)) ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'The root route must render a single element') : (0, _invariant2.default)(false) : void 0;
 
     return element;
   }
@@ -6763,7 +6802,9 @@ var RouterContext = _react2.default.createClass({
 
 exports.default = RouterContext;
 module.exports = exports['default'];
-},{"./RouteUtils":62,"./deprecateObjectProperties":74,"./getRouteParams":76,"./routerWarning":82,"invariant":38,"react":"react"}],65:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./RouteUtils":62,"./deprecateObjectProperties":74,"./getRouteParams":76,"./routerWarning":82,"_process":40,"invariant":38,"react":"react"}],65:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6790,13 +6831,15 @@ function createRouterObject(history, transitionManager) {
 function createRoutingHistory(history, transitionManager) {
   history = _extends({}, history, transitionManager);
 
-  if ("development" !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     history = (0, _deprecateObjectProperties2.default)(history, '`props.history` and `context.history` are deprecated. Please use `context.router`. http://tiny.cc/router-contextchanges');
   }
 
   return history;
 }
-},{"./deprecateObjectProperties":74}],66:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./deprecateObjectProperties":74,"_process":40}],66:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6818,7 +6861,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var RoutingContext = _react2.default.createClass({
   displayName: 'RoutingContext',
   componentWillMount: function componentWillMount() {
-    "development" !== 'production' ? (0, _routerWarning2.default)(false, '`RoutingContext` has been renamed to `RouterContext`. Please use `import { RouterContext } from \'react-router\'`. http://tiny.cc/router-routercontext') : void 0;
+    process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, '`RoutingContext` has been renamed to `RouterContext`. Please use `import { RouterContext } from \'react-router\'`. http://tiny.cc/router-routercontext') : void 0;
   },
   render: function render() {
     return _react2.default.createElement(_RouterContext2.default, this.props);
@@ -6827,7 +6870,9 @@ var RoutingContext = _react2.default.createClass({
 
 exports.default = RoutingContext;
 module.exports = exports['default'];
-},{"./RouterContext":64,"./routerWarning":82,"react":"react"}],67:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./RouterContext":64,"./routerWarning":82,"_process":40,"react":"react"}],67:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6884,7 +6929,7 @@ function runTransitionHooks(length, iter, callback) {
   var redirectInfo = void 0;
   function replace(location, deprecatedPathname, deprecatedQuery) {
     if (deprecatedPathname) {
-      "development" !== 'production' ? (0, _routerWarning2.default)(false, '`replaceState(state, pathname, query) is deprecated; use `replace(location)` with a location descriptor instead. http://tiny.cc/router-isActivedeprecated') : void 0;
+      process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, '`replaceState(state, pathname, query) is deprecated; use `replace(location)` with a location descriptor instead. http://tiny.cc/router-isActivedeprecated') : void 0;
       redirectInfo = {
         pathname: deprecatedPathname,
         query: deprecatedQuery,
@@ -6950,7 +6995,9 @@ function runLeaveHooks(routes, prevState) {
     if (routes[i].onLeave) routes[i].onLeave.call(routes[i], prevState);
   }
 }
-},{"./AsyncUtils":49,"./routerWarning":82}],68:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./AsyncUtils":49,"./routerWarning":82,"_process":40}],68:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -6976,9 +7023,9 @@ exports.default = function () {
     middlewares[_key] = arguments[_key];
   }
 
-  if ("development" !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     middlewares.forEach(function (middleware, index) {
-      "development" !== 'production' ? (0, _routerWarning2.default)(middleware.renderRouterContext || middleware.renderRouteComponent, 'The middleware specified at index ' + index + ' does not appear to be ' + 'a valid React Router middleware.') : void 0;
+      process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(middleware.renderRouterContext || middleware.renderRouteComponent, 'The middleware specified at index ' + index + ' does not appear to be ' + 'a valid React Router middleware.') : void 0;
     });
   }
 
@@ -7008,7 +7055,8 @@ exports.default = function () {
 };
 
 module.exports = exports['default'];
-},{"./RouterContext":64,"./routerWarning":82,"react":"react"}],69:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./RouterContext":64,"./routerWarning":82,"_process":40,"react":"react"}],69:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -7157,6 +7205,7 @@ var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.do
 
 module.exports = exports['default'];
 },{"./useRouterHistory":83}],73:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -7206,7 +7255,7 @@ function createTransitionManager(history, routes) {
 
     var indexOnly = void 0;
     if (indexOnlyOrDeprecatedQuery && indexOnlyOrDeprecatedQuery !== true || deprecatedIndexOnly !== null) {
-      "development" !== 'production' ? (0, _routerWarning2.default)(false, '`isActive(pathname, query, indexOnly) is deprecated; use `isActive(location, indexOnly)` with a location descriptor instead. http://tiny.cc/router-isActivedeprecated') : void 0;
+      process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, '`isActive(pathname, query, indexOnly) is deprecated; use `isActive(location, indexOnly)` with a location descriptor instead. http://tiny.cc/router-isActivedeprecated') : void 0;
       location = { pathname: location, query: indexOnlyOrDeprecatedQuery };
       indexOnly = deprecatedIndexOnly || false;
     } else {
@@ -7398,7 +7447,7 @@ function createTransitionManager(history, routes) {
       }
     } else {
       if (hooks.indexOf(hook) === -1) {
-        "development" !== 'production' ? (0, _routerWarning2.default)(false, 'adding multiple leave hooks for the same route is deprecated; manage multiple confirmations in your own code instead') : void 0;
+        process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, 'adding multiple leave hooks for the same route is deprecated; manage multiple confirmations in your own code instead') : void 0;
 
         hooks.push(hook);
       }
@@ -7441,7 +7490,7 @@ function createTransitionManager(history, routes) {
           } else if (nextState) {
             listener(null, nextState);
           } else {
-            "development" !== 'production' ? (0, _routerWarning2.default)(false, 'Location "%s" did not match any routes', location.pathname + location.search + location.hash) : void 0;
+            process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, 'Location "%s" did not match any routes', location.pathname + location.search + location.hash) : void 0;
           }
         });
       }
@@ -7459,7 +7508,9 @@ function createTransitionManager(history, routes) {
 //export default useRoutes
 
 module.exports = exports['default'];
-},{"./TransitionUtils":67,"./computeChangedRoutes":70,"./getComponents":75,"./isActive":78,"./matchRoutes":81,"./routerWarning":82}],74:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./TransitionUtils":67,"./computeChangedRoutes":70,"./getComponents":75,"./isActive":78,"./matchRoutes":81,"./routerWarning":82,"_process":40}],74:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -7478,7 +7529,7 @@ var deprecateObjectProperties = function deprecateObjectProperties(object) {
   return object;
 };
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   try {
     if (Object.defineProperty({}, 'x', {
       get: function get() {
@@ -7504,7 +7555,7 @@ if ("development" !== 'production') {
         if (typeof object[prop] === 'function') {
           // Can't use fat arrow here because of use of arguments below.
           membrane[prop] = function () {
-            "development" !== 'production' ? (0, _routerWarning2.default)(false, message) : void 0;
+            process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, message) : void 0;
             return object[prop].apply(object, arguments);
           };
           return 'continue';
@@ -7517,7 +7568,7 @@ if ("development" !== 'production') {
         // otherwise support proxies.
         Object.defineProperty(membrane, prop, {
           get: function get() {
-            "development" !== 'production' ? (0, _routerWarning2.default)(false, message) : void 0;
+            process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, message) : void 0;
             return object[prop];
           }
         });
@@ -7535,7 +7586,8 @@ if ("development" !== 'production') {
 }
 
 exports.default = deprecateObjectProperties;
-},{"./routerWarning":82}],75:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./routerWarning":82,"_process":40}],75:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -7780,6 +7832,7 @@ function isActive(_ref, indexOnly, currentLocation, routes, params) {
 }
 module.exports = exports['default'];
 },{"./PatternUtils":57}],79:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -7797,7 +7850,7 @@ var _routerWarning2 = _interopRequireDefault(_routerWarning);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function makeStateWithLocation(state, location) {
-  if ("development" !== 'production' && _deprecateObjectProperties.canUseMembrane) {
+  if (process.env.NODE_ENV !== 'production' && _deprecateObjectProperties.canUseMembrane) {
     var stateWithLocation = _extends({}, state);
 
     // I don't use deprecateObjectProperties here because I want to keep the
@@ -7811,7 +7864,7 @@ function makeStateWithLocation(state, location) {
 
       Object.defineProperty(stateWithLocation, prop, {
         get: function get() {
-          "development" !== 'production' ? (0, _routerWarning2.default)(false, 'Accessing location properties directly from the first argument to `getComponent`, `getComponents`, `getChildRoutes`, and `getIndexRoute` is deprecated. That argument is now the router state (`nextState` or `partialNextState`) rather than the location. To access the location, use `nextState.location` or `partialNextState.location`.') : void 0;
+          process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, 'Accessing location properties directly from the first argument to `getComponent`, `getComponents`, `getChildRoutes`, and `getIndexRoute` is deprecated. That argument is now the router state (`nextState` or `partialNextState`) rather than the location. To access the location, use `nextState.location` or `partialNextState.location`.') : void 0;
           return location[prop];
         }
       });
@@ -7829,7 +7882,9 @@ function makeStateWithLocation(state, location) {
   return _extends({}, state, location);
 }
 module.exports = exports['default'];
-},{"./deprecateObjectProperties":74,"./routerWarning":82}],80:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./deprecateObjectProperties":74,"./routerWarning":82,"_process":40}],80:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -7874,7 +7929,7 @@ function match(_ref, callback) {
 
   var options = _objectWithoutProperties(_ref, ['history', 'routes', 'location']);
 
-  !(history || location) ? "development" !== 'production' ? (0, _invariant2.default)(false, 'match needs a history or a location') : (0, _invariant2.default)(false) : void 0;
+  !(history || location) ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'match needs a history or a location') : (0, _invariant2.default)(false) : void 0;
 
   history = history ? history : (0, _createMemoryHistory2.default)(options);
   var transitionManager = (0, _createTransitionManager2.default)(history, (0, _RouteUtils.createRoutes)(routes));
@@ -7913,7 +7968,9 @@ function match(_ref, callback) {
 
 exports.default = match;
 module.exports = exports['default'];
-},{"./RouteUtils":62,"./RouterUtils":65,"./createMemoryHistory":71,"./createTransitionManager":73,"history/lib/Actions":20,"invariant":38}],81:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./RouteUtils":62,"./RouterUtils":65,"./createMemoryHistory":71,"./createTransitionManager":73,"_process":40,"history/lib/Actions":20,"invariant":38}],81:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -8071,12 +8128,12 @@ function matchRouteDeep(route, location, remainingPathname, paramNames, paramVal
             if (Array.isArray(indexRoute)) {
               var _match$routes;
 
-              "development" !== 'production' ? (0, _routerWarning2.default)(indexRoute.every(function (route) {
+              process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(indexRoute.every(function (route) {
                 return !route.path;
               }), 'Index routes should not have paths') : void 0;
               (_match$routes = match.routes).push.apply(_match$routes, indexRoute);
             } else if (indexRoute) {
-              "development" !== 'production' ? (0, _routerWarning2.default)(!indexRoute.path, 'Index routes should not have paths') : void 0;
+              process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(!indexRoute.path, 'Index routes should not have paths') : void 0;
               match.routes.push(indexRoute);
             }
 
@@ -8165,7 +8222,8 @@ function matchRoutes(routes, location, callback, remainingPathname) {
   }, callback);
 }
 module.exports = exports['default'];
-},{"./AsyncUtils":49,"./PatternUtils":57,"./RouteUtils":62,"./makeStateWithLocation":79,"./routerWarning":82}],82:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./AsyncUtils":49,"./PatternUtils":57,"./RouteUtils":62,"./makeStateWithLocation":79,"./routerWarning":82,"_process":40}],82:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -8227,6 +8285,7 @@ function useRouterHistory(createHistory) {
 }
 module.exports = exports['default'];
 },{"history/lib/useBasename":34,"history/lib/useQueries":35}],84:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -8261,7 +8320,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
  * - isActive(pathname, query, indexOnly=false)
  */
 function useRoutes(createHistory) {
-  "development" !== 'production' ? (0, _routerWarning2.default)(false, '`useRoutes` is deprecated. Please use `createTransitionManager` instead.') : void 0;
+  process.env.NODE_ENV !== 'production' ? (0, _routerWarning2.default)(false, '`useRoutes` is deprecated. Please use `createTransitionManager` instead.') : void 0;
 
   return function () {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -8278,7 +8337,9 @@ function useRoutes(createHistory) {
 
 exports.default = useRoutes;
 module.exports = exports['default'];
-},{"./createTransitionManager":73,"./routerWarning":82,"history/lib/useQueries":35}],85:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./createTransitionManager":73,"./routerWarning":82,"_process":40,"history/lib/useQueries":35}],85:[function(require,module,exports){
+(function (process){
 'use strict';
 
 exports.__esModule = true;
@@ -8317,7 +8378,7 @@ function withRouter(WrappedComponent, options) {
     propTypes: { router: _PropTypes.routerShape },
 
     getWrappedInstance: function getWrappedInstance() {
-      !withRef ? "development" !== 'production' ? (0, _invariant2.default)(false, 'To access the wrapped instance, you need to specify ' + '`{ withRef: true }` as the second argument of the withRouter() call.') : (0, _invariant2.default)(false) : void 0;
+      !withRef ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'To access the wrapped instance, you need to specify ' + '`{ withRef: true }` as the second argument of the withRouter() call.') : (0, _invariant2.default)(false) : void 0;
 
       return this.wrappedInstance;
     },
@@ -8343,7 +8404,8 @@ function withRouter(WrappedComponent, options) {
   return (0, _hoistNonReactStatics2.default)(WithRouter, WrappedComponent);
 }
 module.exports = exports['default'];
-},{"./PropTypes":58,"hoist-non-react-statics":37,"invariant":38,"react":"react"}],86:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./PropTypes":58,"_process":40,"hoist-non-react-statics":37,"invariant":38,"react":"react"}],86:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8403,6 +8465,7 @@ var KeyEscapeUtils = {
 
 module.exports = KeyEscapeUtils;
 },{}],87:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8473,7 +8536,7 @@ var fourArgumentPooler = function (a1, a2, a3, a4) {
 
 var standardReleaser = function (instance) {
   var Klass = this;
-  !(instance instanceof Klass) ? "development" !== 'production' ? invariant(false, 'Trying to release an instance into a pool of a different type.') : _prodInvariant('25') : void 0;
+  !(instance instanceof Klass) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Trying to release an instance into a pool of a different type.') : _prodInvariant('25') : void 0;
   instance.destructor();
   if (Klass.instancePool.length < Klass.poolSize) {
     Klass.instancePool.push(instance);
@@ -8514,7 +8577,9 @@ var PooledClass = {
 };
 
 module.exports = PooledClass;
-},{"./reactProdInvariant":108,"fbjs/lib/invariant":112}],88:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./reactProdInvariant":108,"_process":40,"fbjs/lib/invariant":112}],88:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8543,7 +8608,7 @@ var createElement = ReactElement.createElement;
 var createFactory = ReactElement.createFactory;
 var cloneElement = ReactElement.cloneElement;
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   var lowPriorityWarning = require('./lowPriorityWarning');
   var canDefineProperty = require('./canDefineProperty');
   var ReactElementValidator = require('./ReactElementValidator');
@@ -8558,7 +8623,7 @@ var createMixin = function (mixin) {
   return mixin;
 };
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   var warnedForSpread = false;
   var warnedForCreateMixin = false;
   __spread = function () {
@@ -8609,7 +8674,7 @@ var React = {
   __spread: __spread
 };
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   var warnedForCreateClass = false;
   if (canDefineProperty) {
     Object.defineProperty(React, 'PropTypes', {
@@ -8646,7 +8711,9 @@ if ("development" !== 'production') {
 }
 
 module.exports = React;
-},{"./ReactBaseClasses":89,"./ReactChildren":90,"./ReactDOMFactories":93,"./ReactElement":94,"./ReactElementValidator":96,"./ReactPropTypes":99,"./ReactVersion":101,"./canDefineProperty":102,"./createClass":104,"./lowPriorityWarning":106,"./onlyChild":107,"object-assign":114}],89:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./ReactBaseClasses":89,"./ReactChildren":90,"./ReactDOMFactories":93,"./ReactElement":94,"./ReactElementValidator":96,"./ReactPropTypes":99,"./ReactVersion":101,"./canDefineProperty":102,"./createClass":104,"./lowPriorityWarning":106,"./onlyChild":107,"_process":40,"object-assign":114}],89:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8709,7 +8776,7 @@ ReactComponent.prototype.isReactComponent = {};
  * @protected
  */
 ReactComponent.prototype.setState = function (partialState, callback) {
-  !(typeof partialState === 'object' || typeof partialState === 'function' || partialState == null) ? "development" !== 'production' ? invariant(false, 'setState(...): takes an object of state variables to update or a function which returns an object of state variables.') : _prodInvariant('85') : void 0;
+  !(typeof partialState === 'object' || typeof partialState === 'function' || partialState == null) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'setState(...): takes an object of state variables to update or a function which returns an object of state variables.') : _prodInvariant('85') : void 0;
   this.updater.enqueueSetState(this, partialState);
   if (callback) {
     this.updater.enqueueCallback(this, callback, 'setState');
@@ -8742,7 +8809,7 @@ ReactComponent.prototype.forceUpdate = function (callback) {
  * we would like to deprecate them, we're not going to move them over to this
  * modern base class. Instead, we define a getter that warns if it's accessed.
  */
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   var deprecatedAPIs = {
     isMounted: ['isMounted', 'Instead, make sure to clean up subscriptions and pending requests in ' + 'componentWillUnmount to prevent memory leaks.'],
     replaceState: ['replaceState', 'Refactor your code to use setState instead (see ' + 'https://github.com/facebook/react/issues/3236).']
@@ -8789,7 +8856,8 @@ module.exports = {
   Component: ReactComponent,
   PureComponent: ReactPureComponent
 };
-},{"./ReactNoopUpdateQueue":97,"./canDefineProperty":102,"./lowPriorityWarning":106,"./reactProdInvariant":108,"fbjs/lib/emptyObject":111,"fbjs/lib/invariant":112,"object-assign":114}],90:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./ReactNoopUpdateQueue":97,"./canDefineProperty":102,"./lowPriorityWarning":106,"./reactProdInvariant":108,"_process":40,"fbjs/lib/emptyObject":111,"fbjs/lib/invariant":112,"object-assign":114}],90:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8981,6 +9049,7 @@ var ReactChildren = {
 
 module.exports = ReactChildren;
 },{"./PooledClass":87,"./ReactElement":94,"./traverseAllChildren":109,"fbjs/lib/emptyFunction":110}],91:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
  * All rights reserved.
@@ -9144,29 +9213,29 @@ function describeID(id) {
   if (ownerID) {
     ownerName = ReactComponentTreeHook.getDisplayName(ownerID);
   }
-  "development" !== 'production' ? warning(element, 'ReactComponentTreeHook: Missing React element for debugID %s when ' + 'building stack', id) : void 0;
+  process.env.NODE_ENV !== 'production' ? warning(element, 'ReactComponentTreeHook: Missing React element for debugID %s when ' + 'building stack', id) : void 0;
   return describeComponentFrame(name, element && element._source, ownerName);
 }
 
 var ReactComponentTreeHook = {
   onSetChildren: function (id, nextChildIDs) {
     var item = getItem(id);
-    !item ? "development" !== 'production' ? invariant(false, 'Item must have been set') : _prodInvariant('144') : void 0;
+    !item ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Item must have been set') : _prodInvariant('144') : void 0;
     item.childIDs = nextChildIDs;
 
     for (var i = 0; i < nextChildIDs.length; i++) {
       var nextChildID = nextChildIDs[i];
       var nextChild = getItem(nextChildID);
-      !nextChild ? "development" !== 'production' ? invariant(false, 'Expected hook events to fire for the child before its parent includes it in onSetChildren().') : _prodInvariant('140') : void 0;
-      !(nextChild.childIDs != null || typeof nextChild.element !== 'object' || nextChild.element == null) ? "development" !== 'production' ? invariant(false, 'Expected onSetChildren() to fire for a container child before its parent includes it in onSetChildren().') : _prodInvariant('141') : void 0;
-      !nextChild.isMounted ? "development" !== 'production' ? invariant(false, 'Expected onMountComponent() to fire for the child before its parent includes it in onSetChildren().') : _prodInvariant('71') : void 0;
+      !nextChild ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Expected hook events to fire for the child before its parent includes it in onSetChildren().') : _prodInvariant('140') : void 0;
+      !(nextChild.childIDs != null || typeof nextChild.element !== 'object' || nextChild.element == null) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Expected onSetChildren() to fire for a container child before its parent includes it in onSetChildren().') : _prodInvariant('141') : void 0;
+      !nextChild.isMounted ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Expected onMountComponent() to fire for the child before its parent includes it in onSetChildren().') : _prodInvariant('71') : void 0;
       if (nextChild.parentID == null) {
         nextChild.parentID = id;
         // TODO: This shouldn't be necessary but mounting a new root during in
         // componentWillMount currently causes not-yet-mounted components to
         // be purged from our tree data so their parent id is missing.
       }
-      !(nextChild.parentID === id) ? "development" !== 'production' ? invariant(false, 'Expected onBeforeMountComponent() parent and onSetChildren() to be consistent (%s has parents %s and %s).', nextChildID, nextChild.parentID, id) : _prodInvariant('142', nextChildID, nextChild.parentID, id) : void 0;
+      !(nextChild.parentID === id) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Expected onBeforeMountComponent() parent and onSetChildren() to be consistent (%s has parents %s and %s).', nextChildID, nextChild.parentID, id) : _prodInvariant('142', nextChildID, nextChild.parentID, id) : void 0;
     }
   },
   onBeforeMountComponent: function (id, element, parentID) {
@@ -9191,7 +9260,7 @@ var ReactComponentTreeHook = {
   },
   onMountComponent: function (id) {
     var item = getItem(id);
-    !item ? "development" !== 'production' ? invariant(false, 'Item must have been set') : _prodInvariant('144') : void 0;
+    !item ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Item must have been set') : _prodInvariant('144') : void 0;
     item.isMounted = true;
     var isRoot = item.parentID === 0;
     if (isRoot) {
@@ -9359,7 +9428,8 @@ var ReactComponentTreeHook = {
 };
 
 module.exports = ReactComponentTreeHook;
-},{"./ReactCurrentOwner":92,"./reactProdInvariant":108,"fbjs/lib/invariant":112,"fbjs/lib/warning":113}],92:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./ReactCurrentOwner":92,"./reactProdInvariant":108,"_process":40,"fbjs/lib/invariant":112,"fbjs/lib/warning":113}],92:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -9389,6 +9459,7 @@ var ReactCurrentOwner = {
 
 module.exports = ReactCurrentOwner;
 },{}],93:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -9409,7 +9480,7 @@ var ReactElement = require('./ReactElement');
  * @private
  */
 var createDOMFactory = ReactElement.createFactory;
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   var ReactElementValidator = require('./ReactElementValidator');
   createDOMFactory = ReactElementValidator.createFactory;
 }
@@ -9557,7 +9628,9 @@ var ReactDOMFactories = {
 };
 
 module.exports = ReactDOMFactories;
-},{"./ReactElement":94,"./ReactElementValidator":96}],94:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./ReactElement":94,"./ReactElementValidator":96,"_process":40}],94:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
  * All rights reserved.
@@ -9590,7 +9663,7 @@ var RESERVED_PROPS = {
 var specialPropKeyWarningShown, specialPropRefWarningShown;
 
 function hasValidRef(config) {
-  if ("development" !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     if (hasOwnProperty.call(config, 'ref')) {
       var getter = Object.getOwnPropertyDescriptor(config, 'ref').get;
       if (getter && getter.isReactWarning) {
@@ -9602,7 +9675,7 @@ function hasValidRef(config) {
 }
 
 function hasValidKey(config) {
-  if ("development" !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     if (hasOwnProperty.call(config, 'key')) {
       var getter = Object.getOwnPropertyDescriptor(config, 'key').get;
       if (getter && getter.isReactWarning) {
@@ -9617,7 +9690,7 @@ function defineKeyPropWarningGetter(props, displayName) {
   var warnAboutAccessingKey = function () {
     if (!specialPropKeyWarningShown) {
       specialPropKeyWarningShown = true;
-      "development" !== 'production' ? warning(false, '%s: `key` is not a prop. Trying to access it will result ' + 'in `undefined` being returned. If you need to access the same ' + 'value within the child component, you should pass it as a different ' + 'prop. (https://fb.me/react-special-props)', displayName) : void 0;
+      process.env.NODE_ENV !== 'production' ? warning(false, '%s: `key` is not a prop. Trying to access it will result ' + 'in `undefined` being returned. If you need to access the same ' + 'value within the child component, you should pass it as a different ' + 'prop. (https://fb.me/react-special-props)', displayName) : void 0;
     }
   };
   warnAboutAccessingKey.isReactWarning = true;
@@ -9631,7 +9704,7 @@ function defineRefPropWarningGetter(props, displayName) {
   var warnAboutAccessingRef = function () {
     if (!specialPropRefWarningShown) {
       specialPropRefWarningShown = true;
-      "development" !== 'production' ? warning(false, '%s: `ref` is not a prop. Trying to access it will result ' + 'in `undefined` being returned. If you need to access the same ' + 'value within the child component, you should pass it as a different ' + 'prop. (https://fb.me/react-special-props)', displayName) : void 0;
+      process.env.NODE_ENV !== 'production' ? warning(false, '%s: `ref` is not a prop. Trying to access it will result ' + 'in `undefined` being returned. If you need to access the same ' + 'value within the child component, you should pass it as a different ' + 'prop. (https://fb.me/react-special-props)', displayName) : void 0;
     }
   };
   warnAboutAccessingRef.isReactWarning = true;
@@ -9676,7 +9749,7 @@ var ReactElement = function (type, key, ref, self, source, owner, props) {
     _owner: owner
   };
 
-  if ("development" !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     // The validation flag is currently mutative. We put it on
     // an external backing store so that we can freeze the whole object.
     // This can be replaced with a WeakMap once they are implemented in
@@ -9766,7 +9839,7 @@ ReactElement.createElement = function (type, config, children) {
     for (var i = 0; i < childrenLength; i++) {
       childArray[i] = arguments[i + 2];
     }
-    if ("development" !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       if (Object.freeze) {
         Object.freeze(childArray);
       }
@@ -9783,7 +9856,7 @@ ReactElement.createElement = function (type, config, children) {
       }
     }
   }
-  if ("development" !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     if (key || ref) {
       if (typeof props.$$typeof === 'undefined' || props.$$typeof !== REACT_ELEMENT_TYPE) {
         var displayName = typeof type === 'function' ? type.displayName || type.name || 'Unknown' : type;
@@ -9898,7 +9971,8 @@ ReactElement.isValidElement = function (object) {
 };
 
 module.exports = ReactElement;
-},{"./ReactCurrentOwner":92,"./ReactElementSymbol":95,"./canDefineProperty":102,"fbjs/lib/warning":113,"object-assign":114}],95:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./ReactCurrentOwner":92,"./ReactElementSymbol":95,"./canDefineProperty":102,"_process":40,"fbjs/lib/warning":113,"object-assign":114}],95:[function(require,module,exports){
 /**
  * Copyright 2014-present, Facebook, Inc.
  * All rights reserved.
@@ -9919,6 +9993,7 @@ var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol['for'] && Symbol
 
 module.exports = REACT_ELEMENT_TYPE;
 },{}],96:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
  * All rights reserved.
@@ -10022,7 +10097,7 @@ function validateExplicitKey(element, parentType) {
     childOwner = ' It was passed a child from ' + element._owner.getName() + '.';
   }
 
-  "development" !== 'production' ? warning(false, 'Each child in an array or iterator should have a unique "key" prop.' + '%s%s See https://fb.me/react-warning-keys for more information.%s', currentComponentErrorInfo, childOwner, ReactComponentTreeHook.getCurrentStackAddendum(element)) : void 0;
+  process.env.NODE_ENV !== 'production' ? warning(false, 'Each child in an array or iterator should have a unique "key" prop.' + '%s%s See https://fb.me/react-warning-keys for more information.%s', currentComponentErrorInfo, childOwner, ReactComponentTreeHook.getCurrentStackAddendum(element)) : void 0;
 }
 
 /**
@@ -10083,7 +10158,7 @@ function validatePropTypes(element) {
     checkReactTypeSpec(componentClass.propTypes, element.props, 'prop', name, element, null);
   }
   if (typeof componentClass.getDefaultProps === 'function') {
-    "development" !== 'production' ? warning(componentClass.getDefaultProps.isReactClassApproved, 'getDefaultProps is only used on classic React.createClass ' + 'definitions. Use a static property named `defaultProps` instead.') : void 0;
+    process.env.NODE_ENV !== 'production' ? warning(componentClass.getDefaultProps.isReactClassApproved, 'getDefaultProps is only used on classic React.createClass ' + 'definitions. Use a static property named `defaultProps` instead.') : void 0;
   }
 }
 
@@ -10110,7 +10185,7 @@ var ReactElementValidator = {
 
         var currentSource = props !== null && props !== undefined && props.__source !== undefined ? props.__source : null;
         ReactComponentTreeHook.pushNonStandardWarningStack(true, currentSource);
-        "development" !== 'production' ? warning(false, 'React.createElement: type is invalid -- expected a string (for ' + 'built-in components) or a class/function (for composite ' + 'components) but got: %s.%s', type == null ? type : typeof type, info) : void 0;
+        process.env.NODE_ENV !== 'production' ? warning(false, 'React.createElement: type is invalid -- expected a string (for ' + 'built-in components) or a class/function (for composite ' + 'components) but got: %s.%s', type == null ? type : typeof type, info) : void 0;
         ReactComponentTreeHook.popNonStandardWarningStack();
       }
     }
@@ -10144,7 +10219,7 @@ var ReactElementValidator = {
     // Legacy hook TODO: Warn if this is accessed
     validatedFactory.type = type;
 
-    if ("development" !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       if (canDefineProperty) {
         Object.defineProperty(validatedFactory, 'type', {
           enumerable: false,
@@ -10173,7 +10248,9 @@ var ReactElementValidator = {
 };
 
 module.exports = ReactElementValidator;
-},{"./ReactComponentTreeHook":91,"./ReactCurrentOwner":92,"./ReactElement":94,"./canDefineProperty":102,"./checkReactTypeSpec":103,"./getIteratorFn":105,"./lowPriorityWarning":106,"fbjs/lib/warning":113}],97:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./ReactComponentTreeHook":91,"./ReactCurrentOwner":92,"./ReactElement":94,"./canDefineProperty":102,"./checkReactTypeSpec":103,"./getIteratorFn":105,"./lowPriorityWarning":106,"_process":40,"fbjs/lib/warning":113}],97:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
  * All rights reserved.
@@ -10189,9 +10266,9 @@ module.exports = ReactElementValidator;
 var warning = require('fbjs/lib/warning');
 
 function warnNoop(publicInstance, callerName) {
-  if ("development" !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     var constructor = publicInstance.constructor;
-    "development" !== 'production' ? warning(false, '%s(...): Can only update a mounted or mounting component. ' + 'This usually means you called %s() on an unmounted component. ' + 'This is a no-op. Please check the code for the %s component.', callerName, callerName, constructor && (constructor.displayName || constructor.name) || 'ReactClass') : void 0;
+    process.env.NODE_ENV !== 'production' ? warning(false, '%s(...): Can only update a mounted or mounting component. ' + 'This usually means you called %s() on an unmounted component. ' + 'This is a no-op. Please check the code for the %s component.', callerName, callerName, constructor && (constructor.displayName || constructor.name) || 'ReactClass') : void 0;
   }
 }
 
@@ -10268,7 +10345,9 @@ var ReactNoopUpdateQueue = {
 };
 
 module.exports = ReactNoopUpdateQueue;
-},{"fbjs/lib/warning":113}],98:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40,"fbjs/lib/warning":113}],98:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -10284,7 +10363,7 @@ module.exports = ReactNoopUpdateQueue;
 
 var ReactPropTypeLocationNames = {};
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   ReactPropTypeLocationNames = {
     prop: 'prop',
     context: 'context',
@@ -10293,7 +10372,8 @@ if ("development" !== 'production') {
 }
 
 module.exports = ReactPropTypeLocationNames;
-},{}],99:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40}],99:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -10344,6 +10424,7 @@ module.exports = ReactPropTypesSecret;
 
 module.exports = '15.6.1';
 },{}],102:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -10358,7 +10439,7 @@ module.exports = '15.6.1';
 'use strict';
 
 var canDefineProperty = false;
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   try {
     // $FlowFixMe https://github.com/facebook/flow/issues/285
     Object.defineProperty({}, 'x', { get: function () {} });
@@ -10369,7 +10450,8 @@ if ("development" !== 'production') {
 }
 
 module.exports = canDefineProperty;
-},{}],103:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40}],103:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -10393,7 +10475,7 @@ var warning = require('fbjs/lib/warning');
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && process.env && "development" === 'test') {
+if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -10426,12 +10508,12 @@ function checkReactTypeSpec(typeSpecs, values, location, componentName, element,
       try {
         // This is intentionally an invariant that gets caught. It's the same
         // behavior as without this statement except with a better message.
-        !(typeof typeSpecs[typeSpecName] === 'function') ? "development" !== 'production' ? invariant(false, '%s: %s type `%s` is invalid; it must be a function, usually from React.PropTypes.', componentName || 'React class', ReactPropTypeLocationNames[location], typeSpecName) : _prodInvariant('84', componentName || 'React class', ReactPropTypeLocationNames[location], typeSpecName) : void 0;
+        !(typeof typeSpecs[typeSpecName] === 'function') ? process.env.NODE_ENV !== 'production' ? invariant(false, '%s: %s type `%s` is invalid; it must be a function, usually from React.PropTypes.', componentName || 'React class', ReactPropTypeLocationNames[location], typeSpecName) : _prodInvariant('84', componentName || 'React class', ReactPropTypeLocationNames[location], typeSpecName) : void 0;
         error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
       } catch (ex) {
         error = ex;
       }
-      "development" !== 'production' ? warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', ReactPropTypeLocationNames[location], typeSpecName, typeof error) : void 0;
+      process.env.NODE_ENV !== 'production' ? warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', ReactPropTypeLocationNames[location], typeSpecName, typeof error) : void 0;
       if (error instanceof Error && !(error.message in loggedTypeFailures)) {
         // Only monitor this failure once because there tends to be a lot of the
         // same error.
@@ -10439,7 +10521,7 @@ function checkReactTypeSpec(typeSpecs, values, location, componentName, element,
 
         var componentStackInfo = '';
 
-        if ("development" !== 'production') {
+        if (process.env.NODE_ENV !== 'production') {
           if (!ReactComponentTreeHook) {
             ReactComponentTreeHook = require('./ReactComponentTreeHook');
           }
@@ -10450,7 +10532,7 @@ function checkReactTypeSpec(typeSpecs, values, location, componentName, element,
           }
         }
 
-        "development" !== 'production' ? warning(false, 'Failed %s type: %s%s', location, error.message, componentStackInfo) : void 0;
+        process.env.NODE_ENV !== 'production' ? warning(false, 'Failed %s type: %s%s', location, error.message, componentStackInfo) : void 0;
       }
     }
   }
@@ -10523,6 +10605,7 @@ function getIteratorFn(maybeIterable) {
 
 module.exports = getIteratorFn;
 },{}],106:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -10551,7 +10634,7 @@ module.exports = getIteratorFn;
 
 var lowPriorityWarning = function () {};
 
-if ("development" !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   var printWarning = function (format) {
     for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
       args[_key - 1] = arguments[_key];
@@ -10587,7 +10670,9 @@ if ("development" !== 'production') {
 }
 
 module.exports = lowPriorityWarning;
-},{}],107:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":40}],107:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -10620,12 +10705,13 @@ var invariant = require('fbjs/lib/invariant');
  * structure.
  */
 function onlyChild(children) {
-  !ReactElement.isValidElement(children) ? "development" !== 'production' ? invariant(false, 'React.Children.only expected to receive a single React element child.') : _prodInvariant('143') : void 0;
+  !ReactElement.isValidElement(children) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'React.Children.only expected to receive a single React element child.') : _prodInvariant('143') : void 0;
   return children;
 }
 
 module.exports = onlyChild;
-},{"./ReactElement":94,"./reactProdInvariant":108,"fbjs/lib/invariant":112}],108:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./ReactElement":94,"./reactProdInvariant":108,"_process":40,"fbjs/lib/invariant":112}],108:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -10665,6 +10751,7 @@ function reactProdInvariant(code) {
 
 module.exports = reactProdInvariant;
 },{}],109:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -10772,7 +10859,7 @@ function traverseAllChildrenImpl(children, nameSoFar, callback, traverseContext)
           subtreeCount += traverseAllChildrenImpl(child, nextName, callback, traverseContext);
         }
       } else {
-        if ("development" !== 'production') {
+        if (process.env.NODE_ENV !== 'production') {
           var mapsAsChildrenAddendum = '';
           if (ReactCurrentOwner.current) {
             var mapsAsChildrenOwnerName = ReactCurrentOwner.current.getName();
@@ -10780,7 +10867,7 @@ function traverseAllChildrenImpl(children, nameSoFar, callback, traverseContext)
               mapsAsChildrenAddendum = ' Check the render method of `' + mapsAsChildrenOwnerName + '`.';
             }
           }
-          "development" !== 'production' ? warning(didWarnAboutMaps, 'Using Maps as children is not yet fully supported. It is an ' + 'experimental feature that might be removed. Convert it to a ' + 'sequence / iterable of keyed ReactElements instead.%s', mapsAsChildrenAddendum) : void 0;
+          process.env.NODE_ENV !== 'production' ? warning(didWarnAboutMaps, 'Using Maps as children is not yet fully supported. It is an ' + 'experimental feature that might be removed. Convert it to a ' + 'sequence / iterable of keyed ReactElements instead.%s', mapsAsChildrenAddendum) : void 0;
           didWarnAboutMaps = true;
         }
         // Iterator will provide entry [k,v] tuples rather than values.
@@ -10795,7 +10882,7 @@ function traverseAllChildrenImpl(children, nameSoFar, callback, traverseContext)
       }
     } else if (type === 'object') {
       var addendum = '';
-      if ("development" !== 'production') {
+      if (process.env.NODE_ENV !== 'production') {
         addendum = ' If you meant to render a collection of children, use an array ' + 'instead or wrap the object using createFragment(object) from the ' + 'React add-ons.';
         if (children._isReactElement) {
           addendum = " It looks like you're using an element created by a different " + 'version of React. Make sure to use only one copy of React.';
@@ -10808,7 +10895,7 @@ function traverseAllChildrenImpl(children, nameSoFar, callback, traverseContext)
         }
       }
       var childrenString = String(children);
-      !false ? "development" !== 'production' ? invariant(false, 'Objects are not valid as a React child (found: %s).%s', childrenString === '[object Object]' ? 'object with keys {' + Object.keys(children).join(', ') + '}' : childrenString, addendum) : _prodInvariant('31', childrenString === '[object Object]' ? 'object with keys {' + Object.keys(children).join(', ') + '}' : childrenString, addendum) : void 0;
+      !false ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Objects are not valid as a React child (found: %s).%s', childrenString === '[object Object]' ? 'object with keys {' + Object.keys(children).join(', ') + '}' : childrenString, addendum) : _prodInvariant('31', childrenString === '[object Object]' ? 'object with keys {' + Object.keys(children).join(', ') + '}' : childrenString, addendum) : void 0;
     }
   }
 
@@ -10840,15 +10927,16 @@ function traverseAllChildren(children, callback, traverseContext) {
 }
 
 module.exports = traverseAllChildren;
-},{"./KeyEscapeUtils":86,"./ReactCurrentOwner":92,"./ReactElementSymbol":95,"./getIteratorFn":105,"./reactProdInvariant":108,"fbjs/lib/invariant":112,"fbjs/lib/warning":113}],110:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./KeyEscapeUtils":86,"./ReactCurrentOwner":92,"./ReactElementSymbol":95,"./getIteratorFn":105,"./reactProdInvariant":108,"_process":40,"fbjs/lib/invariant":112,"fbjs/lib/warning":113}],110:[function(require,module,exports){
 arguments[4][9][0].apply(exports,arguments)
 },{"dup":9}],111:[function(require,module,exports){
 arguments[4][10][0].apply(exports,arguments)
-},{"dup":10}],112:[function(require,module,exports){
+},{"_process":40,"dup":10}],112:[function(require,module,exports){
 arguments[4][11][0].apply(exports,arguments)
-},{"dup":11}],113:[function(require,module,exports){
+},{"_process":40,"dup":11}],113:[function(require,module,exports){
 arguments[4][12][0].apply(exports,arguments)
-},{"./emptyFunction":110,"dup":12}],114:[function(require,module,exports){
+},{"./emptyFunction":110,"_process":40,"dup":12}],114:[function(require,module,exports){
 arguments[4][13][0].apply(exports,arguments)
 },{"dup":13}],115:[function(require,module,exports){
 'use strict';
@@ -10913,7 +11001,7 @@ function transmitter() {
 module.exports = transmitter;
 },{}],117:[function(require,module,exports){
 arguments[4][36][0].apply(exports,arguments)
-},{"dup":36}],"alt":[function(require,module,exports){
+},{"_process":40,"dup":36}],"alt":[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
