@@ -12,6 +12,7 @@ class AuthorListActions {
 	}
 
 	getMoreAuthor(page, limit, params) {
+		console.log(params);
 		return AuthorSource.getAuthor(page, limit, params).then(function(data){
 			return data
 		});

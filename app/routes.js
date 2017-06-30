@@ -21,7 +21,7 @@ export default (
     	<IndexRoute component={Home}/>
     	<Redirect from="home" to="art/1" />
    		<Route path="art/:page" component={ArtList} />
-   		<Route path="author/:page" component={AuthorList} />
+   		<Route path="author/:style" component={AuthorList} />
     </Route>
   </Router>
 )

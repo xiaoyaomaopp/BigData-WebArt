@@ -12,6 +12,7 @@ class AuthorList extends React.Component {
         super(props);
         this.state = AuthorStore.getState();
         this.onChange = this.onChange.bind(this);
+        this.styleQuery = 'all';
         this.page = 1;
         this.limit = 4;
         this.autoLoadCount = 5;
@@ -19,14 +20,25 @@ class AuthorList extends React.Component {
         this.state.query = {
             authorName : ''
         };
+        if(!!props.params.style && 'all'!=props.params.style){
+            this.state.query.genre = props.params.style;
+        }
+        console.log(this.state.query);
     }
 
     componentDidMount() {
-        let boxHeight = $(window).height()- 70 - 57 - 60;
+        //$(".active").removeClass("active");
+        //$(".nav_author").addClass("active");
+        let boxHeight = $(window).height()- 70 - 57 - 60 - 24 -20-23;
         $(".pc-center-box").css("height",boxHeight);
         AuthorStore.listen(this.onChange);
+        this.setInitEvent();
+    }
+
+    setInitEvent(){
         var that = this;
-        AuthorListActions.getMoreAuthor(this.page, this.limit).then(
+        console.log(that.props.style)
+        AuthorListActions.getMoreAuthor(that.page, that.limit, that.state.query).then(
             function(data){
                 that.setState({
                     data:{
@@ -64,11 +76,62 @@ class AuthorList extends React.Component {
         );
     }
 
+    setMenuBindEvent(){
+        alert("切换加载正在调试中，暂时不可用使用，数据可以通过F5进行刷新");
+        return;
+        var that = this;
+        console.log(that);
+        AuthorListActions.getMoreAuthor(that.page, that.limit, that.state.query).then(
+            function(data){
+                that.setState({
+                    data:{
+                        data:data.data
+                    }});
+                $(".pc-center-box").mCustomScrollbar({
+                    axis:"y",
+                    callbacks:{
+                        onScroll:function(){
+                            let scrollIndex = this.mcs.draggerTop+$(".mCSB_dragger_bar").height();
+                            let contentHeight = $(".pc-center-box").height();
+                            if(!that.stop && scrollIndex + 80 - contentHeight > 0){
+                                that.stop = true;
+                                $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                                $(".pc-center-box").mCustomScrollbar("update");
+                                AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
+                                        data => that.addNewArticle(data.data)
+                                );
+                            }
+                        },
+                        onTotalScroll:function(){
+                            if(!that.stop){
+                                that.stop = true;
+                                $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                                $(".pc-center-box").mCustomScrollbar("update");
+                                AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
+                                        data => that.addNewArticle(data.data)
+                                );
+                            }
+                        }
+                    }
+
+                })
+            }
+        );
+    }
+
+
     componentWillUnmount() {
         AuthorStore.unlisten(this.onChange);
     }
 
     componentDidUpdate(prevProps) {
+        this.styleQuery = prevProps.params.style;
+        console.log(this.styleQuery);
+        if(!!this.styleQuery && 'all'!=this.styleQuery){
+            this.state.query.genre = this.styleQuery;
+            //this.onChange(newState);
+            console.log('ddd:'+this.state.query.genre);
+        }
     }
 
     onChange(state) {
@@ -157,9 +220,9 @@ class AuthorList extends React.Component {
             <div className="container">
                 <div className="row">
                     <div className="col-sm-2">
-                        <Navbar />
+                        <Navbar updateContent={this.setMenuBindEvent} page={this.page}/>
                     </div>
-                    <div className="col-sm-10">
+                    <div className="col-sm-10 content-box">
                     <div className="search-toobar">
                         <div className="input-group search-input-group">
                             <input type="text" id="authorName" className="form-control" placeholder="Search for..."  />

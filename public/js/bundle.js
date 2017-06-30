@@ -82,6 +82,7 @@ var AuthorListActions = function () {
 	}, {
 		key: 'getMoreAuthor',
 		value: function getMoreAuthor(page, limit, params) {
+			console.log(params);
 			return _AuthorSource2.default.getAuthor(page, limit, params).then(function (data) {
 				return data;
 			});
@@ -154,11 +155,7 @@ var Header = function (_React$Component) {
 							"div",
 							{ className: "col-sm-12" },
 							_react2.default.createElement("a", { href: "/#/home", className: "header-logo" }),
-							_react2.default.createElement(
-								"div",
-								{ className: "header-login" },
-								"admin"
-							),
+							_react2.default.createElement("div", { className: "header-login" }),
 							_react2.default.createElement("div", { className: "header-logout" })
 						)
 					)
@@ -170,8 +167,71 @@ var Header = function (_React$Component) {
 	return Header;
 }(_react2.default.Component);
 
-var Copyright = function (_React$Component2) {
-	_inherits(Copyright, _React$Component2);
+var HeaderTop = function (_React$Component2) {
+	_inherits(HeaderTop, _React$Component2);
+
+	function HeaderTop() {
+		_classCallCheck(this, HeaderTop);
+
+		return _possibleConstructorReturn(this, (HeaderTop.__proto__ || Object.getPrototypeOf(HeaderTop)).apply(this, arguments));
+	}
+
+	_createClass(HeaderTop, [{
+		key: "render",
+		value: function render() {
+			return _react2.default.createElement(
+				"div",
+				{ className: "header-top" },
+				_react2.default.createElement(
+					"div",
+					{ className: "container" },
+					_react2.default.createElement(
+						"div",
+						{ className: "row" },
+						_react2.default.createElement(
+							"div",
+							{ className: "col-sm-8" },
+							_react2.default.createElement(
+								"a",
+								{ href: "/#/home" },
+								"\u4E03\u53EA\u72F8\u732B\xB7\u8352\u91CE\u730E\u4EBA\u56E2\u961F"
+							)
+						),
+						_react2.default.createElement(
+							"div",
+							{ className: "col-sm-4 header-top-user" },
+							_react2.default.createElement(
+								"span",
+								null,
+								"\u60A8\u597D\uFF01\u6B22\u8FCE\u6765\u5230\u4E03\u53EA\u72F8\u732B\xB7\u827A\u672F\u7BA1\u7406\u5E73\u53F0\uFF01"
+							),
+							_react2.default.createElement(
+								"span",
+								{ className: "userName", title: "admin" },
+								"admin"
+							),
+							_react2.default.createElement(
+								"span",
+								null,
+								" | "
+							),
+							_react2.default.createElement(
+								"span",
+								{ className: "loginOut", title: "\u9000\u51FA\u767B\u5F55" },
+								" \u9000\u51FA "
+							)
+						)
+					)
+				)
+			);
+		}
+	}]);
+
+	return HeaderTop;
+}(_react2.default.Component);
+
+var Copyright = function (_React$Component3) {
+	_inherits(Copyright, _React$Component3);
 
 	function Copyright() {
 		_classCallCheck(this, Copyright);
@@ -223,8 +283,8 @@ var Copyright = function (_React$Component2) {
 	return Copyright;
 }(_react2.default.Component);
 
-var App = function (_React$Component3) {
-	_inherits(App, _React$Component3);
+var App = function (_React$Component4) {
+	_inherits(App, _React$Component4);
 
 	function App() {
 		_classCallCheck(this, App);
@@ -240,7 +300,8 @@ var App = function (_React$Component3) {
 		value: function render() {
 			return _react2.default.createElement(
 				"div",
-				{ className: "container" },
+				{ className: "container0" },
+				_react2.default.createElement(HeaderTop, null),
 				_react2.default.createElement(Header, null),
 				_react2.default.createElement(
 					"div",
@@ -412,6 +473,7 @@ var AuthorList = function (_React$Component) {
 
         _this.state = _AuthorStore2.default.getState();
         _this.onChange = _this.onChange.bind(_this);
+        _this.styleQuery = 'all';
         _this.page = 1;
         _this.limit = 4;
         _this.autoLoadCount = 5;
@@ -419,17 +481,71 @@ var AuthorList = function (_React$Component) {
         _this.state.query = {
             authorName: ''
         };
+        if (!!props.params.style && 'all' != props.params.style) {
+            _this.state.query.genre = props.params.style;
+        }
+        console.log(_this.state.query);
         return _this;
     }
 
     _createClass(AuthorList, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var boxHeight = $(window).height() - 70 - 57 - 60;
+            //$(".active").removeClass("active");
+            //$(".nav_author").addClass("active");
+            var boxHeight = $(window).height() - 70 - 57 - 60 - 24 - 20 - 23;
             $(".pc-center-box").css("height", boxHeight);
             _AuthorStore2.default.listen(this.onChange);
+            this.setInitEvent();
+        }
+    }, {
+        key: 'setInitEvent',
+        value: function setInitEvent() {
             var that = this;
-            _AuthorListActions2.default.getMoreAuthor(this.page, this.limit).then(function (data) {
+            console.log(that.props.style);
+            _AuthorListActions2.default.getMoreAuthor(that.page, that.limit, that.state.query).then(function (data) {
+                that.setState({
+                    data: {
+                        data: data.data
+                    } });
+                $(".pc-center-box").mCustomScrollbar({
+                    axis: "y",
+                    callbacks: {
+                        onScroll: function onScroll() {
+                            var scrollIndex = this.mcs.draggerTop + $(".mCSB_dragger_bar").height();
+                            var contentHeight = $(".pc-center-box").height();
+                            if (!that.stop && scrollIndex + 80 - contentHeight > 0) {
+                                that.stop = true;
+                                $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                                $(".pc-center-box").mCustomScrollbar("update");
+                                _AuthorListActions2.default.getMoreAuthor(++that.page, that.limit, that.state.query).then(function (data) {
+                                    return that.addNewArticle(data.data);
+                                });
+                            }
+                        },
+                        onTotalScroll: function onTotalScroll() {
+                            if (!that.stop) {
+                                that.stop = true;
+                                $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                                $(".pc-center-box").mCustomScrollbar("update");
+                                _AuthorListActions2.default.getMoreAuthor(++that.page, that.limit, that.state.query).then(function (data) {
+                                    return that.addNewArticle(data.data);
+                                });
+                            }
+                        }
+                    }
+
+                });
+            });
+        }
+    }, {
+        key: 'setMenuBindEvent',
+        value: function setMenuBindEvent() {
+            alert("切换加载正在调试中，暂时不可用使用，数据可以通过F5进行刷新");
+            return;
+            var that = this;
+            console.log(that);
+            _AuthorListActions2.default.getMoreAuthor(that.page, that.limit, that.state.query).then(function (data) {
                 that.setState({
                     data: {
                         data: data.data
@@ -471,7 +587,15 @@ var AuthorList = function (_React$Component) {
         }
     }, {
         key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps) {}
+        value: function componentDidUpdate(prevProps) {
+            this.styleQuery = prevProps.params.style;
+            console.log(this.styleQuery);
+            if (!!this.styleQuery && 'all' != this.styleQuery) {
+                this.state.query.genre = this.styleQuery;
+                //this.onChange(newState);
+                console.log('ddd:' + this.state.query.genre);
+            }
+        }
     }, {
         key: 'onChange',
         value: function onChange(state) {
@@ -639,11 +763,11 @@ var AuthorList = function (_React$Component) {
                     _react2.default.createElement(
                         'div',
                         { className: 'col-sm-2' },
-                        _react2.default.createElement(_Navbar2.default, null)
+                        _react2.default.createElement(_Navbar2.default, { updateContent: this.setMenuBindEvent, page: this.page })
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'col-sm-10' },
+                        { className: 'col-sm-10 content-box' },
                         _react2.default.createElement(
                             'div',
                             { className: 'search-toobar' },
@@ -759,22 +883,44 @@ var Navbar = function (_React$Component) {
 	function Navbar(props) {
 		_classCallCheck(this, Navbar);
 
-		return _possibleConstructorReturn(this, (Navbar.__proto__ || Object.getPrototypeOf(Navbar)).call(this, props));
-		//this.url = location.href.split('#')[0];
+		var _this = _possibleConstructorReturn(this, (Navbar.__proto__ || Object.getPrototypeOf(Navbar)).call(this, props));
+
+		_this.url = location.href.split('#')[0];
+		_this.updateContent = props.updateContent || function () {};
+		return _this;
 	}
 
 	_createClass(Navbar, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
+			this.updateMenu();
 			this.initEvent();
+		}
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate(prevProps) {
+			this.updateMenu();
+		}
+	}, {
+		key: 'updateMenu',
+		value: function updateMenu() {
+			var urlparams = location.href.split('#/');
+			if (!!urlparams && urlparams.length > 1) {
+				var urlparam = urlparams[1].split("?_k=")[0];
+				$(".active").removeClass("active");
+				$(".nav_" + urlparam.replace("/", "_")).addClass("active");
+			}
 		}
 	}, {
 		key: 'initEvent',
 		value: function initEvent() {
-			$('#nav li').click(function (e) {
+			var that = this;
+			$('.menu_li').click(function (e) {
 				//e.preventDefault()
 				//$(".active").removeClass("active");
 				//$(this).tab('show')
+				console.log('click:');
+				that.updateContent();
 			});
 		}
 	}, {
@@ -782,23 +928,51 @@ var Navbar = function (_React$Component) {
 		value: function render() {
 			return _react2.default.createElement(
 				'div',
-				{ className: 'nav ', id: 'nav' },
+				{ className: 'nav', id: 'nav' },
 				_react2.default.createElement(
 					'li',
-					null,
+					{ className: 'nav_title' },
+					'\u4F5C\u54C1'
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_art active' },
 					_react2.default.createElement(
 						_reactRouter.Link,
 						{ to: '/art/1' },
-						'\u4F5C\u54C1'
+						'\u5168\u90E8'
 					)
 				),
 				_react2.default.createElement(
 					'li',
-					null,
+					{ className: 'nav_title' },
+					'\u4F5C\u8005'
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author_all' },
 					_react2.default.createElement(
 						_reactRouter.Link,
-						{ to: '/author/1' },
-						'\u4F5C\u8005'
+						{ to: '/author/all' },
+						'\u5168\u90E8'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author_abstract' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/abstract' },
+						'\u62BD\u8C61\u6D3E'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author_cityscape' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/cityscape' },
+						'\u57CE\u5E02\u98CE'
 					)
 				)
 			);
@@ -873,7 +1047,7 @@ exports.default = _react2.default.createElement(
     _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
     _react2.default.createElement(_reactRouter.Redirect, { from: 'home', to: 'art/1' }),
     _react2.default.createElement(_reactRouter.Route, { path: 'art/:page', component: _ArtList2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'author/:page', component: _AuthorList2.default })
+    _react2.default.createElement(_reactRouter.Route, { path: 'author/:style', component: _AuthorList2.default })
   )
 );
 
