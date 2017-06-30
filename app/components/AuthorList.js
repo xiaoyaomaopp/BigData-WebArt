@@ -42,7 +42,7 @@ class AuthorList extends React.Component {
                                 that.stop = true;
                                 $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
                                 $(".pc-center-box").mCustomScrollbar("update");
-                                AuthorListActions.getMoreAuthor(++that.page, that.limit).then(
+                                AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
                                         data => that.addNewArticle(data.data)
                                 );
                             }
@@ -52,7 +52,7 @@ class AuthorList extends React.Component {
                                 that.stop = true;
                                 $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
                                 $(".pc-center-box").mCustomScrollbar("update");
-                                AuthorListActions.getMoreAuthor(++that.page, that.limit).then(
+                                AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
                                         data => that.addNewArticle(data.data)
                                 );
                             }
@@ -85,18 +85,29 @@ class AuthorList extends React.Component {
         this.stop = false;
     }
 
-    queryAuthorByParams(params){
-
-    }
-
-    searchAuthorName(){
-        let authorName = $("#authorName").val();
-        if(!!authorName){
-            queryAuthorByParams({'authorName':authorName});
-        }
+    setNewArticle(news){
+        this.setState({
+            data:{
+                data:news
+            }});
+        $(".spinner").remove();
+        $(".pc-center-box").mCustomScrollbar("update");
+        this.stop = false;
     }
 
     render() {
+        var that = this;
+        let searchAuthorName = function(){
+            let authorName = $("#authorName").val();
+            if(!!authorName){
+                that.state.query.authorName = authorName;
+            }else{
+                that.state.query.authorName = '';
+            }
+            AuthorListActions.getMoreAuthor(1, that.limit, that.state.query).then(
+                data => that.setNewArticle(data.data)
+            );
+        }
         let author_data = (this.state.data);
         let author_list = "";
         if(author_data && author_data.data){
@@ -153,7 +164,7 @@ class AuthorList extends React.Component {
                         <div className="input-group search-input-group">
                             <input type="text" id="authorName" className="form-control" placeholder="Search for..."  />
                               <span className="input-group-btn">
-                                <button className="btn btn-default" type="button" onClick={this.searchAuthorName}>搜索</button>
+                                <button className="btn btn-default" type="button" onClick={searchAuthorName}>搜索</button>
                               </span>
                         </div>
                     </div>

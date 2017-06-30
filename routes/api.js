@@ -16,7 +16,8 @@ router.get('/art', function(req, res) {
 router.get('/author', function(req, res) {
 	var page = parseInt(req.query.page);
 	var limit = parseInt(req.query.limit);
-	read.authorByPage(page, limit).then(function(data) {
+	var query = req.query.query;
+	read.authorByPage(page, limit, query).then(function(data) {
 		res.send(data);
 	}).catch(function(e) {
 		res.send([]);

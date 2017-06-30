@@ -27,10 +27,15 @@ exports.articlesByPage = function(page, limit) {
 	})
 }
 
-exports.authorByPage = function(page, limit) {
+exports.authorByPage = function(page, limit, query) {
 	var start = (page - 1) * limit;
+	var param = {};
+	if(!!query && !!query.authorName){
+		param.name = eval('/'+query.authorName+'/');
+	}
+    console.log(param);
 	return db.open("wikiart.org.author").then(function(collection) {
-		return collection.find({}).sort({
+		return collection.find(param).sort({
 			_updateAt: -1
 		}).skip(start).limit(limit).toArray();
 	}).then(function(data) {
