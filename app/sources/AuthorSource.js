@@ -12,4 +12,4 @@ var AuthorSource = {
     }
 }
 
-export default AuthorSource
+export default AuthorSource;

@@ -1,8 +1,56 @@
 var express = require('express');
 var router = express.Router();
 var read = require('../server/read.js');
+var md5 = require("blueimp-md5");
 
 /* GET users listing. */
+router.get('/', function(req, res, next) {
+	res.send('login');
+});
+
+router.post('/login', function(req, res, next) {
+	var user = {
+		account: req.body.account,
+		password: md5(req.body.password)
+	};
+	//read.checkUser(user).then(function(data) {
+	//	var result = false;
+	//	if (data) {
+	//		req.session.user = data;
+	//		result = true;
+	//	}
+	//	res.send({
+	//		result: result,
+	//		data: data
+	//	});
+	//})
+	var result = false;
+	if ((req.body.account == "admin" && req.body.password == "admin")
+        || (req.body.account == "demo" && req.body.password == "demo")
+        ) {
+		req.session.user = user;
+		result = true;
+	}else{
+		req.session.user = null;
+		result = false
+	}
+	res.send({
+		result: result,
+		data: user
+	});
+});
+
+router.get("/currentUser", function(req, res, next) {
+    let user = req.session.user;
+    if(!!user){
+        res.send({
+            account : user.account
+        });
+    }else{
+        res.send('');
+    }
+})
+
 router.get('/art', function(req, res) {
 	var page = parseInt(req.query.page);
 	var limit = parseInt(req.query.limit);

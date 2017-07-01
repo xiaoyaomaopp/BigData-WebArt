@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var session = require('express-session');
 var index = require('./routes/index');
 var api = require('./routes/api');
 
@@ -19,11 +19,18 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-	extended: true
+	extended: false
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: false,
+	cookie: {
+		maxAge: 1000 * 60 * 10 //过期时间设置(单位毫秒)
+	}
+}));
 app.use('/', index);
 app.use('/api', api);
 

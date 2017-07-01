@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>七只狸猫·艺术</title>
+    <link rel="stylesheet" href="/css/vendor.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <script src="/js/vendor.js"></script>
+    <script src="/js/vendor.bundle.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $(".login_btn").on('click',function(){
+                login();
+            })
+            $("#login_pwd").on('keydown',function(event){
+                if (event.keyCode == "13") {//keyCode=13是回车键
+                    login();
+                }
+            })
+            function login(){
+                $.post("api/login", {
+                    account: $("#login_user").val(),
+                    password: $("#login_pwd").val()
+                }, function(data) {
+                    if (data.result) {
+                        location.href = "home";
+                    } else {
+                        $(".login_item_msg").show()
+                    }
+                }, "json")
+            }
+        })
+    </script>
+</head>
+<body>
+    <div id="login">
+        <div id="login_alert">
+            <div class="login_title">
+                七只狸猫·艺术
+            </div>
+            <div class="login_item">
+                <div>用户名</div>
+                <input type="text" id="login_user" class="input-text"/>
+            </div>
+            <div class="login_item login_pwd">
+                <div>密码</div>
+                <input type="password" id="login_pwd" class="input-text"/>
+                <div class="login_item_msg">
+                    用户名或密码错误！
+                </div>
+            </div>
+
+            <div class="login_item login_item_btn">
+                <a class="login_btn">登录</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
