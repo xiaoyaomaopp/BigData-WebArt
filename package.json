@@ -23,7 +23,6 @@
     "jquery": "^3.1.1",
     "jquery-ui": "^1.12.1",
     "jweixin": "^1.0.0",
-    "mmseg": "^0.2.0",
     "qrcodejs": "^1.0.0",
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.7",

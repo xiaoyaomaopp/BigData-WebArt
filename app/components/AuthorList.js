@@ -23,21 +23,27 @@ class AuthorList extends React.Component {
         if(!!props.params.style && 'all'!=props.params.style){
             this.state.query.genre = props.params.style;
         }
-        console.log(this.state.query);
     }
 
     componentDidMount() {
-        //$(".active").removeClass("active");
-        //$(".nav_author").addClass("active");
         let boxHeight = $(window).height()- 70 - 57 - 60 - 24 -20-23;
         $(".pc-center-box").css("height",boxHeight);
         AuthorStore.listen(this.onChange);
         this.setInitEvent();
     }
 
+    componentWillReceiveProps(nextProps){
+        if(!!nextProps.params.style && 'all'!=nextProps.params.style){
+            this.state.query.genre = nextProps.params.style;
+        }else{
+            this.state.query.genre = '';
+        }
+        this.page = 1;
+        this.setMenuBindEvent();
+    }
+
     setInitEvent(){
         var that = this;
-        console.log(that.props.style)
         AuthorListActions.getMoreAuthor(that.page, that.limit, that.state.query).then(
             function(data){
                 that.setState({
@@ -52,8 +58,9 @@ class AuthorList extends React.Component {
                             let contentHeight = $(".pc-center-box").height();
                             if(!that.stop && scrollIndex + 80 - contentHeight > 0){
                                 that.stop = true;
-                                $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
-                                $(".pc-center-box").mCustomScrollbar("update");
+                                $(".tip_msg").fadeIn();
+                                //$(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                                // $(".pc-center-box").mCustomScrollbar("update");
                                 AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
                                         data => that.addNewArticle(data.data)
                                 );
@@ -62,8 +69,9 @@ class AuthorList extends React.Component {
                         onTotalScroll:function(){
                             if(!that.stop){
                                 that.stop = true;
-                                $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
-                                $(".pc-center-box").mCustomScrollbar("update");
+                                $(".tip_msg").fadeIn();
+                                //$(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                                //$(".pc-center-box").mCustomScrollbar("update");
                                 AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
                                         data => that.addNewArticle(data.data)
                                 );
@@ -77,10 +85,7 @@ class AuthorList extends React.Component {
     }
 
     setMenuBindEvent(){
-        alert("切换加载正在调试中，暂时不可用使用，数据可以通过F5进行刷新");
-        return;
         var that = this;
-        console.log(that);
         AuthorListActions.getMoreAuthor(that.page, that.limit, that.state.query).then(
             function(data){
                 that.setState({
@@ -95,8 +100,9 @@ class AuthorList extends React.Component {
                             let contentHeight = $(".pc-center-box").height();
                             if(!that.stop && scrollIndex + 80 - contentHeight > 0){
                                 that.stop = true;
-                                $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
-                                $(".pc-center-box").mCustomScrollbar("update");
+                                $(".tip_msg").fadeIn();
+                                //$(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                                //$(".pc-center-box").mCustomScrollbar("update");
                                 AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
                                         data => that.addNewArticle(data.data)
                                 );
@@ -105,8 +111,9 @@ class AuthorList extends React.Component {
                         onTotalScroll:function(){
                             if(!that.stop){
                                 that.stop = true;
-                                $(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
-                                $(".pc-center-box").mCustomScrollbar("update");
+                                $(".tip_msg").fadeIn();
+                                //$(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
+                                //$(".pc-center-box").mCustomScrollbar("update");
                                 AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
                                         data => that.addNewArticle(data.data)
                                 );
@@ -119,19 +126,9 @@ class AuthorList extends React.Component {
         );
     }
 
-
     componentWillUnmount() {
         AuthorStore.unlisten(this.onChange);
-    }
-
-    componentDidUpdate(prevProps) {
-        this.styleQuery = prevProps.params.style;
-        console.log(this.styleQuery);
-        if(!!this.styleQuery && 'all'!=this.styleQuery){
-            this.state.query.genre = this.styleQuery;
-            //this.onChange(newState);
-            console.log('ddd:'+this.state.query.genre);
-        }
+        //$(".pc-center-box").mCustomScrollbar("destroy");
     }
 
     onChange(state) {
@@ -143,7 +140,8 @@ class AuthorList extends React.Component {
             data:{
                 data:this.state.data.data.concat(news)
             }});
-        $(".spinner").remove();
+        $(".tip_msg").fadeOut("slow");
+        //$(".spinner").remove();
         $(".pc-center-box").mCustomScrollbar("update");
         this.stop = false;
     }
@@ -184,34 +182,38 @@ class AuthorList extends React.Component {
                         <div>
                             <div className="authorList_cart-right_item">
                                 <span className="authorList_cart-title">名字：</span>
-                                <span className="authorList_cart-name" title={author.name}>{author.name}</span>
+                                <span className="authorList_cart-name"><span title={author.name}>{author.name}</span></span>
                             </div>
                             <div className="authorList_cart-right_item">
                                 <span className="authorList_cart-title">国籍：</span>
-                                <span className="authorList_cart-nationality" title={author.nationality}>{author.nationality}</span>
+                                <span className="authorList_cart-nationality"><span title={author.nationality}>{author.nationality}</span></span>
                             </div>
                         </div>
                         <div>
-                            <div className="authorList_cart-right_item authorList_cart-right_item-born">
+                            <div className="authorList_cart-right_item authorList_cart-right_item-born authorList_cart-item-line-2">
                                 <span className="authorList_cart-title">出生日期/地点：</span>
-                                <span className="authorList_cart-born" title={author.born}>{author.born}</span>
+                                <span className="authorList_cart-item-span-all-line"><span title={author.born}>{author.born}</span></span>
                             </div>
+                        </div>
+                        <div>
                             <div className="authorList_cart-right_item authorList_cart-right_item-field">
                                 <span className="authorList_cart-title">领域：</span>
-                                <span className="authorList_cart-field" title={author.field}>{author.field}</span>
+                                <span className="authorList_cart-field"><span title={author.field}>{author.field}</span></span>
+                            </div>
+                            <div className="authorList_cart-right_item">
+                                <span className="authorList_cart-title">风格：</span>
+                                <span className="authorList_cart-genre"><span title={author.genre}>{author.genre}</span></span>
                             </div>
                         </div>
                         <div>
                             <div className="authorList_cart-right_item">
-                                <span className="authorList_cart-title">风格：</span>
-                                <span className="authorList_cart-genre" title={author.genre}>{author.genre}</span>
-                            </div>
-                            <div className="authorList_cart-right_item">
                                 <span className="authorList_cart-title">导师：</span>
-                                <span className="authorList_cart-teachers" title={author.teachers}>{author.teachers}</span>
+                                <span className="authorList_cart-teachers"><span title={author.teachers}>{author.teachers}</span></span>
                             </div>
                         </div>
-
+                    </div>
+                    <div className="authorList_cart-toolbar">
+                        <span className="btn btn-primary authorList_cart-toolbar-edit">编辑</span>
                     </div>
                 </div>
             });
@@ -223,18 +225,21 @@ class AuthorList extends React.Component {
                         <Navbar updateContent={this.setMenuBindEvent} page={this.page}/>
                     </div>
                     <div className="col-sm-10 content-box">
-                    <div className="search-toobar">
-                        <div className="input-group search-input-group">
-                            <input type="text" id="authorName" className="form-control" placeholder="Search for..."  />
-                              <span className="input-group-btn">
-                                <button className="btn btn-default" type="button" onClick={searchAuthorName}>搜索</button>
-                              </span>
+                        <div className="search-toobar">
+                            <div className="input-group search-input-group">
+                                <input type="text" id="authorName" className="form-control" placeholder="Search for..."  />
+                                  <span className="input-group-btn">
+                                    <button className="btn btn-default" type="button" onClick={searchAuthorName}>搜索</button>
+                                  </span>
+                            </div>
                         </div>
-                    </div>
                         <div className="pc-center-box">
                             <div className="author-list">
                                 {author_list}
                             </div>
+                        </div>
+                        <div className="tip_contain">
+                            <span className="tip_msg">加载中...</span>
                         </div>
                     </div>
                 </div>
