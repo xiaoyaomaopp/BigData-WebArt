@@ -765,7 +765,8 @@ var AuthorList = function (_React$Component) {
             };
             var author_data = this.state.data;
             var author_list = "";
-            if (author_data && author_data.data) {
+            debugger;
+            if (author_data && author_data.data && author_data.data.length > 0) {
                 author_list = author_data.data.map(function (author) {
                     return _react2.default.createElement(
                         'div',
@@ -915,6 +916,12 @@ var AuthorList = function (_React$Component) {
                         )
                     );
                 });
+            } else {
+                author_list = _react2.default.createElement(
+                    'div',
+                    null,
+                    '\u65E0\u67E5\u8BE2\u5230\u5339\u914D\u7684\u6570\u636E\uFF01'
+                );
             }
             return _react2.default.createElement(
                 'div',

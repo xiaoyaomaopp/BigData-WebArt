@@ -32,7 +32,8 @@ exports.authorByPage = function(page, limit, query) {
 	var param = {};
 	if(!!query && !!query.authorName){
 		param.name = eval('/'+query.authorName+'/');
-	}else if(!!query && !!query.genre){
+	}
+	if(!!query && !!query.genre){
 		param.genre = eval('/'+query.genre+'/');
 	}
     console.log(param);

@@ -171,7 +171,8 @@ class AuthorList extends React.Component {
         }
         let author_data = (this.state.data);
         let author_list = "";
-        if(author_data && author_data.data){
+        debugger;
+        if(author_data && author_data.data && author_data.data.length>0){
             author_list = author_data.data.map(function(author){
                 return <div className="authorList_cart" key={author._id}>
                     <div className="authorList_cart-left">
@@ -217,6 +218,8 @@ class AuthorList extends React.Component {
                     </div>
                 </div>
             });
+        }else{
+            author_list = <div>无查询到匹配的数据！</div>;
         }
         return (
             <div className="container">
