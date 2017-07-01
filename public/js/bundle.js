@@ -636,6 +636,7 @@ var AuthorList = function (_React$Component) {
         key: 'setInitEvent',
         value: function setInitEvent() {
             var that = this;
+            $(".tip_msg").fadeIn();
             _AuthorListActions2.default.getMoreAuthor(that.page, that.limit, that.state.query).then(function (data) {
                 that.setState({
                     data: {
@@ -671,12 +672,14 @@ var AuthorList = function (_React$Component) {
                     }
 
                 });
+                $(".tip_msg").fadeOut("slow");
             });
         }
     }, {
         key: 'setMenuBindEvent',
         value: function setMenuBindEvent() {
             var that = this;
+            $(".tip_msg").fadeIn();
             _AuthorListActions2.default.getMoreAuthor(that.page, that.limit, that.state.query).then(function (data) {
                 that.setState({
                     data: {
@@ -712,6 +715,7 @@ var AuthorList = function (_React$Component) {
                     }
 
                 });
+                $(".tip_msg").fadeOut("slow");
             });
         }
     }, {
@@ -744,7 +748,8 @@ var AuthorList = function (_React$Component) {
                 data: {
                     data: news
                 } });
-            $(".spinner").remove();
+            $(".tip_msg").fadeOut("slow");
+            //$(".spinner").remove();
             $(".pc-center-box").mCustomScrollbar("update");
             this.stop = false;
         }
@@ -759,6 +764,7 @@ var AuthorList = function (_React$Component) {
                 } else {
                     that.state.query.authorName = '';
                 }
+                $(".tip_msg").fadeIn("slow");
                 _AuthorListActions2.default.getMoreAuthor(1, that.limit, that.state.query).then(function (data) {
                     return that.setNewArticle(data.data);
                 });
