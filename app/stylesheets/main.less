@@ -158,11 +158,13 @@ html,body,#app,.container{
 }
 .header-login{
   float: right;
-  margin: 5px 10px 0 0;
+  margin: 20px 10px 0 0;
+  cursor: default;
 }
 .header-logout{
   float: right;
-  margin: 0 10px 0 0;
+  margin: 20px 10px 0 0;
+  cursor: pointer;
 }
 .main{
   min-height: 540px;
@@ -405,7 +407,7 @@ html,body,#app,.container{
   border-radius:5px ;
   width: 300px;
   height: 350px;
-  margin: 100px auto 0 auto;
+  margin: 100px 200px 0 auto;
   background: #ffffff;
   padding: 0 auto;
 }
@@ -461,4 +463,43 @@ a:focus, a:hover {
 }
 .login_pwd{
   height: 88px;
+}
+
+/**************** edit author css *******************/
+.edit_author_modal{
+  width: 980px;
+  height: 800px;
+}
+.edit-author-img{
+  width: 420px;
+  height: 420px;
+  margin-left:15px;
+  padding: 10px;
+  float:left;
+}
+.edit-author-field{
+  float:left;
+  width: 515px;
+  max-height: 500px;
+}
+.edit-author-field .row{
+  margin: 20px auto;
+}
+.edit-author-form-group{
+  width: 500px;
+}
+.edit-author-form-group label{
+  margin-top:2px;
+}
+.author-textarea{
+  resize: none;
+}
+.modal-body2{
+  border-top: 1px solid #e5e5e5;
+ /* border-bottom: 1px solid #e5e5e5;*/
+  position: relative;
+  padding: 15px;
+}
+.art-title{
+  font-weight: bold;
 }

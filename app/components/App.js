@@ -3,18 +3,69 @@ import UserActions from '../actions/UserActions';
 import UserStore from '../stores/UserStore';
 
 class Header extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = UserStore.getState();
+        this.state.user = {};
+    }
+
+    componentDidMount() {
+        var that = this;
+        UserActions.getCuurentUser().then(function(user){
+            if(!!user){
+                that.setState({
+                    'user' : user
+                });
+                $(".header-logout").click(function(){
+                    $('#loginOutModal').modal('show');
+                })
+            }else{
+                $(".header-logout").attr("title","请登录");
+                $(".header-logout").text(" 请登录 ");
+                $(".header-logout").click(function(){
+                    window.location.href = "/logout";
+                });
+            }
+        });
+        $("#loginOut").click(function(){
+            $('#loginOutModal').modal('hide');
+            window.location.href = "/logout";
+        });
+    }
+
 	render() {
+        function model(id,title,text,comfirm){
+            return (
+                <div className="modal fade" id={id} role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                <div className="modal-content">
+                <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 className="modal-title" id="myModalLabel">{title}</h4>
+                </div>
+                <div className="modal-body">{text}</div>
+                <div className="modal-footer">
+                <button type="button" className="btn btn-primary" id={comfirm}>确认</button>
+                <button type="button" className="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+                </div>
+                </div>
+                </div>
+            )
+        }
 		return (
 			<div className="header">
 				<div className="container">
 					<div className="row">
 						<div className="col-sm-12">
 							<a href="/#/home" className="header-logo"></a>
-							<div className="header-login"></div>
-							<div className="header-logout"></div>
+                            <div className="header-logout" title="退出">退出</div>
+							<div className="header-login" title={this.state.user.account}>您好，{this.state.user.account}</div>
 						</div>
 					</div>
 				</div>
+                {model('loginOutModal','确认','确认要退出登录？','loginOut')}
 			</div>
 		);
 	}
@@ -69,7 +120,7 @@ class HeaderTop extends React.Component {
                 </div>
                 </div>
                 </div>
-        )
+            )
         }
         return (
             <div className="header-top">
@@ -114,7 +165,6 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="container0">
-				<HeaderTop />
 				<Header />
 				<div className="main">
 					{this.props.children}

@@ -1,7 +1,7 @@
 import alt from '../alt';
 import UserActions from '../actions/UserActions';
 
-class AuthorStore {
+class UserStore {
 	constructor() {
 		this.bindActions(UserActions);
 		this.data = [];
@@ -15,4 +15,4 @@ class AuthorStore {
 	}
 }
 
-export default alt.createStore(AuthorStore);
+export default alt.createStore(UserStore);

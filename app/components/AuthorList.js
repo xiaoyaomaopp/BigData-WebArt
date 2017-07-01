@@ -6,6 +6,7 @@ import {
 import AuthorStore from '../stores/AuthorStore';
 import AuthorListActions from '../actions/AuthorListActions';
 import Navbar from './Navbar';
+import AuthorEditDialog from './AuthorEditDialog';
 
 class AuthorList extends React.Component {
     constructor(props) {
@@ -50,7 +51,8 @@ class AuthorList extends React.Component {
                 that.setState({
                     data:{
                         data:data.data
-                    }});
+                    }
+                });
                 $(".pc-center-box").mCustomScrollbar({
                     axis:"y",
                     callbacks:{
@@ -63,7 +65,7 @@ class AuthorList extends React.Component {
                                 //$(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
                                 // $(".pc-center-box").mCustomScrollbar("update");
                                 AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
-                                        data => that.addNewArticle(data.data)
+                                        data => that.addNewAuthor(data.data)
                                 );
                             }
                         },
@@ -74,7 +76,7 @@ class AuthorList extends React.Component {
                                 //$(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
                                 //$(".pc-center-box").mCustomScrollbar("update");
                                 AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
-                                        data => that.addNewArticle(data.data)
+                                        data => that.addNewAuthor(data.data)
                                 );
                             }
                         }
@@ -84,6 +86,13 @@ class AuthorList extends React.Component {
                 $(".tip_msg").fadeOut("slow");
             }
         );
+        $("#updateAuthor").click(function(){
+            let newAuthor = {};
+            $("#editAuthorModal .form-control").each(function(){
+                newAuthor[$(this).attr("name")] = $(this).val();
+            });
+            console.log("save:"+JSON.stringify(newAuthor));
+        });
     }
 
     setMenuBindEvent(){
@@ -107,7 +116,7 @@ class AuthorList extends React.Component {
                                 //$(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
                                 //$(".pc-center-box").mCustomScrollbar("update");
                                 AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
-                                        data => that.addNewArticle(data.data)
+                                        data => that.addNewAuthor(data.data)
                                 );
                             }
                         },
@@ -118,7 +127,7 @@ class AuthorList extends React.Component {
                                 //$(".author-list").append("<div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div>");
                                 //$(".pc-center-box").mCustomScrollbar("update");
                                 AuthorListActions.getMoreAuthor(++that.page, that.limit, that.state.query).then(
-                                        data => that.addNewArticle(data.data)
+                                        data => that.addNewAuthor(data.data)
                                 );
                             }
                         }
@@ -139,26 +148,135 @@ class AuthorList extends React.Component {
         this.setState(state);
     }
 
-    addNewArticle(news){
+    addNewAuthor(news){
         this.setState({
-            data:{
-                data:this.state.data.data.concat(news)
-            }});
+            data: {
+                data: this.state.data.data.concat(news)
+            }
+        });
         $(".tip_msg").fadeOut("slow");
         //$(".spinner").remove();
         $(".pc-center-box").mCustomScrollbar("update");
         this.stop = false;
     }
 
-    setNewArticle(news){
+    setNewAuthor(news){
         this.setState({
             data:{
                 data:news
-            }});
+            }
+        });
         $(".tip_msg").fadeOut("slow");
         //$(".spinner").remove();
         $(".pc-center-box").mCustomScrollbar("update");
         this.stop = false;
+    }
+
+    showEditAuthorDialog(event){
+        let authorJson = $(event.currentTarget).attr("data-author");
+        if(!!authorJson){
+            let author = JSON.parse(authorJson);
+            $("#editAuthorModal .form-control").each(function(){
+                $(this).val(author[$(this).attr("name")]);
+            });
+            $(".edit-author-img img").attr("src",author.portraitUrl);
+            $("#editAuthorModal").modal("show");
+        }
+    }
+
+    editAuthorInfo(){
+        function model(id,title,comfirm){
+            let st = {
+                height : '400px',
+                width : '400px',
+                display : 'block'
+            }
+            return (
+                <div className="modal fade" id={id} role="dialog" data-backdrop="static" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div className="modal-dialog edit_author_modal">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 className="modal-title" id="myModalLabel">{title}</h4>
+                        </div>
+                        <div className="modal-body">
+                            <div className="row">
+                                <div className="edit-author-img">
+                                    <img data-src="holder.js/400%x400" alt="400%x400" style={st}
+                                        src="https://uploads8.wikiart.org/temp/75c94575-44e2-49d6-8a37-8b16e289cd27.jpg!Portrait.jpg"
+                                data-holder-rendered="true" />
+                            </div>
+                            <div className="edit-author-field">
+                                <div className="row">
+                                    <div className="edit-author-form-group">
+                                        <label className="col-sm-2">名字：</label>
+                                        <div className="col-sm-10">
+                                            <input type="text" name="name" className="form-control" id="name" placeholder="" />
+                                        </div>
+                                    </div>
+                                 </div>
+                                <div className="row">
+                                    <div className="edit-author-form-group">
+                                        <label className="col-sm-2">国籍：</label>
+                                         <div className="col-sm-10">
+                                             <input type="text" name="nationality" className="form-control" id="nationality" placeholder="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="edit-author-form-group">
+                                        <label className="col-sm-2">领域：</label>
+                                        <div className="col-sm-10">
+                                            <input type="text" name="field" className="form-control" id="field" placeholder="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="edit-author-form-group">
+                                        <label className="col-sm-2">风格：</label>
+                                        <div className="col-sm-10">
+                                            <input type="text" name="genre" className="form-control" id="genre" placeholder="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="edit-author-form-group">
+                                        <label className="col-sm-2">导师：</label>
+                                        <div className="col-sm-10">
+                                            <input type="text" name="teachers" className="form-control" id="teachers" placeholder="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="edit-author-form-group">
+                                        <label className="col-sm-2">出生日期/地点：</label>
+                                        <div className="col-sm-10">
+                                            <textarea name="born" id="born" className="form-control author-textarea" rows="5"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-body2 artList">
+                            <div className="art-title">作品集</div>
+                            <div className="art-list">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-primary" id={comfirm}>确认</button>
+                        <button type="button" className="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+                </div>
+            </div>)
+        }
+        return (
+            <div className="authorEdit">
+                {model('editAuthorModal','修改作者信息','updateAuthor')}
+            </div>
+        );
     }
 
     render() {
@@ -172,14 +290,14 @@ class AuthorList extends React.Component {
             }
             $(".tip_msg").fadeIn("slow");
             AuthorListActions.getMoreAuthor(1, that.limit, that.state.query).then(
-                data => that.setNewArticle(data.data)
+                data => that.setNewAuthor(data.data)
             );
         }
         let author_data = (this.state.data);
         let author_list = "";
-        debugger;
         if(author_data && author_data.data && author_data.data.length>0){
             author_list = author_data.data.map(function(author){
+                let authorJson = JSON.stringify(author);
                 return <div className="authorList_cart" key={author._id}>
                     <div className="authorList_cart-left">
                         <img className="authorList_cart-img"
@@ -220,13 +338,16 @@ class AuthorList extends React.Component {
                         </div>
                     </div>
                     <div className="authorList_cart-toolbar">
-                        <span className="btn btn-primary authorList_cart-toolbar-edit">编辑</span>
+                        <span className="btn btn-primary authorList_cart-toolbar-edit"
+                            data-author={authorJson}
+                            onClick={that.showEditAuthorDialog}>编辑</span>
                     </div>
                 </div>
             });
         }else{
             author_list = <div>无查询到匹配的数据！</div>;
         }
+
         return (
             <div className="container">
                 <div className="row">
@@ -252,6 +373,7 @@ class AuthorList extends React.Component {
                         </div>
                     </div>
                 </div>
+                {this.editAuthorInfo()}
             </div>
         );
     }
