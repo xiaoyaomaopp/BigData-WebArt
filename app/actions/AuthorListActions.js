@@ -17,6 +17,12 @@ class AuthorListActions {
 		});
 	}
 
+    updateAuthor(author){
+		return AuthorSource.updateAuthor(author).then(function(data){
+            return data;
+        });
+	}
+
 }
 
 export default alt.createActions(AuthorListActions);

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var read = require('../server/read.js');
+var update = require('../server/update.js');
 var md5 = require("blueimp-md5");
 
 /* GET users listing. */
@@ -70,6 +71,25 @@ router.get('/author', function(req, res) {
 	}).catch(function(e) {
 		res.send([]);
 	})
+});
+
+router.post('/updateAuthor', function(req, res, next) {
+	var author = req.body;
+    if(!!!author || !!!author._id) res.send('');
+    update.updateAuthor(author).then(function(data) {
+        res.send('success');
+    }).catch(function(e) {
+        res.send('');
+    })
+});
+
+router.get('/getArtByAuthor', function(req, res) {
+    var authorName = req.query.authorName;
+    read.getArtByAuthor({authorName:authorName}).then(function(data) {
+        res.send(data);
+    }).catch(function(e) {
+        res.send([]);
+    })
 });
 
 module.exports = router;

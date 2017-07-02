@@ -35,6 +35,13 @@ var ArtListActions = function () {
 				return _this.onSuccess(data);
 			});
 		}
+	}, {
+		key: 'getArtByAuthor',
+		value: function getArtByAuthor(authorName) {
+			return _ArtSource2.default.getArtByAuthor(authorName).then(function (data) {
+				return data;
+			});
+		}
 	}]);
 
 	return ArtListActions;
@@ -83,6 +90,13 @@ var AuthorListActions = function () {
 		key: 'getMoreAuthor',
 		value: function getMoreAuthor(page, limit, params) {
 			return _AuthorSource2.default.getAuthor(page, limit, params).then(function (data) {
+				return data;
+			});
+		}
+	}, {
+		key: 'updateAuthor',
+		value: function updateAuthor(author) {
+			return _AuthorSource2.default.updateAuthor(author).then(function (data) {
 				return data;
 			});
 		}
@@ -914,6 +928,10 @@ var _AuthorListActions = require('../actions/AuthorListActions');
 
 var _AuthorListActions2 = _interopRequireDefault(_AuthorListActions);
 
+var _ArtListActions = require('../actions/ArtListActions');
+
+var _ArtListActions2 = _interopRequireDefault(_ArtListActions);
+
 var _Navbar = require('./Navbar');
 
 var _Navbar2 = _interopRequireDefault(_Navbar);
@@ -942,7 +960,7 @@ var AuthorList = function (_React$Component) {
         _this.onChange = _this.onChange.bind(_this);
         _this.styleQuery = 'all';
         _this.page = 1;
-        _this.limit = 4;
+        _this.limit = 7;
         _this.autoLoadCount = 5;
         _this.stop = false;
         _this.state.query = {
@@ -951,6 +969,8 @@ var AuthorList = function (_React$Component) {
         if (!!props.params.style && 'all' != props.params.style) {
             _this.state.query.genre = props.params.style;
         }
+        _this.showEditAuthorDialog = _this.showEditAuthorDialog.bind(_this);
+        _this.pageArtPicWindow = _this.pageArtPicWindow.bind(_this);
         return _this;
     }
 
@@ -1022,6 +1042,73 @@ var AuthorList = function (_React$Component) {
                     newAuthor[$(this).attr("name")] = $(this).val();
                 });
                 console.log("save:" + JSON.stringify(newAuthor));
+                var authorJson = $(".oldAuthor").val();
+                var editAuthor = {};
+                if (!!authorJson) {
+                    editAuthor = JSON.parse(authorJson);
+                }
+                if (!!newAuthor && isObjectValueEqual(newAuthor, editAuthor)) {
+                    _AuthorListActions2.default.updateAuthor(newAuthor).then(function (data) {
+                        if (!!data) {
+                            $(".modal-message").text("提示：保存成功！");
+                            var sourceList = that.state.data.data;
+                            if (!!sourceList && sourceList.length > 0) {
+                                for (var i = 0; i < sourceList.length; i++) {
+                                    if (newAuthor._id === sourceList[i]._id) {
+                                        setObjectValueEqual(newAuthor, sourceList[i]);
+                                        break;
+                                    }
+                                }
+                                that.setState({
+                                    data: {
+                                        data: sourceList
+                                    }
+                                });
+                            }
+                            $("#editAuthorModal").modal("hide");
+                        } else {
+                            $(".modal-message").text("提示：保存失败！");
+                        }
+                    });
+                } else {
+                    $(".modal-message").text("提示：请先修改内容后，再进行保存操作！");
+                }
+            });
+            function isObjectValueEqual(a, b) {
+                var aProps = Object.getOwnPropertyNames(a);
+                var bProps = Object.getOwnPropertyNames(b);
+                var count = 0;
+                for (var i = 0; i < aProps.length; i++) {
+                    var propName = aProps[i];
+                    if (a[propName] === b[propName] || !!!a[propName] && !!!b[propName]) {
+                        count++;
+                    }
+                }
+                if (count == aProps.length) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            function setObjectValueEqual(a, b) {
+                var aProps = Object.getOwnPropertyNames(a);
+                var bProps = Object.getOwnPropertyNames(b);
+                for (var i = 0; i < aProps.length; i++) {
+                    var propName = aProps[i];
+                    b[propName] = a[propName];
+                }
+            }
+            $("#editAuthorModal").on('click', ".art-box-right", function () {
+                if (that.art.group < that.art.maxGroup) {
+                    that.state.art = that.pageArtPicWindow(++that.art.group);
+                    that.setState(that.state);
+                }
+            });
+            $("#editAuthorModal").on('click', ".art-box-left", function () {
+                if (that.art.group > 1) {
+                    that.state.art = that.pageArtPicWindow(--that.art.group);
+                    that.setState(that.state);
+                }
             });
         }
     }, {
@@ -1109,21 +1196,96 @@ var AuthorList = function (_React$Component) {
         value: function showEditAuthorDialog(event) {
             var authorJson = $(event.currentTarget).attr("data-author");
             if (!!authorJson) {
+                $(".modal-message").text("");
+                $(".oldAuthor").val(authorJson);
                 var author = JSON.parse(authorJson);
                 $("#editAuthorModal .form-control").each(function () {
                     $(this).val(author[$(this).attr("name")]);
+                });
+                var that = this;
+                _ArtListActions2.default.getArtByAuthor(author.name).then(function (data) {
+                    that.art = data;
+                    if (!!that.art && !!that.art.data && that.art.data.length > 0) {
+                        $(".modal-body2").show();
+                    } else {
+                        $(".modal-body2").hide();
+                    }
+                    that.state.art = that.pageArtPicWindow(1);
+                    that.setState(that.state);
                 });
                 $(".edit-author-img img").attr("src", author.portraitUrl);
                 $("#editAuthorModal").modal("show");
             }
         }
     }, {
+        key: 'pageArtPicWindow',
+        value: function pageArtPicWindow(group) {
+            var arts = this.art;
+            var maxGroup = Math.ceil(arts.count / 6);
+            var newData = [];
+            var artData = arts.data;
+            if (group > 0 && group <= maxGroup) {
+                for (var i = (group - 1) * 6; i < group * 6 && i < arts.count; i++) {
+                    newData.push(artData[i]);
+                }
+                if (group == 1) {
+                    $(".art-box-left").css({ "cursor": "not-allowed", "background-color": "#EBEBEB" });
+                    if (arts.count <= 6) {
+                        $(".art-box-right").css({ "cursor": "not-allowed", "background-color": "#EBEBEB" });
+                    } else {
+                        $(".art-box-right").css({ "cursor": "pointer", "background-color": "#C0C5C8" });
+                    }
+                } else if (group > 1) {
+                    $(".art-box-left").css({ "cursor": "pointer", "background-color": "#C0C5C8" });
+                    if (group == maxGroup) {
+                        $(".art-box-right").css({ "cursor": "not-allowed", "background-color": "#EBEBEB" });
+                    } else {
+                        $(".art-box-right").css({ "cursor": "pointer", "background-color": "#C0C5C8" });
+                    }
+                } else {
+                    $(".art-box-right").css({ "cursor": "not-allowed", "background-color": "#EBEBEB" });
+                    $(".art-box-left").css({ "cursor": "not-allowed", "background-color": "#EBEBEB" });
+                }
+            } else {
+                $(".art-box-right").css({ "cursor": "not-allowed", "background-color": "#EBEBEB" });
+                $(".art-box-left").css({ "cursor": "not-allowed", "background-color": "#EBEBEB" });
+            }
+            this.art.group = group;
+            this.art.maxGroup = maxGroup;
+            return { "data": newData, "count": arts.count, "group": group, 'maxGroup': maxGroup };
+        }
+    }, {
         key: 'editAuthorInfo',
         value: function editAuthorInfo() {
+            var arts = this.state.art;
+            var artPics = '';
+            if (!!arts && !!arts.data && arts.data.length > 0) {
+                var st2 = {
+                    height: '140px',
+                    width: '140px',
+                    display: 'block'
+                };
+                artPics = arts.data.map(function (art) {
+                    var showImageUrl = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVkMDEyMDE0ZTUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWQwMTIwMTRlNSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44MDQ2ODc1IiB5PSIxMDUuMSI+MjQyeDIwMDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==';
+                    if (!!art.smallImgUrl) showImageUrl = art.smallImgUrl;
+                    return _react2.default.createElement(
+                        'li',
+                        { key: art._id, className: 'thumbnail' },
+                        _react2.default.createElement('img', { 'data-src': 'holder.js/140%x140', alt: '140%x140', title: art.name, style: st2,
+                            src: showImageUrl,
+                            'data-holder-rendered': 'true' })
+                    );
+                });
+            }
             function model(id, title, comfirm) {
                 var st = {
                     height: '400px',
                     width: '400px',
+                    display: 'block'
+                };
+                var st2 = {
+                    height: '140px',
+                    width: '140px',
                     display: 'block'
                 };
                 return _react2.default.createElement(
@@ -1159,7 +1321,7 @@ var AuthorList = function (_React$Component) {
                                         'div',
                                         { className: 'edit-author-img' },
                                         _react2.default.createElement('img', { 'data-src': 'holder.js/400%x400', alt: '400%x400', style: st,
-                                            src: 'https://uploads8.wikiart.org/temp/75c94575-44e2-49d6-8a37-8b16e289cd27.jpg!Portrait.jpg',
+                                            src: '/images/author_default.jpg',
                                             'data-holder-rendered': 'true' })
                                     ),
                                     _react2.default.createElement(
@@ -1179,7 +1341,9 @@ var AuthorList = function (_React$Component) {
                                                 _react2.default.createElement(
                                                     'div',
                                                     { className: 'col-sm-10' },
-                                                    _react2.default.createElement('input', { type: 'text', name: 'name', className: 'form-control', id: 'name', placeholder: '' })
+                                                    _react2.default.createElement('input', { type: 'text', name: 'name', className: 'form-control', id: 'name', placeholder: '' }),
+                                                    _react2.default.createElement('input', { type: 'hidden', name: '_id', className: 'form-control' }),
+                                                    _react2.default.createElement('input', { type: 'hidden', name: 'oldAuthor', className: 'oldAuthor' })
                                                 )
                                             )
                                         ),
@@ -1277,27 +1441,42 @@ var AuthorList = function (_React$Component) {
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    { className: 'modal-body2 artList' },
+                                    { className: 'modal-body2' },
                                     _react2.default.createElement(
                                         'div',
                                         { className: 'art-title' },
                                         '\u4F5C\u54C1\u96C6'
                                     ),
-                                    _react2.default.createElement('div', { className: 'art-list' })
+                                    _react2.default.createElement(
+                                        'div',
+                                        { className: 'art-list' },
+                                        _react2.default.createElement('div', { className: 'art-box-left glyphicon glyphicon-chevron-left' }),
+                                        _react2.default.createElement(
+                                            'div',
+                                            { className: 'pics-list' },
+                                            _react2.default.createElement(
+                                                'ul',
+                                                null,
+                                                artPics
+                                            )
+                                        ),
+                                        _react2.default.createElement('div', { className: 'art-box-right glyphicon glyphicon-chevron-right' })
+                                    )
                                 )
                             ),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'modal-footer' },
+                                _react2.default.createElement('span', { className: 'modal-message' }),
                                 _react2.default.createElement(
                                     'button',
                                     { type: 'button', className: 'btn btn-primary', id: comfirm },
-                                    '\u786E\u8BA4'
+                                    '\u4FDD\u5B58'
                                 ),
                                 _react2.default.createElement(
                                     'button',
                                     { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-                                    '\u53D6\u6D88'
+                                    '\u8FD4\u56DE'
                                 )
                             )
                         )
@@ -1331,6 +1510,10 @@ var AuthorList = function (_React$Component) {
             if (author_data && author_data.data && author_data.data.length > 0) {
                 author_list = author_data.data.map(function (author) {
                     var authorJson = JSON.stringify(author);
+                    var author_pic = '/images/author_default.jpg';
+                    if (!!author.portraitUrl) {
+                        author_pic = author.portraitUrl;
+                    }
                     return _react2.default.createElement(
                         'div',
                         { className: 'authorList_cart', key: author._id },
@@ -1338,7 +1521,7 @@ var AuthorList = function (_React$Component) {
                             'div',
                             { className: 'authorList_cart-left' },
                             _react2.default.createElement('img', { className: 'authorList_cart-img',
-                                src: author.portraitUrl })
+                                src: author_pic })
                         ),
                         _react2.default.createElement(
                             'div',
@@ -1551,7 +1734,7 @@ var AuthorList = function (_React$Component) {
 
 exports.default = AuthorList;
 
-},{"../actions/AuthorListActions":2,"../stores/AuthorStore":17,"./AuthorEditDialog":7,"./Navbar":10,"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
+},{"../actions/ArtListActions":1,"../actions/AuthorListActions":2,"../stores/AuthorStore":17,"./AuthorEditDialog":7,"./Navbar":10,"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1659,7 +1842,7 @@ var Navbar = function (_React$Component) {
 	}, {
 		key: 'initEvent',
 		value: function initEvent() {
-			var that = this;
+			//var that = this;
 			//$('.menu_li').click(function (e) {
 			//e.preventDefault()
 			//$(".active").removeClass("active");
@@ -1708,7 +1891,7 @@ var Navbar = function (_React$Component) {
 					_react2.default.createElement(
 						_reactRouter.Link,
 						{ to: '/author/abstract' },
-						'\u62BD\u8C61\u6D3E'
+						'\u62BD\u8C61\u6982\u5FF5'
 					)
 				),
 				_react2.default.createElement(
@@ -1717,7 +1900,106 @@ var Navbar = function (_React$Component) {
 					_react2.default.createElement(
 						_reactRouter.Link,
 						{ to: '/author/cityscape' },
-						'\u57CE\u5E02\u98CE'
+						'\u57CE\u5E02\u666F\u89C2'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_design' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/design' },
+						'\u7ED3\u6784'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_photo' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/photo' },
+						'\u7167\u7247'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_portrait' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/portrait' },
+						'\u4EBA\u7269\u63CF\u5199'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_miniature' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/miniature' },
+						'\u5FAE\u578B\u753B'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_illustration' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/illustration' },
+						'\u63D2\u56FE'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_painting' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/painting' },
+						'\u6CB9\u753B'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_landscape' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/landscape' },
+						'\u4E61\u6751\u98CE\u666F\u753B'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_calligraphy' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/calligraphy' },
+						'\u7F8E\u672F\u5B57'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_self-portrait' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/self-portrait' },
+						'\u81EA\u753B\u50CF'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_cloudscape' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/cloudscape' },
+						'\u4E91\u666F'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					{ className: 'menu_li nav_author nav_author_sculpture' },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: '/author/sculpture' },
+						'\u96D5\u523B'
 					)
 				)
 			);
@@ -1813,6 +2095,14 @@ var ArtSource = {
                 "limit": limit
             }).done(resolve).fail(reject);
         });
+    },
+    getArtByAuthor: function getArtByAuthor(authorName) {
+        return new Promise(function (resolve, reject) {
+            var url = "/api/getArtByAuthor";
+            $.get(url, {
+                "authorName": authorName
+            }).done(resolve).fail(reject);
+        });
     }
 };
 
@@ -1838,6 +2128,14 @@ var AuthorSource = {
                 "query": params
             };
             $.get(url, param).done(resolve).fail(reject);
+        });
+    },
+    updateAuthor: function updateAuthor() {
+        var author = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        return new Promise(function (resolve, reject) {
+            var url = "/api/updateAuthor";
+            $.post(url, author).done(resolve).fail(reject);
         });
     }
 };

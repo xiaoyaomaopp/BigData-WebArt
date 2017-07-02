@@ -86,6 +86,7 @@ input[type="search"],
 input[type="text"],
 input[type="url"],
 input[type="email"],
+input[type="password"],
 textarea {
   padding: 7px 7px;
   border: 1px solid #ebebeb;
@@ -483,6 +484,11 @@ a:hover {
 .author-textarea {
   resize: none;
 }
+.modal-message {
+  color: red;
+  position: absolute;
+  left: 25px;
+}
 .modal-body2 {
   border-top: 1px solid #e5e5e5;
   /* border-bottom: 1px solid #e5e5e5;*/
@@ -492,3 +498,64 @@ a:hover {
 .art-title {
   font-weight: bold;
 }
+.art-list {
+  border: 1px solid #C0C5C8;
+  height: 150px;
+  width: 920px;
+  margin-top: 10px;
+  padding: 0 25px;
+  overflow: hidden;
+}
+.art-box-right,
+.art-box-left {
+  position: absolute;
+  width: 25px;
+  height: 150px;
+  background-color: #C0C5C8;
+  opacity: 0.7;
+  -moz-opacity: 0.7;
+  -khtml-opacity: 0.7;
+  cursor: pointer;
+  line-height: 150px;
+  top: 50px;
+  padding-left: 5px;
+  color: #fff;
+}
+.art-box-left {
+  left: 16px;
+}
+.art-box-right {
+  right: 14px;
+}
+.art-box-right:hover,
+.art-box-left:hover {
+  background-color: #C6C6C6;
+  opacity: 0.9;
+  -moz-opacity: 0.9;
+  -khtml-opacity: 0.9;
+}
+.art-list ul {
+  padding: 0;
+  margin-left: 2px;
+}
+.art-list ul li {
+  list-style-type: none;
+  border: 0px solid;
+  width: 144px;
+  height: 148px;
+  float: left;
+  display: inline;
+  opacity: 1;
+  transition: all 0.4s;
+  cursor: pointer;
+}
+.pics-list {
+  height: 148px;
+  margin-top: -10px;
+}
+/*
+.art-list ul li:hover img{
+  -webkit-transform:scale(1.5,1.5);
+  -moz-transform:scale(1.5,1.5);
+  -transform:scale(1.5,1.5);
+}*/

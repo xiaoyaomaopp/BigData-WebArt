@@ -9,6 +9,12 @@ var AuthorSource = {
             };
             $.get(url, param).done(resolve).fail(reject);
         })
+    },
+    updateAuthor:function(author={}){
+        return new Promise(function(resolve,reject){
+            var url = "/api/updateAuthor";
+            $.post(url, author).done(resolve).fail(reject);
+        })
     }
 }
 

@@ -10,6 +10,11 @@ class ArtListActions {
 	getArt(page, limit) {
 		ArtSource.getArt(page, limit).then((data) => this.onSuccess(data));
 	}
+    getArtByAuthor(authorName){
+        return ArtSource.getArtByAuthor(authorName).then(function(data){
+            return data;
+        });
+    }
 }
 
 export default alt.createActions(ArtListActions);
