@@ -19,7 +19,7 @@ export default (
   <Router history={hashHistory}>
     <Route path="/" component={App}>
     	<IndexRoute component={Home}/>
-    	<Redirect from="home" to="art/1" />
+    	<Redirect from="home" to="author/all" />
    		<Route path="art/:page" component={ArtList} />
    		<Route path="author/:style" component={AuthorList} />
     </Route>

@@ -1,7 +1,7 @@
 var mongodb = require("mongodb");
 
 var MongoClient = mongodb.MongoClient;
-var url = 'mongodb://technologycloud.cn:27017/crawlerNew';
+var url = 'mongodb://10.82.0.1:27017/crawlerNew';
 class DB {
 	constructor() {
 		this.db = null;

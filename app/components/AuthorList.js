@@ -14,7 +14,6 @@ class AuthorList extends React.Component {
         super(props);
         this.state = AuthorStore.getState();
         this.onChange = this.onChange.bind(this);
-        this.styleQuery = 'all';
         this.page = 1;
         this.limit = 7;
         this.autoLoadCount = 5;
@@ -22,7 +21,7 @@ class AuthorList extends React.Component {
         this.state.query = {
             authorName : ''
         };
-        if(!!props.params.style && 'all'!=props.params.style){
+        if(!!props.params && !!props.params.style && 'all'!=props.params.style){
             this.state.query.genre = props.params.style;
         }
         this.showEditAuthorDialog = this.showEditAuthorDialog.bind(this);
