@@ -38,8 +38,8 @@ gulp.task('vendor', ['vendor-css'], function() {
 			'node_modules/headroom.js/dist/jQuery.headroom.js',
 			'node_modules/qrcodejs/qrcode.js',
 			'node_modules/jweixin/jweixin-1.0.0.js',
-			'node_modules/imageviewer/dist/viewer.min.js',
 			'self_modules/jquery-ui-1.12.1/jquery-ui.min.js',
+			'node_modules/imageviewer/dist/viewer.min.js',
 			'self_modules/mousewheel/3.1.11/jquery.mousewheel.min.js',
 			'self_modules/masonry/masonry-docs.min.js',
 			'self_modules/mCustomScrollbar/3.0.2/jquery.mCustomScrollbar.js'
