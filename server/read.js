@@ -1,17 +1,19 @@
 var db = require('./db.js');
 
-exports.articlesByPage = function(page, limit) {
+exports.artsByPage = function(page, limit, query) {
 	var start = (page - 1) * limit;
-	return db.open("articles").then(function(collection) {
-		return collection.find({
-			"delete": null,
-            "similar": {$ne:null,$exists:true}
-		}).sort({
-			createDate: -1
+    var param = {
+    };
+    if(!!query && !!query.artName){
+        param.title = eval('/'+query.artName+'/');
+    }
+	return db.open("wikiart.org.艺术品").then(function(collection) {
+		return collection.find(param).sort({
+            _createAt: -1
 		}).skip(start).limit(limit).toArray();
 	}).then(function(data) {
 		//console.log(data.length, "data");
-		return db.collection.find().count().then(function(count) {
+		return db.collection.find(param).count().then(function(count) {
 			db.close();
 			return ({
 				limit,
@@ -97,4 +99,19 @@ exports.getArtByAuthor = function(query) {
 		console.error(error)
 		throw error;
 	})
+}
+
+exports.getArtById = function(id) {
+    return db.open("wikiart.org.艺术品").then(function(collection) {
+        return collection.findOne({
+            "_id": id
+        });
+    }).then(function(data) {
+        console.log("get------------------------------"+data)
+        return data
+    }).catch(function(error) {
+        db.close();
+        console.error(error)
+        throw error;
+    })
 }

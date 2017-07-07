@@ -55,7 +55,8 @@ router.get("/currentUser", function(req, res, next) {
 router.get('/art', function(req, res) {
 	var page = parseInt(req.query.page);
 	var limit = parseInt(req.query.limit);
-	read.articlesByPage(page, limit).then(function(data) {
+	var query = req.query.query;
+	read.artsByPage(page, limit, query).then(function(data) {
 		res.send(data);
 	}).catch(function(e) {
 		res.send([]);
@@ -82,13 +83,31 @@ router.post('/updateAuthor', function(req, res, next) {
         res.send('');
     })
 });
-
 router.get('/getArtByAuthor', function(req, res) {
     var authorName = req.query.authorName;
     read.getArtByAuthor({authorName:authorName}).then(function(data) {
         res.send(data);
     }).catch(function(e) {
         res.send([]);
+    })
+});
+
+router.get('/getArtById', function(req, res) {
+    var _id = req.query._id;
+    read.getArtById(_id).then(function(data) {
+        res.send(data);
+    }).catch(function(e) {
+        res.send([]);
+    })
+});
+
+router.post('/updateArtById', function(req, res, next) {
+    var art = req.body;
+    if(!!!art || !!!art._id) res.send('');
+    update.updateArt(art).then(function(data) {
+        res.send('success');
+    }).catch(function(e) {
+        res.send('');
     })
 });
 

@@ -16,6 +16,7 @@ gulp.task('vendor-css', function() {
 
 	return gulp.src(['node_modules/bootstrap/dist/css/bootstrap.min.css',
 			'node_modules/animate.css/animate.css',
+			'node_modules/imageviewer/dist/viewer.min.css',
 			'self_modules/mCustomScrollbar/3.0.2/jquery.mCustomScrollbar.css'
 		])
 		.pipe(concat('vendor.css'))
@@ -31,14 +32,16 @@ gulp.task('vendor-css', function() {
  */
 gulp.task('vendor', ['vendor-css'], function() {
 	return gulp.src([
-			'node_modules/jquery/dist/jquery.js',
+            'node_modules/jquery/dist/jquery.js',
 			'node_modules/bootstrap/dist/js/bootstrap.js',
 			'node_modules/headroom.js/dist/headroom.js',
 			'node_modules/headroom.js/dist/jQuery.headroom.js',
 			'node_modules/qrcodejs/qrcode.js',
 			'node_modules/jweixin/jweixin-1.0.0.js',
+			'node_modules/imageviewer/dist/viewer.min.js',
 			'self_modules/jquery-ui-1.12.1/jquery-ui.min.js',
 			'self_modules/mousewheel/3.1.11/jquery.mousewheel.min.js',
+			'self_modules/masonry/masonry-docs.min.js',
 			'self_modules/mCustomScrollbar/3.0.2/jquery.mCustomScrollbar.js'
 	]).pipe(concat('vendor.js'))
 		//.pipe(gulpif(production, uglify({mangle: false})))

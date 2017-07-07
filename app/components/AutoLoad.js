@@ -1,14 +1,8 @@
 import alt from '../alt';
-import React from 'react';
-import {
-    Link
-    } from 'react-router';
 
+class AutoLoad{
 
-class AutoLoad extends React.Component {
-
-    constructor(props) {
-        super(props);
+    constructor() {
         this.page = 1;
         this.limit = 5;
         this.stop = true;
@@ -66,6 +60,7 @@ class AutoLoad extends React.Component {
     }
 
     loadEnd(){
+        debugger;
         $(".spinner").remove();
         if(this.autoLoadCount>0){
             this.autoLoadCount--;

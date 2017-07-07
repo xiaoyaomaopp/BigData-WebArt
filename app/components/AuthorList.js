@@ -508,10 +508,10 @@ class AuthorList extends React.Component {
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col-sm-2">
+                    <div className="col-sm-2 hidden">
                         <Navbar updateContent={this.setMenuBindEvent} page={this.page}/>
                     </div>
-                    <div className="col-sm-10 content-box">
+                    <div className="col-sm-12 content-box">
                         <div className="search-toobar">
                             <div className="input-group search-input-group">
                                 <input type="text" id="authorName" className="form-control" placeholder="Search for..."  />

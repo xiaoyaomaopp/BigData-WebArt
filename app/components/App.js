@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+    Link
+    } from 'react-router';
 import UserActions from '../actions/UserActions';
 import UserStore from '../stores/UserStore';
 
@@ -32,6 +35,24 @@ class Header extends React.Component {
             $('#loginOutModal').modal('hide');
             window.location.href = "/logout";
         });
+        this.updateMenu();
+    }
+
+    componentDidUpdate(prevProps) {
+        this.updateMenu();
+    }
+
+    updateMenu(){
+        let urlparams = location.href.split('#/');
+        if(!!urlparams && urlparams.length>1){
+            let urlparam = urlparams[1].split("?_k=")[0];
+            if(!!urlparam){
+                $(".header-menu .hactive").removeClass("hactive");
+                $(".header-menu .nav_"+urlparam.replace("/","_")).addClass("hactive");
+            }else{
+                $(".header-menu .nav_art_all").addClass("hactive");
+            }
+        }
     }
 
 	render() {
@@ -62,7 +83,17 @@ class Header extends React.Component {
 							<a href="/#/home" className="header-logo"></a>
                             <div className="header-logout" title="退出">退出</div>
 							<div className="header-login" title={this.state.user.account}>您好，{this.state.user.account}</div>
-						</div>
+						    <div className="header-menu">
+                                <ul>
+                                    <li className="nav_art_all">
+                                        <Link to='/art/all'>作品</Link>
+                                    </li>
+                                    <li className="nav_author_all">
+                                        <Link to='/author/all'>作者</Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 					</div>
 				</div>
                 {model('loginOutModal','确认','确认要退出登录？','loginOut')}

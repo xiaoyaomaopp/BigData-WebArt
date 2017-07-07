@@ -2,12 +2,12 @@ import React from 'react';
 import {
 	Link
 } from 'react-router';
-import AuthorList from './AuthorList';
+import ArtList from './ArtList';
 
 class Home extends React.Component {
 	render() {
 		return (
-			<AuthorList/>
+			<ArtList/>
 		);
 	}
 }

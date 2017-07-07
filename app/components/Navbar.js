@@ -10,21 +10,19 @@ class Navbar extends React.Component {
         this.updateContent = props.updateContent || function(){};
 	}
 	componentDidMount() {
-        this.updateMenu();
 		this.initEvent();
 	}
 
     componentDidUpdate(prevProps) {
-        this.updateMenu();
     }
 
     updateMenu(){
         let urlparams = location.href.split('#/');
         if(!!urlparams && urlparams.length>1){
             let urlparam = urlparams[1].split("?_k=")[0];
-			if(!!urlparams){
-				$(".active").removeClass("active");
-				$(".nav_"+urlparam.replace("/","_")).addClass("active");
+			if(!!urlparam){
+				$(".nav .active").removeClass("active");
+				$(".nav .nav_"+urlparam.replace("/","_")).addClass("active");
 			}
         }
     }
@@ -48,9 +46,9 @@ class Navbar extends React.Component {
 		return (
 			<div className="nav" id='nav'>
 				<li className="nav_title" title="作品">作品</li>
-				<li className="menu_li nav_art_all"><Link to='/art/all'>全部</Link></li>
+				<li className="menu_li nav_art_all active"><Link to='/art/all'>全部</Link></li>
 				<li className="nav_title" title="作者">作者</li>
-				<li className="menu_li nav_author nav_author_all active"><Link to='/author/all'>全部</Link></li>
+				<li className="menu_li nav_author nav_author_all"><Link to='/author/all'>全部</Link></li>
 				<li className="menu_li nav_author nav_author_abstract"><Link to='/author/abstract'>抽象概念</Link></li>
 				<li className="menu_li nav_author nav_author_cityscape"><Link to='/author/cityscape'>城市景观</Link></li>
 				<li className="menu_li nav_author nav_author_design"><Link to='/author/design'>结构</Link></li>

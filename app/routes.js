@@ -13,14 +13,16 @@ import App from './components/App';
 import Home from './components/Home';
 import AuthorList from './components/AuthorList';
 import ArtList from './components/ArtList';
+import Art from './components/Art';
 
 
 export default (
   <Router history={hashHistory}>
     <Route path="/" component={App}>
     	<IndexRoute component={Home}/>
-    	<Redirect from="home" to="author/all" />
+    	<Redirect from="home" to="art/all" />
    		<Route path="art/:page" component={ArtList} />
+   		<Route path="artDetail/:id" component={Art} />
    		<Route path="author/:style" component={AuthorList} />
     </Route>
   </Router>
