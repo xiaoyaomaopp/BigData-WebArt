@@ -347,7 +347,7 @@ class AuthorList extends React.Component {
                             <div className="row">
                                 <div className="edit-author-img">
                                     <img data-src="holder.js/400%x400" alt="400%x400" style={st}
-                                        src="/images/author_default.jpg"
+                                        src="/images/ARTIST-480x600.jpg"
                                 data-holder-rendered="true" />
                             </div>
                             <div className="edit-author-field">
@@ -451,7 +451,7 @@ class AuthorList extends React.Component {
         if(author_data && author_data.data && author_data.data.length>0){
             author_list = author_data.data.map(function(author){
                 let authorJson = JSON.stringify(author);
-                let author_pic = '/images/author_default.jpg';
+                let author_pic = '/images/ARTIST-480x600.jpg';
                 if(!!author.portraitUrl){
                     author_pic = author.portraitUrl;
                 }

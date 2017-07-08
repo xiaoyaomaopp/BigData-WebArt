@@ -337,6 +337,20 @@ html,body,#app,.container{
   float: right;
   margin-right: 10px;
 }
+.search-button-group{
+  width: 30px;
+  height: 39px;
+  float: right;
+  margin-right: 1%;
+}
+.search-button-icon{
+  width: 21px;
+  height: 18px;
+  margin-top: 11px;
+  overflow: hidden;
+  background: url("/images/card_setts_fdb17359.png") no-repeat -121px -49px;
+  cursor: pointer;
+}
 .header-top{
   font-size: 12px;
   color: #333;
@@ -691,15 +705,18 @@ a:focus, a:hover {
 }
 .searchToolBarPanel{
   z-index: 998;
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(64, 62, 62, 0.9);
+  position: absolute;
+  top: -20px;
+  display: none;
+  /*background-color: rgba(64, 62, 62, 0.9);*/
+}
+.search-box{
+  background-color: #FFFFFF;
+  height: 420px;
+  border: 1px solid #759fe8;
 }
 .searchToolBar{
-  width: 300px;
+  width: 400px;
   height: 100%;
   position: fixed;
   top: 70px;
@@ -761,6 +778,57 @@ a:focus, a:hover {
   margin: 5px;
   padding: 3px 5px;
   display: inline-block;
+}
+.search-box-header{
+  height: 50px;
+  padding: 8px;
+}
+.search-box-header .title{
+  display: inline-block;
+  border-bottom: 1px solid #cccccc;
+  font-size: 18px;
+  padding-bottom: 8px;
+}
+.search-box-body{
+  height: 250px;
+  width: 100%;
+}
+.search-box-body-left{
+  width: 7%;
+  float: left;
+}
+.search-box-body-right{
+  width: 93%;
+  float: left;
+}
+.search-box-body ul{
+  list-style: none;
+}
+.search-box-body .search-tips,.search-box-footer .search-tips{
+  display: inline-block;
+  border: 1px solid #CCCCCC;
+  min-width: 80px;
+  padding: 2px 5px;
+  text-align: center;
+  margin: 3px 5px;
+  cursor: pointer;
+}
+.search-box-body-right .btn-has-select{
+  background: #a0bbef url("/images/close.gif") right 9px no-repeat;
+  color: #FFFFFF;
+}
+.search-box-body-right .select-item{
+  background: #a0bbef;
+  color: #FFFFFF;
+}
+.search-box-footer{
+  margin-top: 5px;
+  padding: 5px;
+  border-top: 1px dashed #EEEEEE;
+}
+.search-box-footer-bottom{
+  margin-top: 5px;
+  border-top: 1px dashed #EEEEEE;
 }
 .artDetail{
   background-color: #FFFFFF;

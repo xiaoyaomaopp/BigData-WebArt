@@ -5,7 +5,6 @@ import {
 
 import ArtListStore from '../stores/ArtListStore';
 import ArtListActions from '../actions/ArtListActions';
-import SearchToolbar from './SearchToolbar';
 
 class ArtList extends React.Component {
     constructor(props) {
@@ -107,6 +106,10 @@ class ArtList extends React.Component {
         });
     }
 
+    searchBar(){
+        //$(".searchToolBarPanel").fadeIn("slow");
+    }
+
     toTop(){
         $("html,body").animate({scrollTop: 0}, 10);
     }
@@ -119,7 +122,7 @@ class ArtList extends React.Component {
         if(!!arts && arts.length>0){
             childElements = arts.map(function(art){
                 let author = art.author;
-                if(!!author) author = art.author.replace(/-/g," ");
+                //if(!!author) author = art.author.replace(/-/g," ");
                 let date = art.date;
                 if(!!date) date = art.date.split(";")[0];
                 let imgKey = "img-"+art._id;
@@ -133,10 +136,10 @@ class ArtList extends React.Component {
                         <img data-img={imgKey} src={art.smallImgUrl} title={art.title + ' - ' + author} />
                         <div className="art-img-info">
                           <p className="title">
-                              <span title={art.title} ><a href={artUrl} target="_bank">{art.title}</a></span>
+                              <span title={art.title} ><a href={artUrl} target="_blank">{art.title}</a></span>
                           </p>
                           <p>
-                              <span className="author" title={author}><a href={artUrl} target="_bank">{author}</a></span>
+                              <span className="author" title={author}><a href={artUrl} target="_blank">{author}</a></span>
                               <span>{dot}</span>
                               <span className="time" title={art.date}>{date}</span></p>
                         </div>
@@ -145,7 +148,7 @@ class ArtList extends React.Component {
             });
             imgList = arts.map(function(art){
                 let author = art.author;
-                if(!!author) author = art.author.replace(/-/g," ");
+                //if(!!author) author = art.author.replace(/-/g," ");
                 let imgKey = "tt img-"+art._id;
                 return (
                     <li key={art._id}>
@@ -172,10 +175,12 @@ class ArtList extends React.Component {
         }
         return (
             <div className="container">
-                <SearchToolbar />
                 <div className="row">
                     <div className="col-sm-12 art-box">
                         <div className="search-toobar">
+                            <div className="search-button-group hidden">
+                                <div className="search-button-icon" title="高级筛选" onClick={this.searchBar}></div>
+                            </div>
                             <div className="input-group search-input-group">
                                 <input type="text" id="artName" className="form-control" placeholder="Search for..."  />
                                   <span className="input-group-btn">
