@@ -54,7 +54,7 @@ function GetCurrentDate(AddDayCount) {
     else
         curDateTime = curDateTime + "月0" + date + "日";
 
-    /*var weekday = "";
+    var weekday = "";
     if (week == 0)
         weekday = "日";
     else if (week == 1)
@@ -68,7 +68,7 @@ function GetCurrentDate(AddDayCount) {
     else if (week == 5)
         weekday = "五";
     else if (week == 6)
-        weekday = "六";*/
+        weekday = "六";
 
     var mouthCN = "";
     if (month == 0)
@@ -98,7 +98,7 @@ function GetCurrentDate(AddDayCount) {
     else if (month == 12)
         mouthCN = "十二";
 
-    curDateTime ='<span class="day">'+ date + '</span><br /><span class="mouth">'+mouthCN+'月</span>';
+    curDateTime ='<span class="mouth">'+mouthCN+'月</span><span class="day mouth">'+ date + '日</span> <span class="mouth">周'+weekday+"</span>";
     return curDateTime;
 }
    
