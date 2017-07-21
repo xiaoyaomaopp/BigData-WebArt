@@ -56,6 +56,7 @@
     "gulp-express": "^0.3.5",
     "gulp-less": "^3.1.0",
     "gulp-plumber": "^1.1.0",
+    "html-entities": "^1.2.1",
     "jquery": "^3.1.1",
     "jweixin": "^1.0.0",
     "memory-cache": "^0.1.6",

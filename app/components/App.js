@@ -27,13 +27,13 @@ class Header extends React.Component {
                 $(".header-logout").attr("title","请登录");
                 $(".header-logout").text(" 请登录 ");
                 $(".header-logout").click(function(){
-                    window.location.href = "/logout";
+                    window.location.href = "/mng/logout";
                 });
             }
         });
         $("#loginOut").click(function(){
             $('#loginOutModal').modal('hide');
-            window.location.href = "/logout";
+            window.location.href = "/mng/logout";
         });
         this.updateMenu();
     }
@@ -123,13 +123,13 @@ class HeaderTop extends React.Component {
                 $(".loginOut").attr("title","请登录");
                 $(".loginOut").text(" 请登录 ");
                 $(".loginOut").click(function(){
-                    window.location.href = "/logout";
+                    window.location.href = "/mng/logout";
                 });
             }
         });
         $("#loginOut").click(function(){
             $('#myModal').modal('hide');
-            window.location.href = "/logout";
+            window.location.href = "/mng/logout";
         });
     }
 

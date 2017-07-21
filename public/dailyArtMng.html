@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>七只狸猫·每日艺术-管理</title>
+    <script src="/js/vendor.js"></script>
+    <script src="/js/vendor.bundle.js"></script>
+<style>
+.label{
+    width: 100px;
+    display: inline-block;
+}
+#send{
+    border: 1px solid;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 5px 0px 5px 20px;
+}
+</style>
+</head>
+
+<body>
+<div id="form">
+    <p><span class="label">发布日期: </span><input type="text" name="date" placeholder="yyyyMMdd"/></p>
+    <p><span class="label">路径: </span><input type="text" name="path" /></p>
+    <p><span class="label">作品名称: </span><input type="text" name="artName" /></p>
+    <p><span class="label">作者: </span><input type="text" name="author" /></p>
+    <p><span class="label">年代: </span><input type="text" name="time" /></p>
+    <p><span class="label">介绍: </span><textarea cols="105" rows="15" name="detail" id="detail"></textarea></p>
+</div>
+<span id="send">发布</span>
+</body>
+<script>
+    $(document).ready(function(){
+        $("#send").click(function(){
+            var data = {};
+            $("#form input").each(function(){
+                data[$(this).attr("name")] = $(this).val();
+            });
+            data['detail'] = $("#detail").val();
+            console.log(data);
+            $.post("/api/addDailyArt",data,function(data){
+                if("success"==data){
+                    alert("保存成功！");
+                }
+            });
+        });
+
+    });
+
+</script>
+</html>

@@ -1,0 +1,133 @@
+﻿@charset "utf-8";
+*{
+	margin:0;
+	padding:0;
+}
+body{
+	background:#3A4350;
+	font: 14px Arial,Helvetica,sans-serif;
+    background-image: url("../images/daliy-art/daily-art-bg.png");
+}
+/**/
+.swiper-container{
+	padding:19px 0;
+}
+.swiper-slide{
+	width:85%;
+	padding:0 1%;
+    margin:0 1%;
+}
+.dailyart-card {
+    width:100%;
+    display: inline-block;
+    position: relative;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.06);
+}
+.dailyart-time{
+    background: none;
+    text-align: center;
+    overflow: hidden;
+    padding: 30px 0 20px 0;
+    font-size: 14px;
+}
+.dailyart-time .day{
+    font-size: 18px;
+    font-weight: bold;
+}
+.dailyart-time .mouth{
+    font-weight: 600;
+    font-size: 16px;
+    font-family: "楷体","微软雅黑","宋体";
+}
+.dailyart-pic {
+    background: none;
+    text-align: center;
+    overflow: hidden;
+    padding-top: 2px;
+    margin-left: 3%;
+}
+.dailyart-pic .dailyart-pic-win{
+    /*width: 80%;
+    height: 500px;*/
+    margin: 0 auto;
+    /*border: 12px ridge #B8B8B8;*/
+    padding: 0;
+    line-height: 0;
+    border: 15px solid;
+    -moz-border-image:url(../images/daliy-art/daily-art-border.png) 27 27 round;	/* Old Firefox */
+    -webkit-border-image:url(../images/daliy-art/daily-art-border.png) 27 27 round;	/* Safari and Chrome */
+    -o-border-image:url(../images/daliy-art/daily-art-border.png) 27 27 round;		/* Opera */
+    border-image:url(../images/daliy-art/daily-art-border.png) 27 27 round;
+}
+.dailyart-pic .dailyart-pic-win img{
+    position: relative;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.dailyart-pic>* {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0 10px;
+    line-height: 24px;
+}
+.dailyart-info {
+    max-height: 870px;
+    overflow: hidden;
+    padding-top: 18px;
+}
+.dailyart-info>* {
+    margin: 0;
+    font-weight: normal;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0 10px;
+    line-height: 24px;
+}
+.dailyart-info h2 {
+    font-size: 18px;
+    margin-top: 18px;
+}
+.dailyart-info h1 {
+    font-size: 78px;
+    line-height: 90px;
+    margin: -3px 0 -8px 0;
+}
+.dailyart-info h3 {
+    font-size: 17px;
+}
+.dailyart-info h4 {
+    font-size: 12px;
+    color: #777;
+    margin-top: -4px;
+}
+.dailyart-info .artName{
+    font-weight: bold;
+    font-size: 18px;
+    display: block;
+}
+.dailyart-info .author{
+    font-size: 14px;
+    display: block;
+}
+.dailyart-info .year{
+    font-size: 14px;
+    display: block;
+}
+.dailyart-info .detail{
+    white-space: pre-wrap;
+    margin: 18px auto;
+}
+.tomor{
+    background-image: url(../images/daliy-art/tomor.jpg);
+}
+.unfind{
+    background-image: url(../images/daliy-art/unfind.jpg);
+}

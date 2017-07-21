@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>发布平台-每日一艺术</title>
+    <link rel="stylesheet" href="/css/vendor.css" />
+    <script src="/js/vendor.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css">
+    <script src="/js/bootstrap-table.min.js"></script>
+    <script src="/js/bootstrap-table-locale-all.min.js"></script>
+    <style>
+        .label-1{
+            width: 100px;
+            display: inline-block;
+        }
+        #myModal input{
+            width: 410px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="toolbar">&nbsp;&nbsp;
+    <button id="add" type="button" class="btn btn-primary">
+         发布
+    </button>
+    <button id="edit" class="btn btn-primary" disabled>
+        编辑
+    </button>
+    <button id="remove" class="btn btn-danger" disabled>
+        删除
+    </button>
+</div>
+<table id="table" data-toolbar="#toolbar"
+       data-search="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-columns="true"
+       data-show-export="true"
+       data-detail-view="true"
+       data-single-select="true"
+       data-locale="zh-CN"
+       data-detail-formatter="detailFormatter"
+       data-minimum-count-columns="2"
+       data-show-pagination-switch="true"
+       data-pagination="true"
+       data-id-field="_id"
+       data-page-list="[5, 10, 25, 50, 100, 200, 300, 500]"
+       data-show-footer="false"
+       data-side-pagination="server"
+       data-url="/api/listDailyArt"
+       data-response-handler="responseHandler">
+</table>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">发布信息编辑</h4>
+            </div>
+            <div class="modal-body">
+                <div id="form">
+                    <input type="hidden" name="id" />
+                    <p><span class="label-1">发布日期<span style="color: red">*</span>: </span><input type="text" name="date" placeholder="yyyyMMdd"/></p>
+                    <p><span class="label-1">路径: </span><input type="text" name="path" value="../daily-art-resource/" /></p>
+                    <p><span class="label-1">作品名称: </span><input type="text" name="artName" /></p>
+                    <p><span class="label-1">作者: </span><input type="text" name="author" /></p>
+                    <p><span class="label-1">年代: </span><input type="text" name="time" /></p>
+                    <p><span class="label-1">详细: </span><textarea cols="55" rows="15" name="detail" id="detail"></textarea></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="send">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+<script>
+
+    var $table = $('#table'),
+            $remove = $('#remove'),
+            $edit = $('#edit'),
+            selections = [];
+    $(document).ready(function(){
+        $('#table').bootstrapTable({
+            height: getHeight(),
+            columns: [{
+                field: 'state',
+                checkbox: true,
+                align: 'center',
+                valign: 'middle'
+            },{
+                field: '_id',
+                title: 'id'
+            }, {
+                field: 'date',
+                title: '发布时间',
+                sortable: true,
+                editable: true
+            }, {
+                field: 'path',
+                title: '资源路径',
+                editable: true
+            }, {
+                field: 'artName',
+                title: '名称',
+                editable: true
+            }, {
+                field: 'author',
+                title: '作者',
+                editable: true
+            }, {
+                field: 'time',
+                title: '年代',
+                editable: true
+            }, {
+                field: 'detail',
+                title: '详情',
+                editable: true
+            }, {
+                field: 'operate',
+                title: '操作',
+                align: 'center',
+                events: operateEvents,
+                formatter: operateFormatter
+            }]
+        });
+        $("#add").click(function(){
+            $("#myModal").modal("show");
+        });
+
+        $("#send").click(function(){
+            var data = {};
+            $("#form input").each(function(){
+                data[$(this).attr("name")] = $(this).val();
+            });
+            data['detail'] = $("#detail").val();
+            if(!!!data.date || data.date.length!=8){
+                alert("发布时间必须为yyyyMMdd");
+                return false;
+            }
+            console.log(data);
+            $.post("/api/addDailyArt",data,function(data){
+                if("success"==data){
+                    $('#table').bootstrapTable('refresh');
+                    $("#myModal").modal("hide");
+                    alert("保存成功！");
+                }else{
+                    alert(data);
+                }
+            });
+        });
+
+        $('#myModal').on('hidden.bs.modal', function () {
+            clearForm();
+        })
+    });
+
+    function delById(row){
+        $.post("/api/delDailyArt",{date:row.date},function(data){
+            if("success"==data){
+                $('#table').bootstrapTable('refresh');
+                $remove.prop('disabled', true);
+                $edit.prop('disabled', true);
+                alert("删除成功！");
+            }
+        });
+
+    }
+
+    setTimeout(function () {
+        $table.bootstrapTable('resetView');
+    }, 200);
+    $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+        $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+        $edit.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+        // save your data, here just save the current page
+        selections = getIdSelections();
+        // push or splice the selections if you want to save all data selections
+    });
+//    $table.on('expand-row.bs.table', function (e, index, row, $detail) {
+//        if (index % 2 == 1) {
+//            $detail.html('Loading from ajax request...');
+//            $.get('LICENSE', function (res) {
+//                $detail.html(res.replace(/\n/g, '<br>'));
+//            });
+//        }
+//    });
+    $table.on('all.bs.table', function (e, name, args) {
+        console.log(name, args);
+    });
+    $remove.click(function () {
+        var ids = getSelectValues();
+        if(!!ids && ids.length>0){
+            delById(ids[0]);
+        }
+    });
+    $(window).resize(function () {
+        $table.bootstrapTable('resetView', {
+            height: getHeight()
+        });
+    });
+    $edit.click(function () {
+        var rows = getSelectValues();
+        if(!!rows && rows.length>0){
+            var row = rows[0];
+            for(var r in row){
+                $("input[name="+r+"]").val(row[r]);
+            }
+            $("input[name=id]").val(row['_id']);
+            $("#detail").val(row['detail']);
+            $("#myModal").modal("show");
+        }
+        $remove.prop('disabled', true);
+        $edit.prop('disabled', true);
+    });
+
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {
+            if('state'!=key){
+                html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+            }
+        });
+        return html.join('');
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+            /*'<a class="like" href="javascript:void(0)" title="Like">',
+            '<i class="glyphicon glyphicon-heart"></i>',
+            '</a>  ',*/
+            '<a class="remove" href="javascript:void(0)" title="Remove">',
+            '<i class="glyphicon glyphicon-remove"></i>',
+            '</a>'
+        ].join('');
+    }
+
+    window.operateEvents = {
+        /*'click .like': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row));
+        },*/
+        'click .remove': function (e, value, row, index) {
+            delById(row);
+        }
+    };
+
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row._id
+        });
+    }
+
+    function getSelectValues() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row
+        });
+    }
+
+    function totalTextFormatter(data) {
+        return 'Total';
+    }
+
+    function totalNameFormatter(data) {
+        return data.length;
+    }
+
+    function totalPriceFormatter(data) {
+        var total = 0;
+        $.each(data, function (i, row) {
+            total += +(row.price.substring(1));
+        });
+        return '$' + total;
+    }
+
+    function getHeight() {
+        return $(window).height();
+    }
+
+    function responseHandler(res) {
+        $.each(res.rows, function (i, row) {
+            row.state = $.inArray(row._id, selections) !== -1;
+        });
+        return res;
+    }
+
+    function clearForm(){
+        $("#myModal input").each(function(){
+            $(this).val('');
+        });
+        $("#detail").val('');
+        $("input[name=path]").val('../daily-art-resource/');
+        if(!!getIdSelections()){
+            $remove.prop('disabled', false);
+            $edit.prop('disabled', false);
+        }
+    }
+
+
+</script>
+</body>
+</html>

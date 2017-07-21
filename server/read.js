@@ -115,3 +115,50 @@ exports.getArtById = function(id) {
         throw error;
     })
 }
+
+exports.getDailyArt = function(date) {
+    return db.open("daily.art").then(function(collection) {
+        return collection.find({
+            "date": date+""
+        }).toArray();
+    }).then(function(data) {
+        console.log("getDailyArt------------------------------"+data)
+        return data;
+    }).catch(function(error) {
+        db.close();
+        console.error(error)
+        throw error;
+    })
+}
+
+exports.queryDailyArt = function(query) {
+    //var start = (page - 1) * query.limit;
+    var param = {};
+
+    var sort = {
+        "date" : -1
+    };
+    if(!!query.sort){
+        sort[query.sort] = query.order=='asc'?1:-1;
+    }
+    console.log(sort);
+    console.log(query.order);
+    return db.open("daily.art").then(function(collection) {
+        return collection.find(param).sort(sort).skip(parseInt(query.offset)).limit(parseInt(query.limit)).toArray();
+    }).then(function(rows) {
+        //console.log(data.length, "data");
+        return db.collection.find(param).count().then(function(total) {
+            db.close();
+            return ({
+                limit:query.limit,
+                total,
+                offset:query.offset,
+                rows
+            });
+        })
+    }).catch(function(error) {
+        db.close();
+        console.error(error)
+        throw error;
+    })
+}

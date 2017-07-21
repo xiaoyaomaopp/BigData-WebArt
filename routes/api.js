@@ -111,4 +111,48 @@ router.post('/updateArtById', function(req, res, next) {
     })
 });
 
+router.post('/addDailyArt', function(req, res, next) {
+    var art = req.body;
+    update.addDailyArt(art).then(function(data) {
+        res.send(data);
+    }).catch(function(e) {
+        res.send('');
+    })
+});
+router.post('/delDailyArt', function(req, res, next) {
+    var art = req.body;
+    update.delDailyArt(art).then(function(data) {
+        res.send(data);
+    }).catch(function(e) {
+        res.send('');
+    })
+});
+router.get('/getDailyArt', function(req, res, next) {
+    var date = req.query.date;
+    read.getDailyArt(date).then(function(data) {
+        res.send(data);
+    }).catch(function(e) {
+        res.send([]);
+    })
+});
+router.get('/listDailyArt', function(req, res, next) {
+    var query = {};
+    if(!!req.query.offset){
+        query.offset = req.query.offset;
+    }else{
+        query.offset = 0;
+    }
+    if(!!req.query.limit){
+        query.limit = req.query.limit;
+    }else{
+        query.limit = 10;
+    }
+    query.sort = req.query.sort;
+    query.order = req.query.order;
+    read.queryDailyArt(query).then(function(data) {
+        res.send(data);
+    }).catch(function(e) {
+        res.send([]);
+    })
+});
 module.exports = router;

@@ -107,6 +107,7 @@ gulp.task('watch', ['build'], function() {
 gulp.task('server', ['watch'], function() {
 	process.env.NODE_ENV = 'development';
 	process.env.debug = 'bigdata-web:*';
+	process.env.PORT = '3001';
 	// Start the server at the beginning of the task
 	server.run(['./bin/www']);
 	gulp.watch('public/**/bundle.js', server.notify);
