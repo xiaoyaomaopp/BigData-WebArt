@@ -39,7 +39,7 @@ exports.authorByPage = function(page, limit, query) {
 		param.genre = eval('/'+query.genre+'/');
 	}
     //console.log(param);
-	return db.open("wikiart.org.author").then(function(collection) {
+	return db.open("wikiart.org.艺术家").then(function(collection) {
 		return collection.find(param).sort({
 			_updateAt: -1
 		}).skip(start).limit(limit).toArray();
@@ -141,12 +141,12 @@ exports.queryDailyArt = function(query) {
     if(!!query.sort){
         sort[query.sort] = query.order=='asc'?1:-1;
     }
-    console.log(sort);
-    console.log(query.order);
+	if(!!query.search){
+		param['date'] = query.search;
+	}
     return db.open("daily.art").then(function(collection) {
         return collection.find(param).sort(sort).skip(parseInt(query.offset)).limit(parseInt(query.limit)).toArray();
     }).then(function(rows) {
-        //console.log(data.length, "data");
         return db.collection.find(param).count().then(function(total) {
             db.close();
             return ({

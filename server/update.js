@@ -2,7 +2,7 @@ var db = require('./db.js');
 var common = require('./common.js');
 
 exports.updateAuthor = function(author) {
-    return db.open("wikiart.org.author").then(function(collection) {
+    return db.open("wikiart.org.艺术家").then(function(collection) {
         return collection.update({
             "_id" : author._id
         },{$set:{

@@ -14,6 +14,7 @@ import Home from './components/Home';
 import AuthorList from './components/AuthorList';
 import ArtList from './components/ArtList';
 import Art from './components/Art';
+import DailyArtMng from './components/DailyArtMng';
 
 
 export default (
@@ -24,6 +25,7 @@ export default (
    		<Route path="art/:page" component={ArtList} />
    		<Route path="artDetail/:id" component={Art} />
    		<Route path="author/:style" component={AuthorList} />
+   		<Route path="daily/:type" component={DailyArtMng} />
     </Route>
   </Router>
 )

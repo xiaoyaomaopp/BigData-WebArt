@@ -16,7 +16,24 @@
         #myModal input{
             width: 410px;
         }
-
+        #alert-msg{
+            height: 5rem;
+            text-align: center;
+            position: fixed;
+            top: 50%;
+            margin-top: -1rem;
+            line-height: 5rem;
+            width: 100%;
+            z-index: 9999;
+        }
+        #alert-msg span{
+            color: #fff;
+            background: rgba(0,0,0,0.6);
+            height: 5rem;
+            display: inline-block;
+            padding: 0 3rem;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -95,17 +112,10 @@
                 checkbox: true,
                 align: 'center',
                 valign: 'middle'
-            },{
-                field: '_id',
-                title: 'id'
             }, {
                 field: 'date',
                 title: '发布时间',
                 sortable: true,
-                editable: true
-            }, {
-                field: 'path',
-                title: '资源路径',
                 editable: true
             }, {
                 field: 'artName',
@@ -115,21 +125,13 @@
                 field: 'author',
                 title: '作者',
                 editable: true
-            }, {
-                field: 'time',
-                title: '年代',
-                editable: true
-            }, {
-                field: 'detail',
-                title: '详情',
-                editable: true
-            }, {
+            }/*, {
                 field: 'operate',
                 title: '操作',
                 align: 'center',
                 events: operateEvents,
                 formatter: operateFormatter
-            }]
+            }*/]
         });
         $("#add").click(function(){
             $("#myModal").modal("show");
@@ -195,7 +197,7 @@
 //        }
 //    });
     $table.on('all.bs.table', function (e, name, args) {
-        console.log(name, args);
+        //console.log(name, args);
     });
     $remove.click(function () {
         var ids = getSelectValues();
@@ -225,11 +227,10 @@
 
     function detailFormatter(index, row) {
         var html = [];
-        $.each(row, function (key, value) {
-            if('state'!=key){
-                html.push('<p><b>' + key + ':</b> ' + value + '</p>');
-            }
-        });
+        html.push('<p><b>_id:</b> ' + row['_id'] + '</p>');
+        html.push('<p><b>资源路径:</b> ' + row['path'] + '</p>');
+        html.push('<p><b>年代:</b> ' + row['time'] + '</p>');
+        html.push('<p><b>详情:</b><br />' + row['detail'] + '</p>');
         return html.join('');
     }
 
@@ -304,7 +305,16 @@
         }
     }
 
+    function alert(e){
+        $("body").append("<div id='alert-msg'><span>"+e+"</span></div>");
+        clearmsg();
+    }
 
+    function clearmsg(){
+        var t = setTimeout(function(){
+            $("#alert-msg").remove();
+        },2000)
+    };
 </script>
 </body>
 </html>

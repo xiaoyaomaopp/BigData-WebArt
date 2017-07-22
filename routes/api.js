@@ -149,6 +149,7 @@ router.get('/listDailyArt', function(req, res, next) {
     }
     query.sort = req.query.sort;
     query.order = req.query.order;
+    query.search = req.query.search;
     read.queryDailyArt(query).then(function(data) {
         res.send(data);
     }).catch(function(e) {

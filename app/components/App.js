@@ -91,6 +91,9 @@ class Header extends React.Component {
                                     <li className="nav_author_all">
                                         <Link to='/author/all'>作者</Link>
                                     </li>
+                                    <li className="nav_daily_art">
+                                        <Link to='/daily/art'>每日艺术</Link>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

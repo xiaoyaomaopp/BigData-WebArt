@@ -21,12 +21,12 @@
                 }
             })
             function login(){
-                $.post("api/login", {
+                $.post("/api/login", {
                     account: $("#login_user").val(),
                     password: $("#login_pwd").val()
                 }, function(data) {
                     if (data.result) {
-                        location.href = "/mng/home";
+                        location.href = "home";
                     } else {
                         $(".login_item_msg").show()
                     }

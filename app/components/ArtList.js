@@ -126,7 +126,7 @@ class ArtList extends React.Component {
                 let date = art.date;
                 if(!!date) date = art.date.split(";")[0];
                 let imgKey = "img-"+art._id;
-                let artUrl = "/home#/artDetail/"+art._id;
+                let artUrl = "/mng/home#/artDetail/"+art._id;
                 let dot = " . ";
                 if(!!!art.date){
                     dot = "";
