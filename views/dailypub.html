@@ -34,6 +34,13 @@
             padding: 0 3rem;
             border-radius: 5px;
         }
+        .btn-disabled{
+            cursor: not-allowed;
+            filter: alpha(opacity=65);
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            opacity: .65;
+        }
     </style>
 </head>
 <body>
@@ -81,7 +88,10 @@
                 <div id="form">
                     <input type="hidden" name="id" />
                     <p><span class="label-1">发布日期<span style="color: red">*</span>: </span><input type="text" name="date" placeholder="yyyyMMdd"/></p>
-                    <p><span class="label-1">路径: </span><input type="text" name="path" value="../daily-art-resource/" /></p>
+                    <p>
+                        <span class="label-1">路径: </span><input type="text" name="path" value="../daily-art-resource/" />
+                        <button type="button" class="btn btn-default" id="uploadImg">上传</button>
+                    </p>
                     <p><span class="label-1">作品名称: </span><input type="text" name="artName" /></p>
                     <p><span class="label-1">作者: </span><input type="text" name="author" /></p>
                     <p><span class="label-1">年代: </span><input type="text" name="time" /></p>
@@ -96,7 +106,12 @@
     </div><!-- /.modal -->
 </div>
 
-
+<div style="display: none;">
+    <form id="uploadForm" method="post" enctype="multipart/form-data" action="/upload/dailryArtUpload" >
+        <input type="file" name="thumbnail" id="file-img" onChange="doImgUploadSubmit()">
+        <input type="submit" />
+    </form>
+</div>
 
 <script>
 
@@ -104,7 +119,45 @@
             $remove = $('#remove'),
             $edit = $('#edit'),
             selections = [];
+
+    function doImgUploadSubmit(){
+        if(!!$("#file-img").val()){
+            $("body").append("<div id='alert-msg'><span>正在上传...</span></div>");
+            $("#uploadImg").attr("disabled","disabled");
+            var formData = new FormData($( "#uploadForm" )[0]);
+            $.ajax({
+                url: '/upload/dailryArtUpload?rd='+new Date().getTime() ,
+                method: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+            success: function (returndata) {
+                    $("#alert-msg").remove();
+                    alert("上传完成！");
+                    if(!!returndata){
+                        returndata = JSON.parse(returndata);
+                        if(returndata.success){
+                            $("input[name=path]").val(returndata.path);
+                        }
+                    }
+                    $("#uploadImg").removeAttr("disabled");
+                },
+                error: function (returndata) {
+                    $("#alert-msg").remove();
+                    $("#uploadImg").removeAttr("disabled");
+                    alert("上传失败！");
+                    console.log('error:'+returndata);
+                }
+            });
+        }
+    }
+
     $(document).ready(function(){
+        $("#uploadImg").click(function(){
+            $("#file-img").click();
+        });
         $('#table').bootstrapTable({
             height: getHeight(),
             columns: [{

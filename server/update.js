@@ -81,6 +81,7 @@ exports.addDailyArt = function(art) {
                 'date' : art.date,
                 'author' : art.author,
                 'time' : art.time,
+                'path' : art.path,
                 'detail' : art.detail
             }});
         }).then(function(data) {

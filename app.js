@@ -8,6 +8,7 @@ var session = require('express-session');
 var index = require('./routes/index');
 var api = require('./routes/api');
 var mng = require('./routes/mng');
+var fileupload = require('./routes/fileupload');
 
 var app = express();
 
@@ -29,12 +30,13 @@ app.use(session({
 	resave: true,
 	saveUninitialized: false,
 	cookie: {
-		maxAge: 1000 * 60 * 10 //过期时间设置(单位毫秒)
+		maxAge: 1000 * 60 * 10 //杩囨湡鏃堕棿璁剧疆(鍗曚綅姣)
 	}
 }));
 app.use('/', index);
 app.use('/api', api);
 app.use('/mng', mng);
+app.use('/upload', fileupload);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
