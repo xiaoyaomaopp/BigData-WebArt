@@ -122,7 +122,8 @@ exports.getDailyArt = function(date) {
             "date": date+""
         }).toArray();
     }).then(function(data) {
-        console.log("getDailyArt------------------------------"+data)
+        console.log("getDailyArt------------------------------"+data);
+        db.close();
         return data;
     }).catch(function(error) {
         db.close();
