@@ -8,57 +8,86 @@
     <title>七只狸猫·艺术</title>
     <link rel="stylesheet" href="/css/vendor.css" />
     <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/login-mng.css" />
     <script src="/js/vendor.js"></script>
     <script src="/js/vendor.bundle.js"></script>
-    <script type="text/javascript">
-        $(function(){
-            $(".login_btn").on('click',function(){
-                login();
-            })
-            $("#login_pwd").on('keydown',function(event){
-                if (event.keyCode == "13") {//keyCode=13是回车键
-                    login();
-                }
-            })
-            function login(){
-                $.post("/api/login", {
-                    account: $("#login_user").val(),
-                    password: $("#login_pwd").val()
-                }, function(data) {
-                    if (data.result) {
-                        location.href = "home";
-                    } else {
-                        $(".login_item_msg").show()
-                    }
-                }, "json")
-            }
-        })
-    </script>
+    <script src="/js/jquery.mCustomScrollbar.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/getToday.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/login-mng.js"></script>
 </head>
 <body>
     <div id="login">
-        <div id="login_alert">
+        <div class="dailyart-pic1 hide"><div class="dailyart-pic-win1 animated fadeIn"></div></div>
+    </div>
+    <div class="login_toolbar">
+        <div class="login_footerbar_rightdiv animated fadeIn">
+            <div class="login_toolbar_btn info-icon" title="艺术品详情"></div>
+            <div class="login_toolbar_btn left-icon" title="上一个图像"></div>
+            <div class="login_toolbar_btn right-icon btn-right-disabled" title="下一个图像"></div>
+            <div class="login_toolbar_btn login-icon" title="登录"></div>
+        </div>
+    </div>
+    <footer class="login_page_footer">
+        <span><a href="http://www.limaodata.com/">Copyright © 七只狸猫·荒野猎人团队</a></span>
+        <span>|</span>
+        <span><a href="http://www.miibeian.gov.cn/" target="_blank"> 苏ICP备14030752号</a></span>
+    </footer>
+    <div class="modal fade" id="panel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog panel-dialog">
+            <div class="panel-content">
+            </div>
+        </div>
+    </div>
+    <div class="login-panel-info hide">
+        <div id="login_alert" class="animated fadeIn">
             <div class="login_title">
                 七只狸猫·艺术
             </div>
             <div class="login_item">
-                <div>用户名</div>
+                <label>用户名</label>
                 <input type="text" id="login_user" class="input-text" value="admin" placeholder="请输入用户名"/>
             </div>
             <div class="login_item login_pwd">
-                <div>密码</div>
+                <label>密码</label>
                 <input type="password" id="login_pwd" class="input-text" value="admin" placeholder="请输入密码"/>
                 <div class="login_item_msg">
                     用户名或密码错误！
                 </div>
             </div>
-
             <div class="login_item login_item_btn">
                 <a class="login_btn">登录</a>
             </div>
         </div>
     </div>
-
+    <div class="dailyArt-panel-info hide">
+        <div class="dailyart-detail animated fadeIn">
+            <div class="publishDate">
+                <span class="date"></span>
+            </div>
+            <div class="dailyart-pic">
+                <div class="dailyart-pic-win">
+                    <img src="" class="dailyArt-detail-img" /></div>
+            </div>
+            <div class="dailyart-info">
+                <span class="artName"></span>
+                <span class="author"></span>
+                <span class="time"></span>
+            </div>
+            <div class="dailyart-more-info">
+                <p class="detail"></p>
+            </div>
+            <div class="dailyart-copy">
+                <div class="dailyart-copy-item dailyart-copy-item-code">
+                    <img src="/images/dailyArtCode.png" />
+                    <div class="code-art-desc">口袋里的作品</div>
+                </div>
+                <div class="dailyart-copy-item dailyart-copy-item-des">
+                    <span>七只狸猫·每日艺术</span><br />
+                    <span class="dailyart-copy-item-des2">每日推送一个艺术品</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

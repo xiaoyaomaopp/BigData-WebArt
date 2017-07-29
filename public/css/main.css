@@ -424,20 +424,25 @@ body,
 /*************登入页面********************/
 #login {
   width: 100%;
-  height: 100%;
+  height: 98%;
   display: inline-block;
-  background: url('../images/login.jpg');
   font-size: 12px;
   font-family: "微软雅黑", sans-serif;
+  background: url('../images/login.jpg');
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
 }
 #login_alert {
-  border: 1px solid #009adb;
-  border-radius: 5px ;
+  /*border: 1px solid #009adb;*/
+  /*border-radius:5px ;*/
   width: 300px;
   height: 350px;
   margin: 100px 200px 0 auto;
-  background: #ffffff;
+  /*background: #ffffff;*/
   padding: 0 auto;
+  margin: 100px auto;
 }
 .login_title {
   font-size: 16px;
@@ -492,6 +497,113 @@ a:hover {
 }
 .login_pwd {
   height: 88px;
+}
+.login_toolbar {
+  width: 420px;
+  height: 80px;
+  position: fixed;
+  bottom: 28px;
+  z-index: 1060;
+  right: 0;
+}
+.login_footerbar_rightdiv {
+  right: 10px;
+  z-index: 1;
+  width: 240px;
+  position: absolute;
+  margin-top: 17px;
+}
+.login_toolbar_btn {
+  width: 40px;
+  height: 40px;
+  float: left;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.info-icon {
+  background: url(../images/info_w.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+}
+.info-icon:hover {
+  background: url(../images/info_b.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+}
+.left-icon {
+  background: url(../images/left_w.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+}
+.left-icon:hover {
+  background: url(../images/left_b.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+}
+.right-icon {
+  background: url(../images/right_w.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+}
+.right-icon:hover {
+  background: url(../images/right_b.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+}
+.login-icon {
+  background: url(../images/login_w.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+}
+.login-icon:hover {
+  background: url(../images/login_b.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+}
+.login_page_footer {
+  background-color: #333;
+  width: 100%;
+  height: 30px;
+  position: fixed;
+  bottom: 0;
+  color: #666;
+  text-align: center;
+}
+.login_page_footer a {
+  color: #666;
+}
+.login_page_footer a:hover {
+  color: #9a9a9a;
+}
+#panel .panel-dialog {
+  width: 420px;
+  position: absolute;
+  right: 0;
+  overflow-x: hidden;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 10;
+  margin-top: 30px;
+}
+#panel .panel-content {
+  width: 100%;
+  height: 500px;
+  border: 0px solid #fff;
 }
 /**************** edit author css *******************/
 .edit_author_modal {
