@@ -178,7 +178,7 @@ class ArtList extends React.Component {
                 <div className="row">
                     <div className="col-sm-12 art-box">
                         <div className="search-toobar">
-                            <div className="search-button-group ">
+                            <div className="search-button-group hide">
                                 <div className="search-button-icon" title="高级筛选" onClick={this.searchBar}></div>
                             </div>
                             <div className="input-group search-input-group">

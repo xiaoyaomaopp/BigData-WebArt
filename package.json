@@ -59,6 +59,7 @@
     "html-entities": "^1.2.1",
     "jquery": "^3.1.1",
     "jweixin": "^1.0.0",
+    "lightbox2": "^2.9.0",
     "memory-cache": "^0.1.6",
     "mongodb": "^2.2.10",
     "morgan": "^1.7.0",

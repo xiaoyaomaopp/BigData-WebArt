@@ -5,7 +5,7 @@ var dailyArt = {
     active : 0,
     art : [],
     leftMar : 0,
-    startDate : '20170731',
+    startDate : '20170718',
     defaultPic : '/images/login.jpg'
 };
 $(function(){
@@ -13,6 +13,15 @@ $(function(){
     var panelHeight = $(document).height()-30-30;
     $(".panel-dialog").css("height", panelHeight+"px")
     $(".panel-content").css("height", (panelHeight-80)+"px");
+    var wWidth = $(window).width();
+
+    var wHeight = $(window).height();
+    var sHeight = wHeight-160;
+    var sWidth = sHeight*wWidth/wHeight;
+    $(".dailyart-pic1").width(sWidth);
+    $(".dailyart-pic1").height(sHeight);
+    $(".dailyart-pic1 img").css('max-height',sHeight+'px');
+    $(".dailyart-pic1 img").css('max-width',(wWidth-110)+'px');
 
     $(".login-icon").on('click',function(){
         var flag = false;
@@ -129,25 +138,36 @@ function loadWindowArt(){
     if($("#panel").hasClass("in") && !!$(".dailyart-detail") && $(".dailyart-detail").length>1){
         loadPanelDailyArt(true);
     }
-    var ww = $(".dailyart-pic-win1").css("width");
-    $(".dailyart-pic-win1").animate({}, 0).animate({}, 0).css({
-        "background":"url("+dailyArt.art[dailyArt.today-dailyArt.active].path+")",
-        "background-repeat": "no-repeat",
-        "background-position-x": "center",
-        "background-position-y": "center",
-        "-webkit-background-size": "cover",
-        "-moz-background-size": "cover",
-        "-o-background-size": "cover",
-        "background-size": "cover"
-    });
+    var dart = dailyArt.art[dailyArt.today-dailyArt.active];
+    $(".dailyart-pic1 img").attr('src',dart.path);
+    $(".dailyart-pic1 img").attr('alt',dart.artName);
+    $(".dailyart-pic1 img").attr('title',dart.artName);
+    //if(!!$(".dailyart-pic1 .c"+dart.date).html()){
+    //    $(".dailyart-pic1 div").fadeOut();
+    //    $(".dailyart-pic1 .c"+dart.date).show();
+    //}else{
+    //    $(".dailyart-pic1 div").fadeOut();
+    //    var hh = '<div class="dailyart-pic-win1 animated fadeIn c'+dart.date+' " ';
+    //    hh += 'style="background-image:url('+dart.path+')" ></div>';
+    //    $(".dailyart-pic1").append(hh);
+    //}
+    //$(".dailyart-pic-win1").css(
+    //    "background-image","url("+dailyArt.art[dailyArt.today-dailyArt.active].path+") no-repeat"
+    //);
 }
 
 function initDailyArt(){
     getArt(getArtDate(dailyArt.today),function(data){
         if(!!data){
-            $(".dailyart-pic1").removeClass("hide");
             dailyArt.art[dailyArt.today] = data;
-            $(".dailyart-pic-win1").css("background","url("+data.path+")");
+            //$(".dailyart-pic1 div").fadeOut();
+            //var hh = '<div class="dailyart-pic-win1 animated fadeIn c'+data.date+' " ';
+            //hh += 'style="background-image:url('+data.path+')" ></div>';
+            //$(".dailyart-pic1").append(hh);
+            //$(".dailyart-pic-win1").css("background","url("+data.path+")");
+            $(".dailyart-pic1 img").attr('src',data.path);
+            $(".dailyart-pic1 img").attr('alt',data.artName);
+            $(".dailyart-pic1 img").attr('title',data.artName);
         }else{
             dailyArt.art[dailyArt.today-dailyArt.active] = {
                 path: dailyArt.defaultPic,

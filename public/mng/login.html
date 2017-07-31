@@ -17,7 +17,9 @@
 </head>
 <body>
     <div id="login">
-        <div class="dailyart-pic1 hide"><div class="dailyart-pic-win1 animated fadeIn"></div></div>
+        <div class="dailyart-pic1">
+            <img class="example-image" src="../images/login.jpg" alt="" title="" data-lightbox="example-1"/>
+        </div>
     </div>
     <div class="login_toolbar">
         <div class="login_footerbar_rightdiv animated fadeIn">
@@ -45,11 +47,11 @@
             </div>
             <div class="login_item">
                 <label>用户名</label>
-                <input type="text" id="login_user" class="input-text" value="admin" placeholder="请输入用户名"/>
+                <input type="text" id="login_user" class="input-text" value="" placeholder="请输入用户名"/>
             </div>
             <div class="login_item login_pwd">
                 <label>密码</label>
-                <input type="password" id="login_pwd" class="input-text" value="admin" placeholder="请输入密码"/>
+                <input type="password" id="login_pwd" class="input-text" value="" placeholder="请输入密码"/>
                 <div class="login_item_msg">
                     用户名或密码错误！
                 </div>
@@ -74,7 +76,7 @@
                 <span class="time"></span>
             </div>
             <div class="dailyart-more-info">
-                <p class="detail"></p>
+                <div class="detail"></div>
             </div>
             <div class="dailyart-copy">
                 <div class="dailyart-copy-item dailyart-copy-item-code">
@@ -89,5 +91,13 @@
         </div>
     </div>
 </body>
+<script>
 
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true,
+        'alwaysShowNavOnTouchDevices': true,
+        'maxHeight': '200px'
+    })
+</script>
 </html>
