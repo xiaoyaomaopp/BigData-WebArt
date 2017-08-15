@@ -95,6 +95,8 @@
                         <button type="button" class="btn btn-default" id="uploadImg">上传</button>
                     </p>
                     <p><span class="label-1">作品名称: </span><input type="text" name="artName" /></p>
+                    <p><span class="label-1">专栏: </span><input type="text" name="column" /></p>
+                    <p><span class="label-1">来源: </span><input type="text" name="from" /></p>
                     <p><span class="label-1">作者: </span><input type="text" name="author" /></p>
                     <p><span class="label-1">年代: </span><input type="text" name="time" /></p>
                     <p><span class="label-1">详细: </span><textarea cols="55" rows="15" name="detail" id="detail" class="xheditor"></textarea></p>
@@ -217,6 +219,7 @@
         $('#myModal').on('hidden.bs.modal', function () {
             clearForm();
         })
+        $("a[cmd='About']").css("display","none");
     });
 
     function delById(row){
@@ -284,6 +287,8 @@
         var html = [];
         html.push('<p><b>_id:</b> ' + row['_id'] + '</p>');
         html.push('<p><b>资源路径:</b> ' + row['path'] + '</p>');
+        html.push('<p><b>来源:</b> ' + row['from'] + '</p>');
+        html.push('<p><b>专栏:</b> ' + row['column'] + '</p>');
         html.push('<p><b>年代:</b> ' + row['time'] + '</p>');
         html.push('<p><b>详情:</b><br />' + row['detail'] + '</p>');
         return html.join('');

@@ -82,6 +82,8 @@ exports.addDailyArt = function(art) {
                 'author' : art.author,
                 'time' : art.time,
                 'path' : art.path,
+                'column' : art.column,
+                'from' : art.from,
                 'detail' : art.detail
             }});
         }).then(function(data) {
@@ -100,6 +102,39 @@ exports.delDailyArt = function(art) {
         return collection.remove(art);
     }).then(function() {
         return "success";
+    }).catch(function(error) {
+        db.close();
+        console.error(error)
+        throw error;
+    })
+}
+
+exports.likeDailyArt = function(params) {
+    var _id = params._id;
+    return db.open("daily.art").then(function(collection) {
+        return collection.find({
+            "_id" : _id
+        }).toArray();
+    }).then(function(data) {
+        db.close();
+        if(!!data && data.length>0){
+            var likeCount = data[0].likeCount || 0;
+            db.open("daily.art").then(function(collection) {
+                return collection.update({
+                    "_id" : _id
+                },{$set:{
+                    'likeCount' : ++likeCount
+                }}).then(function(data) {
+                    console.log(data.result);
+                    return "";
+                }).catch(function(error) {
+                    db.close();
+                    console.error(error)
+                    throw error;
+                });
+            });
+        }
+        return data;
     }).catch(function(error) {
         db.close();
         console.error(error)

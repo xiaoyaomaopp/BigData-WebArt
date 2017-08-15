@@ -156,4 +156,12 @@ router.get('/listDailyArt', function(req, res, next) {
         res.send([]);
     })
 });
+router.post('/likeDailyArt', function(req, res, next) {
+    var params = req.body;
+    update.likeDailyArt(params).then(function(data) {
+        res.send(data);
+    }).catch(function(e) {
+        res.send('');
+    })
+});
 module.exports = router;
