@@ -159,7 +159,7 @@ exports.queryDailyArt = function(query) {
         })
     }).catch(function(error) {
         db.close();
-        console.error(error)
+        console.info(error)
         throw error;
     })
 }

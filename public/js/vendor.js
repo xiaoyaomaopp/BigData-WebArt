@@ -12631,8 +12631,8 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /*!
- * headroom.js v0.9.3 - Give your page some headroom. Hide your header until you need it
- * Copyright (c) 2016 Nick Williams - http://wicky.nillia.ms/headroom.js
+ * headroom.js v0.9.4 - Give your page some headroom. Hide your header until you need it
+ * Copyright (c) 2017 Nick Williams - http://wicky.nillia.ms/headroom.js
  * License: MIT
  */
 
@@ -12786,7 +12786,7 @@ if (typeof jQuery === 'undefined') {
       this.debouncer = new Debouncer(this.update.bind(this));
       this.elem.classList.add(this.classes.initial);
   
-      // defer event registration to handle browser 
+      // defer event registration to handle browser
       // potentially restoring previous scroll position
       setTimeout(this.attachEvent.bind(this), 100);
   
@@ -12800,7 +12800,13 @@ if (typeof jQuery === 'undefined') {
       var classes = this.classes;
   
       this.initialised = false;
-      this.elem.classList.remove(classes.unpinned, classes.pinned, classes.top, classes.notTop, classes.initial);
+  
+      for (var key in classes) {
+        if(classes.hasOwnProperty(key)) {
+          this.elem.classList.remove(classes[key]);
+        }
+      }
+  
       this.scroller.removeEventListener('scroll', this.debouncer, false);
     },
   
@@ -12817,14 +12823,14 @@ if (typeof jQuery === 'undefined') {
         this.debouncer.handleEvent();
       }
     },
-    
+  
     /**
      * Unpins the header if it's currently pinned
      */
     unpin : function() {
       var classList = this.elem.classList,
         classes = this.classes;
-      
+  
       if(classList.contains(classes.pinned) || !classList.contains(classes.unpinned)) {
         classList.add(classes.unpinned);
         classList.remove(classes.pinned);
@@ -12838,7 +12844,7 @@ if (typeof jQuery === 'undefined') {
     pin : function() {
       var classList = this.elem.classList,
         classes = this.classes;
-      
+  
       if(classList.contains(classes.unpinned)) {
         classList.remove(classes.unpinned);
         classList.add(classes.pinned);
@@ -12852,7 +12858,7 @@ if (typeof jQuery === 'undefined') {
     top : function() {
       var classList = this.elem.classList,
         classes = this.classes;
-      
+  
       if(!classList.contains(classes.top)) {
         classList.add(classes.top);
         classList.remove(classes.notTop);
@@ -12866,7 +12872,7 @@ if (typeof jQuery === 'undefined') {
     notTop : function() {
       var classList = this.elem.classList,
         classes = this.classes;
-      
+  
       if(!classList.contains(classes.notTop)) {
         classList.add(classes.notTop);
         classList.remove(classes.top);
@@ -12877,7 +12883,7 @@ if (typeof jQuery === 'undefined') {
     bottom : function() {
       var classList = this.elem.classList,
         classes = this.classes;
-      
+  
       if(!classList.contains(classes.bottom)) {
         classList.add(classes.bottom);
         classList.remove(classes.notBottom);
@@ -12891,7 +12897,7 @@ if (typeof jQuery === 'undefined') {
     notBottom : function() {
       var classList = this.elem.classList,
         classes = this.classes;
-      
+  
       if(!classList.contains(classes.notBottom)) {
         classList.add(classes.notBottom);
         classList.remove(classes.bottom);
@@ -12953,7 +12959,7 @@ if (typeof jQuery === 'undefined') {
     getDocumentHeight : function () {
       var body = document.body,
         documentElement = document.documentElement;
-    
+  
       return Math.max(
         body.scrollHeight, documentElement.scrollHeight,
         body.offsetHeight, documentElement.offsetHeight,
@@ -12992,7 +12998,7 @@ if (typeof jQuery === 'undefined') {
     isOutOfBounds : function (currentScrollY) {
       var pastTop  = currentScrollY < 0,
         pastBottom = currentScrollY + this.getScrollerPhysicalHeight() > this.getScrollerHeight();
-      
+  
       return pastTop || pastBottom;
     },
   
@@ -13092,8 +13098,8 @@ if (typeof jQuery === 'undefined') {
   return Headroom;
 }));
 /*!
- * headroom.js v0.9.3 - Give your page some headroom. Hide your header until you need it
- * Copyright (c) 2016 Nick Williams - http://wicky.nillia.ms/headroom.js
+ * headroom.js v0.9.4 - Give your page some headroom. Hide your header until you need it
+ * Copyright (c) 2017 Nick Williams - http://wicky.nillia.ms/headroom.js
  * License: MIT
  */
 

@@ -2,13 +2,16 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var cronJob = require('cron').CronJob;
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var index = require('./routes/index');
 var api = require('./routes/api');
+var wxapi = require('./routes/wxapi');
 var mng = require('./routes/mng');
 var fileupload = require('./routes/fileupload');
+var dailyService = require('./server/dailyService.js');
 
 var app = express();
 
@@ -35,6 +38,7 @@ app.use(session({
 }));
 app.use('/', index);
 app.use('/api', api);
+app.use('/wxapi', wxapi);
 app.use('/mng', mng);
 app.use('/upload', fileupload);
 
@@ -55,5 +59,13 @@ app.use(function(err, req, res, next) {
 	res.status(err.status || 500);
 	res.render('error');
 });
+
+new cronJob('1 0 5 * * *',function(){
+    console.log('daily for art job start...');
+    dailyService.updateDailyArt().then(res=>{
+        console.log(res);
+    });
+    console.log('daily for art job end...');
+},null,true,'Asia/Shanghai');
 
 module.exports = app;

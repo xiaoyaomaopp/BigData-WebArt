@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var read = require('../server/read.js');
 var update = require('../server/update.js');
+var dailyService = require('../server/dailyService.js');
 var md5 = require("blueimp-md5");
 
 /* GET users listing. */
@@ -159,6 +160,13 @@ router.get('/listDailyArt', function(req, res, next) {
 router.post('/likeDailyArt', function(req, res, next) {
     var params = req.body;
     update.likeDailyArt(params).then(function(data) {
+        res.send(data);
+    }).catch(function(e) {
+        res.send('');
+    })
+});
+router.get('/makeDailyArt', function(req, res, next) {
+    dailyService.updateDailyArt().then(function(data) {
         res.send(data);
     }).catch(function(e) {
         res.send('');

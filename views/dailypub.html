@@ -197,7 +197,8 @@
         $("#send").click(function(){
             var data = {};
             $("#form input").each(function(){
-                data[$(this).attr("name")] = $(this).val();
+                if(!!($(this).attr("name")))
+                    data[$(this).attr("name")] = $(this).val();
             });
             data['detail'] = $("#detail").val();
             if(!!!data.date || data.date.length!=8){
