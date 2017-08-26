@@ -62,6 +62,7 @@
     "jweixin": "^1.0.0",
     "lightbox2": "^2.9.0",
     "memory-cache": "^0.1.6",
+    "moment-timezone": "^0.5.13",
     "mongodb": "^2.2.10",
     "morgan": "^1.7.0",
     "multiparty": "^4.1.3",

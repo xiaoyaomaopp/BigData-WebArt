@@ -1,7 +1,7 @@
 var mongodb = require("mongodb");
-
+var config = require("../util/config").db;
 var MongoClient = mongodb.MongoClient;
-var url = 'mongodb://127.0.0.1:27017/artForDaily';
+var url = 'mongodb://'+config.dailyArt+'/artForDaily';
 class DB {
 	constructor() {
 		this.db = null;
