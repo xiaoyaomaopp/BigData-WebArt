@@ -188,3 +188,31 @@ exports.addInviteInfo = function(data) {
         throw error;
     })
 }
+
+exports.pageInvite = function(data) {
+    var limit = parseInt(data.limit);
+    var page = parseInt(data.page);
+    var start = (page-1)*limit;
+    var param = {};
+    if(!!data.fromUserId) param.fromUserId = data.fromUserId;
+    if(!!data.type) param.type = parseInt(data.type);
+    return userdb.open("wx.invite").then(function(collection) {
+        return collection.find(param).sort({
+            createTime:-1
+        }).skip(start).limit(limit).toArray();
+    }).then(function(data) {
+        return userdb.collection.find(param).count().then(count=>{
+            userdb.close();
+            return ({
+                limit,
+                count,
+                page,
+                data
+            });
+        });
+    }).catch(function(error) {
+        userdb.close();
+        console.error(error)
+        throw error;
+    })
+}

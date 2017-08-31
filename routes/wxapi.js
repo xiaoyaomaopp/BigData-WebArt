@@ -58,6 +58,20 @@ router.post('/addInvite', function(req, res, next) {
     })
 });
 
+router.get('/pageInvite', function(req, res, next) {
+    var data = req.query;
+    if(!!!data || !!!data.type){
+        res.send({success:false,text:'请求参数不能为空!'});
+        return;
+    }
+    service.pageInvite(data).then(data=>{
+        res.send(data);
+    }).catch(function(e) {
+        console.error(e);
+        res.send({success:false,text:'内部服务器出错!'});
+    })
+});
+
 router.post('/checkUserPower', function(req, res, next) {
     var data = req.body.data;
     if(!!!data){
@@ -100,5 +114,7 @@ router.get('/getUserByUserId', function(req, res, next) {
         res.send({success:false,text:'内部服务器出错!'});
     })
 });
+
+
 
 module.exports = router;

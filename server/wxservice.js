@@ -42,7 +42,12 @@ exports.getWXUserInfo = function(data) {
                 if(ret.success){
                     var pc = new WXBizDataCrypt(config.wxClientConfig.appId, ret.sessionKey);
                     var user = pc.decryptData(data.encryptedData , data.iv)
-                    resolve({success:true,text:ret.text, user: user});
+                    userDao.getUserByUserId({openId:user.openId}).then(re=>{
+                        if(!!re && re.length>0){
+                            user = re[0];
+                        }
+                        resolve({success:true,text:ret.text, user: user});
+                    })
                 }else{
                     resolve({success:false,text:ret.text});
                 }
@@ -129,6 +134,27 @@ exports.addInviteInfo = function(data) {
     return new Promise((resolve, reject) => {
         try{
             userDao.addInviteInfo(data).then(data=>{
+                this.updateUser({viplevel:'专属会员',userId:data.toUserId}).then(res=>{
+                    console.log(res);
+                    resolve({success:true, data: data});
+                }).catch(function(error) {
+                    console.error(error);
+                    reject(error);
+                });
+            }).catch(function(error) {
+                console.error(error);
+                reject(error);
+            });
+        }catch(e){
+            reject(e);
+        }
+    });
+};
+
+exports.pageInvite = function(data) {
+    return new Promise((resolve, reject) => {
+        try{
+            userDao.pageInvite(data).then(data=>{
                 resolve({success:true, data: data});
             }).catch(function(error) {
                 console.error(error);
@@ -139,3 +165,4 @@ exports.addInviteInfo = function(data) {
         }
     });
 };
+
