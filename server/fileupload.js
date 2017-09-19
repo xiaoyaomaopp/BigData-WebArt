@@ -29,7 +29,7 @@ exports.dailryArtImg = function(err, fields, files, filePath) {
         success : !err,
         path : retPath
     };
-}
+};
 
 function formatDate(date, fmt) {
     var o = {
@@ -46,3 +46,33 @@ function formatDate(date, fmt) {
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
+
+exports.uploadUserArt = function(err, fields, files, filePath) {
+    if(err){
+        console.log('parse error: ' + err);
+    } else {
+        //console.log('parse files: ' + filesTmp);
+        try{
+            var inputFile = files.thumbnail[0];
+            var uploadedPath = inputFile.path;
+            var dstPath = filePath + 'art_' + formatDate(new Date(),'yyyyMMddhhmmss') + '-' + inputFile.originalFilename;
+            //重命名为真实文件名
+            fs.rename(uploadedPath, dstPath, function(err) {
+                if(err){
+                    console.log('rename error: ' + err);
+                } else {
+                    //console.log('rename ok');
+                }
+            });
+        }catch(e){
+            console.log(e);
+        }
+
+    }
+    var retPath = '';
+    if(!err) retPath = dstPath.replace('./public/','/');
+    return {
+        success : !err,
+        path : retPath
+    };
+};

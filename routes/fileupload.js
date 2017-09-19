@@ -24,4 +24,15 @@ router.post('/dailryArtUpload', function(req, res, next){
         res.end(JSON.stringify(ret) );
     });
 });
+
+router.post('/userArtUpload', function(req, res, next){
+    var filePath = './public/files/userArt';
+    var form = new multiparty.Form({uploadDir: filePath});
+    form.parse(req, function(err, fields, files) {
+        var ret = fileupload.uploadUserArt(err,fields,files,filePath);
+        res.writeHead(200, {'content-type': 'text/plain;charset=utf-8'});
+        console.log(ret)
+        res.end(JSON.stringify(ret) );
+    });
+});
 module.exports = router;
