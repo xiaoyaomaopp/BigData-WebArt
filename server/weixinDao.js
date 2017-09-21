@@ -170,7 +170,7 @@ exports.updateUserByOpenId = function(user) {
             throw error;
         })
     }
-}
+};
 
 exports.addInviteInfo = function(data) {
     var time = new Date().getTime();
@@ -187,7 +187,7 @@ exports.addInviteInfo = function(data) {
         console.error(error)
         throw error;
     })
-}
+};
 
 exports.pageInvite = function(data) {
     var limit = parseInt(data.limit);
@@ -215,4 +215,57 @@ exports.pageInvite = function(data) {
         console.error(error)
         throw error;
     })
-}
+};
+
+exports.saveUserArt = function(data) {
+    var time = new Date().getTime();
+    var uuid = common.toOnlyId(data.fromUserId+time);
+    data.id = uuid;
+    data.createTime = time;
+    return userdb.open("wx.userArt").then(function(collection) {
+        return collection.insert([data]);
+    }).then(function() {
+        userdb.close();
+        return data;
+    }).catch(function(error) {
+        userdb.close();
+        console.error(error)
+        throw error;
+    })
+};
+
+exports.pageUserArt = function(data) {
+    var limit = parseInt(data.limit);
+    var page = parseInt(data.page);
+    var start = (page-1)*limit;
+    var param = {};
+    if(!!data.openId) param.openId = data.openId;
+    if(!!data.userId) param.userId = data.userId;
+    if(!!data.query){
+        param['$or'] = [
+            {title : eval( '/'+data.query+'/')},
+            {author : eval( '/'+data.query+'/')},
+            {desc : eval( '/'+data.query+'/')},
+            {username :  eval('/'+data.query+'/')}
+        ];
+    }
+    return userdb.open("wx.userArt").then(function(collection) {
+        return collection.find(param).sort({
+            createTime:-1
+        }).skip(start).limit(limit).toArray();
+    }).then(function(data) {
+        return userdb.collection.find(param).count().then(count=>{
+            userdb.close();
+            return ({
+                limit,
+                count,
+                page,
+                data
+            });
+        });
+    }).catch(function(error) {
+        userdb.close();
+        console.error(error)
+        throw error;
+    })
+};

@@ -115,6 +115,32 @@ router.get('/getUserByUserId', function(req, res, next) {
     })
 });
 
+router.post('/saveUserArt', function(req, res, next) {
+    var data = req.body.data;
+    if(!!!data){
+        res.send({success:false,text:'请求参数不能为空!'});
+        return;
+    }
+    service.saveUserArt(data).then(data=>{
+        res.send(data);
+    }).catch(function(e) {
+        console.error(e);
+        res.send({success:false,text:'内部服务器出错!'});
+    })
+});
 
+router.post('/pageUserArt', function(req, res, next) {
+    var data = req.body.data;
+    if(!!!data){
+        res.send({success:false,text:'请求参数不能为空!'});
+        return;
+    }
+    service.pageUserArt(data).then(data=>{
+        res.send(data);
+    }).catch(function(e) {
+        console.error(e);
+        res.send({success:false,text:'内部服务器出错!'});
+    })
+});
 
 module.exports = router;

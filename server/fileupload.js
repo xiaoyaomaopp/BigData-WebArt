@@ -55,7 +55,7 @@ exports.uploadUserArt = function(err, fields, files, filePath) {
         try{
             var inputFile = files.thumbnail[0];
             var uploadedPath = inputFile.path;
-            var dstPath = filePath + 'art_' + formatDate(new Date(),'yyyyMMddhhmmss') + '-' + inputFile.originalFilename;
+            var dstPath = filePath + '/art_' + formatDate(new Date(),'yyyyMMddhhmmss') + '-' + inputFile.originalFilename;
             //重命名为真实文件名
             fs.rename(uploadedPath, dstPath, function(err) {
                 if(err){

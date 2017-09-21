@@ -166,3 +166,33 @@ exports.pageInvite = function(data) {
     });
 };
 
+exports.saveUserArt = function(data) {
+    return new Promise((resolve, reject) => {
+        try{
+            userDao.saveUserArt(data).then(data=>{
+                resolve({success:true,data:data,text:'保存成功！'});
+            }).catch(function(error) {
+                console.error(error);
+                reject(error);
+            });
+        }catch(e){
+            reject(e);
+        }
+    });
+};
+
+exports.pageUserArt = function(data) {
+    return new Promise((resolve, reject) => {
+        try{
+            userDao.pageUserArt(data).then(data=>{
+                resolve({success:true, data: data});
+            }).catch(function(error) {
+                console.error(error);
+                reject(error);
+            });
+        }catch(e){
+            reject(e);
+        }
+    });
+};
+
