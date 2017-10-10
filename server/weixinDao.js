@@ -269,3 +269,29 @@ exports.pageUserArt = function(data) {
         throw error;
     })
 };
+exports.pageNewArt = function(data){
+    var page = parseInt(data.page);
+    var limit = parseInt(data.limit);
+    var include = data.include;
+    var filter = {};
+    if(include && include != ""){
+        filter = {
+            $or:[
+                {title:{$regex:reg}},
+                {author:{$regex:reg}},
+                {desc:{$regex:reg}}
+            ]
+        }
+    }
+    var start = (page - 1)*limit;
+    var reg = new RegExp(include,'i');
+    return userdb.open("wx.userArt").then(function(collection) {
+        return collection.find(filter).sort({
+            createTime:-1
+        }).skip(start).limit(limit).toArray();
+    }).catch(function(error) {
+        userdb.close();
+        console.error(error)
+        throw error;
+    })
+}

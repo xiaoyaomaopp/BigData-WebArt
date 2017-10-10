@@ -195,4 +195,18 @@ exports.pageUserArt = function(data) {
         }
     });
 };
+exports.getWXNewArt = function(param){
+    return new Promise((resolve, reject) => {
+        try{
+            userDao.pageNewArt(param).then(data=>{
+                resolve({success:true, data: data});
+            }).catch(function(error) {
+                console.error(error);
+                reject(error);
+            });
+        }catch(e){
+            reject(e);
+        }
+    });
+}
 
