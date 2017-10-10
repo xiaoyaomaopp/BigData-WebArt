@@ -273,6 +273,8 @@ exports.pageNewArt = function(data){
     var page = parseInt(data.page);
     var limit = parseInt(data.limit);
     var include = data.include;
+    var start = (page - 1)*limit;
+    var reg = new RegExp(include,'i');
     var filter = {};
     if(include && include != ""){
         filter = {
@@ -283,8 +285,6 @@ exports.pageNewArt = function(data){
             ]
         }
     }
-    var start = (page - 1)*limit;
-    var reg = new RegExp(include,'i');
     return userdb.open("wx.userArt").then(function(collection) {
         return collection.find(filter).sort({
             createTime:-1
