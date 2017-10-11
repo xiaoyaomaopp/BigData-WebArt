@@ -295,3 +295,30 @@ exports.pageNewArt = function(data){
         throw error;
     })
 }
+
+exports.pageArt = function(data){
+    var page = parseInt(data.page);
+    var limit = parseInt(data.limit);
+    var include = data.include;
+    var start = (page - 1)*limit;
+    var reg = new RegExp(include,'i');
+    var filter = {};
+    if(include && include != ""){
+        filter = {
+            $or:[
+                {title:{$regex:reg}},
+                {author:{$regex:reg}},
+                {intrduction:{$regex:reg}}
+            ]
+        }
+    }
+    return userdb.open("art").then(function(collection) {
+        return collection.find(filter).sort({
+            createTime:-1
+        }).skip(start).limit(limit).toArray();
+    }).catch(function(error) {
+        userdb.close();
+        console.error(error)
+        throw error;
+    })
+}

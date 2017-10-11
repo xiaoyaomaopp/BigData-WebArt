@@ -128,6 +128,19 @@ router.get('/getNewArt', function(req, res, next) {
     })
 });
 
+router.get('/getArt', function(req, res, next) {
+    var include = req.query.include;
+    var page = req.query.page;
+    var limit = req.query.limit;
+    //var startTime = req.query.startTime; //参数保留，以后高级搜索
+    service.getWXArt({include:include,page:page,limit:limit}).then(data=>{
+        res.send(data);
+    }).catch(function(e) {
+        console.error(e);
+        res.send({success:false,text:'内部服务器出错!'});
+    })
+});
+
 router.post('/saveUserArt', function(req, res, next) {
     var data = req.body.data;
     if(!!!data){
