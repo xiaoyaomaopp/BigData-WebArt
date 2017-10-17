@@ -286,9 +286,10 @@ exports.pageNewArt = function(data){
         }
     }
     return userdb.open("wx.userArt").then(function(collection) {
-        var res = collection.find(filter).sort({
+        return res = collection.find(filter).sort({
             createTime:-1
         }).skip(start).limit(limit).toArray();
+    }).then(res=>{
         userdb.close();
         return res;
     }).catch(function(error) {
@@ -315,9 +316,10 @@ exports.pageArt = function(data){
         }
     }
     return userdb.open("art").then(function(collection) {
-        var res = collection.find(filter).sort({
+        return collection.find(filter).sort({
             createTime:-1
         }).skip(start).limit(limit).toArray();
+    }).then(res=>{
         userdb.close();
         return res;
     }).catch(function(error) {
