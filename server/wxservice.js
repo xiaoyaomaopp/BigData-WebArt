@@ -34,6 +34,23 @@ exports.loginWXClient = function(data) {
     });
 };
 
+exports.getWXUserInfArt = function(param){
+    return new Promise((resolve, reject) => {
+        var dataCount = {}
+        try{
+            userDao.pageInvite(param).then(data=>{
+                dataCount.invite = data;
+                userDao.pageUserArt(param).then(data=>{
+                    dataCount.userArt = data;
+                    resolve({success:false,data:dataCount});
+                })
+            });
+        }catch(e){
+            reject(e);
+        }
+    });
+}
+
 exports.getWXUserInfo = function(data) {
     return new Promise((resolve, reject) => {
         try{
