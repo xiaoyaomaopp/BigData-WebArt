@@ -42,7 +42,7 @@ exports.getWXUserInfArt = function(param){
                 dataCount.invite = data;
                 userDao.pageUserArt(param).then(data=>{
                     dataCount.userArt = data;
-                    resolve({success:false,data:dataCount});
+                    resolve({success:true,data:dataCount});
                 })
             });
         }catch(e){
