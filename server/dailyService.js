@@ -22,7 +22,7 @@ exports.updateDailyArt = function() {
         offset : 0,
         limit : 1
     };
-    query['search'] = date.getFullYear() + (date.getMonth()>8?(date.getMonth()+1):('0'+(date.getMonth()+1))) + (date.getDate().toString().length>1?date.getDate():'0'+date.getDate())
+    query['search'] = ''+date.getFullYear() + (date.getMonth()>8?(date.getMonth()+1):('0'+(date.getMonth()+1))) + (date.getDate().toString().length>1?date.getDate():'0'+date.getDate())
     return read.queryDailyArt(query).then(result=>{
         if(!!!result || (!!result && !!result.rows)){
             if(result.rows.length<=0){
