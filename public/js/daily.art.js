@@ -118,12 +118,12 @@ function getArtDate(AddDayCount){
     var date = d.getDate();
     var ss = year;
     if(month>9){
-        ss += month;
+        ss += month+'';
     }else{
         ss += '0'+ month;
     }
     if(date > 9){
-        ss += date;
+        ss += date+'';
     }else{
         ss += '0'+ date;
     }
