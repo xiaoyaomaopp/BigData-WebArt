@@ -197,6 +197,34 @@ exports.saveUserArt = function(data) {
         }
     });
 };
+exports.editUserArt = function(data) {
+    return new Promise((resolve, reject) => {
+        try{
+            userDao.editUserArt(data).then(data=>{
+                resolve({success:true,data:data,text:'保存成功！'});
+            }).catch(function(error) {
+                console.error(error);
+                reject(error);
+            });
+        }catch(e){
+            reject(e);
+        }
+    });
+};
+exports.deleteUserArt = function(data) {
+    return new Promise((resolve, reject) => {
+        try{
+            userDao.deleteUserArt(data).then(data=>{
+                resolve({success:true,data:data,text:'删除成功！'});
+            }).catch(function(error) {
+                console.error(error);
+                reject(error);
+            });
+        }catch(e){
+            reject(e);
+        }
+    });
+};
 
 exports.pageUserArt = function(data) {
     return new Promise((resolve, reject) => {
@@ -216,6 +244,20 @@ exports.getWXNewArt = function(param){
     return new Promise((resolve, reject) => {
         try{
             userDao.pageNewArt(param).then(data=>{
+                resolve({success:true, data: data});
+            }).catch(function(error) {
+                console.error(error);
+                reject(error);
+            });
+        }catch(e){
+            reject(e);
+        }
+    });
+}
+exports.getWXNewArtById = function(param){
+    return new Promise((resolve, reject) => {
+        try{
+            userDao.pageNewArtFilter(param).then(data=>{
                 resolve({success:true, data: data});
             }).catch(function(error) {
                 console.error(error);

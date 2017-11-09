@@ -142,13 +142,51 @@ router.get('/getNewArt', function(req, res, next) {
         res.send({success:false,text:'内部服务器出错!'});
     })
 });
+router.put('/newArt',function(req,res,next){
+    var data = req.body.data;
+    if(!!!data){
+        res.send({success:false,text:'请求参数不能为空!'});
+        return;
+    }
+    service.editUserArt(data).then(data=>{
+        res.send(data);
+    }).catch(function(e) {
+        console.error(e);
+        res.send({success:false,text:'内部服务器出错!'});
+    })
+})
+router.delete('/newArt',function(req,res,next){
+    var data = req.body.data;
+    if(!!!data){
+        res.send({success:false,text:'请求参数不能为空!'});
+        return;
+    }
+    service.deleteUserArt(data).then(data=>{
+        res.send(data);
+    }).catch(function(e) {
+        console.error(e);
+        res.send({success:false,text:'内部服务器出错!'});
+    })
+})
+router.get('/getNewArtById', function(req, res, next) {
+    var id = req.query.id;
+    //var startTime = req.query.startTime; //参数保留，以后高级搜索
+    service.getWXNewArtById({id:id}).then(data=>{
+        res.send(data);
+    }).catch(function(e) {
+        console.error(e);
+        res.send({success:false,text:'内部服务器出错!'});
+    })
+});
 
 router.get('/getArt', function(req, res, next) {
     var include = req.query.include;
     var page = req.query.page;
     var limit = req.query.limit;
+    var style = req.query.style;
+    var text = req.query.text;
     //var startTime = req.query.startTime; //参数保留，以后高级搜索
-    service.getWXArt({include:include,page:page,limit:limit}).then(data=>{
+    service.getWXArt({include:include,page:page,limit:limit,style:style,text:text}).then(data=>{
         res.send(data);
     }).catch(function(e) {
         console.error(e);
@@ -183,5 +221,6 @@ router.post('/pageUserArt', function(req, res, next) {
         res.send({success:false,text:'内部服务器出错!'});
     })
 });
+
 
 module.exports = router;

@@ -219,7 +219,7 @@ exports.pageInvite = function(data) {
 
 exports.saveUserArt = function(data) {
     var time = new Date().getTime();
-    var uuid = common.toOnlyId(data.fromUserId+time);
+    var uuid = common.toOnlyId(data.userId + time);
     data.id = uuid;
     data.createTime = time;
     return userdb.open("wx.userArt").then(function(collection) {
@@ -233,7 +233,30 @@ exports.saveUserArt = function(data) {
         throw error;
     })
 };
-
+exports.editUserArt = function(data) {
+    return userdb.open("wx.userArt").then(function(collection) {
+        return collection.update({"id":data.id},data);
+    }).then(function() {
+        userdb.close();
+        return data;
+    }).catch(function(error) {
+        userdb.close();
+        console.error(error)
+        throw error;
+    })
+};
+exports.deleteUserArt = function(data) {
+    return userdb.open("wx.userArt").then(function(collection) {
+        return collection.remove({"id":data});
+    }).then(function() {
+        userdb.close();
+        return data;
+    }).catch(function(error) {
+        userdb.close();
+        console.error(error)
+        throw error;
+    })
+};
 exports.pageUserArt = function(data) {
     var limit = parseInt(data.limit);
     var page = parseInt(data.page);
@@ -298,12 +321,27 @@ exports.pageNewArt = function(data){
         throw error;
     })
 }
-
+exports.pageNewArtFilter = function(data){
+    return userdb.open("wx.userArt").then(function(collection) {
+        return res = collection.find(data).sort({
+            createTime:-1
+        }).toArray();
+    }).then(res=>{
+        userdb.close();
+        return res;
+    }).catch(function(error) {
+        userdb.close();
+        console.error(error)
+        throw error;
+    })
+}
 exports.pageArt = function(data){
     var page = parseInt(data.page);
     var limit = parseInt(data.limit);
     var include = data.include;
     var start = (page - 1)*limit;
+    var style = data.style;
+    var text = data.text
     var reg = new RegExp(include,'i');
     var filter = {};
     if(include && include != ""){
@@ -312,6 +350,28 @@ exports.pageArt = function(data){
                 {title:{$regex:reg}},
                 {author:{$regex:reg}},
                 {intrduction:{$regex:reg}}
+            ]
+        }
+    }
+    var reg1 = new RegExp(text,'i');
+    if(style == "1"){
+        filter = {
+            $or:[
+                {genre:{$regex:reg1}}
+            ]
+        }
+    }
+    if(style == "2"){
+        filter = {
+            $or:[
+                {style:{$regex:reg1}}
+            ]
+        }
+    }
+    if(style == "3"){
+        filter = {
+            $or:[
+                {media:{$regex:reg1}}
             ]
         }
     }

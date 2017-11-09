@@ -42,8 +42,16 @@ class DB {
 			}).then(resolve).catch(reject);
 		})
 	}
-
-
+	update(filter,rows){
+		return new Promise((resolve, reject) => {
+			this.collection.update(filter,{$set:rows}).then(resolve).catch(reject);
+		})
+	}
+	delete(filter){
+		return new Promise((resolve, reject) => {
+			this.collection.remove(filter).then(resolve).catch(reject);
+		})
+	}
 	insertUnique(rows, key) {
 
 		return new Promise((resolve, reject) => {
